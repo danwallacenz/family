@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:find finderName="ByMotherAndFather" id="ff_family_domain_Person" path="/people" z="8HbBMcg0zHIWz04X18Tw690UrjY=">
+        <field:select disableFormBinding="true" field="mother" id="f_family_domain_Person_mother" itemValue="id" items="${people}" path="/people" required="true" z="RK4ES1j7bZF9SgKWBQ6hIiIHcNk="/>
+        <field:select disableFormBinding="true" field="father" id="f_family_domain_Person_father" itemValue="id" items="${people}" path="/people" required="true" z="Xo9e+2jzMa4mgK6Qa+TBQY7xXYs="/>
+    </form:find>
+</div>
