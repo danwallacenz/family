@@ -1,0 +1,142 @@
+project --topLevelPackage family
+
+//jpa setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
+
+jpa setup --provider HIBERNATE --database MYSQL --userName root --password password --databaseName family --hostname localhost
+
+// create the person class
+entity jpa --class ~.domain.Person --testAutomatically
+
+
+// create the fields and references
+field string --fieldName name --sizeMax 30 
+
+//field reference --fieldName father --type ~.domain.Person  --cardinality MANY_TO_ONE --fetch LAZY
+
+//field reference --fieldName mother --type ~.domain.Person  --cardinality MANY_TO_ONE --fetch LAZY
+
+//field set --fieldName children --type ~.domain.Person --sizeMin 0 --cardinality MANY_TO_MANY --fetch LAZY
+
+
+// finders
+ finder add --finderName findPeopleByNameLike --class ~.domain.Person
+ finder add --finderName findPeopleByMotherAndFather --class ~.domain.Person
+
+
+// Offer JSON remoting for all domain types through Spring MVC
+//json all --deepSerialize
+json all
+web mvc json setup
+web mvc json all --package ~.web
+
+web mvc setup
+web mvc all --package ~.web
+
+web mvc finder all
+
+// languages
+web mvc language --code en
+web mvc language --code it
+web mvc language --code de
+web mvc language --code nl
+web mvc language --code sv
+
+logging setup --level INFO
+
+perform eclipse
+
+perform test
+
+perform package
+
+
+// createFromJson
+// createFromJsonArray
+// showJson
+// listJson
+// updateFromJson
+// updateFromJsonArray
+// deleteFromJson
+// jsonFindPeopleByMotherAndFather
+// jsonFindPeopleByNameLike
+// addMother
+// addFather
+// findChildren
+// 
+
+
+/*
+// mvn tomcat:run
+
+// Find Person id = 1
+// curl -i -H "Accept: application/json" http://localhost:8080/family/people/1
+
+// Find all people
+// curl -i -H "Accept: application/json" http://localhost:8080/family/people
+
+// Create new Person doesn't work on Windows. Use RESTClient 2.3.3
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '[{"name": "Jonathan"}]' http://localhost:8080/family/people/jsonArray
+// curl -i -X POST -H Content-Type:application/json -H Accept:application/json -d '[{"name":"dan"}]' http://localhost:8080/family/people/jsonArray
+// curl -i -g -X POST -H Content-Type:application/json -H Accept:application/json -d '{"name":"dan"}' http://localhost:8080/family/people
+// curl -XPOST -H "Content-type: application/json" http://localhost:8080/family/people -d "{\"name\" : \"xxx\" }"
+
+// Delete Person
+// curl -i -X DELETE -H "Accept: application/json" http://localhost:8080/family/people/1
+
+// find by name like
+// curl -i -H "Accept: application/json" http://localhost:8090/family/people?name=dan&find=ByNameLike
+
+// set mother
+// curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/mother/2
+
+// set father
+// curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/father/3
+
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '[{name: "Cheesy Crust"},{name: "Thick Crust"}]' http://localhost:8080/pizzashop/bases/jsonArray
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '[{name: "Fresh Tomato"},{name: "Prawns"},{name: "Mozarella"},{name: "Bogus"}]' http://localhost:8080/pizzashop/toppings/jsonArray
+// curl -i -X DELETE -H "Accept: application/json" http://localhost:8080/pizzashop/toppings/7
+// curl -i -X PUT -H "Content-Type: application/json" -H "Accept: application/json" -d '{id:6,name:"Mozzarella",version:1}' http://localhost:8080/pizzashop/toppings
+// curl -i -H "Accept: application/json" http://localhost:8080/pizzashop/toppings
+// curl -i -H "Accept: application/json" http://localhost:8080/pizzashop/toppings/6
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{name:"Napolitana",price:7.5,base:{id:1},toppings:[{name: "Anchovy fillets"},{name: "Mozzarella"}]}' http://localhost:8080/pizzashop/pizzas
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{name:"Stefan",total:7.5,address:"Sydney, AU",deliveryDate:1314595427866,id:{shopCountry:"AU",shopCity:"Sydney",shopName:"Pizza Pan 1"},pizzas:[{id:8,version:1}]}' http://localhost:8080/pizzashop/pizzaorders
+*/
+
+
+/*
+Functions needed
+Search People by name like 
+	?? Smith >> smth, wallace --> wlc
+Create Person
+
+update Person
+
+get person by id
+
+Add father id,id
+
+remove father
+
+Add mother id,id
+
+remove mother
+
+list children id
+
+show person id
+
+show parents id
+
+show children id
+
+
+Daniel Roy Wallace
+male
+born 27/6/1957 at Te Awamutu, New Zealand
+
+Roy Stanley Wallace
+male
+born 21/2/1921 at Napier, New Zealand
+died 23/3/1990 at Wanganui,New Zealand
+
+*/

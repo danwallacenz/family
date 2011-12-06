@@ -1,0 +1,32 @@
+project --topLevelPackage family
+
+//jpa setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
+
+jpa setup --provider HIBERNATE --database MYSQL --userName root --password password --databaseName family --hostname localhost
+
+// create the person class
+entity jpa --class ~.domain.Person --testAutomatically
+
+
+// create the fields and references
+//field reference --fieldName parent --type ~.domain.Person --cardinality ONE_TO_ONE --fetch LAZY
+field string --fieldName name --sizeMax 30 
+field set --fieldName children --type ~.domain.Person --sizeMin 0 --cardinality MANY_TO_MANY --fetch LAZY
+field set --fieldName parents --type ~.domain.Person --sizeMin 0 --sizeMax 2 --cardinality MANY_TO_MANY --fetch LAZY
+
+
+// finders
+finder add --finderName findPeopleByNameLike --class ~.domain.Person
+
+// web tier
+web mvc setup
+web mvc all --package ~.web
+
+perform eclipse
+
+perform test
+
+perform package
+
+//jdbc:mysql://<hostname>[,<failoverhost>][<:3306>]/<dbname>[?<param1>=<value1>][&<param2>=<value2>]
+//jdbc:mysql://localhost:3306/family
