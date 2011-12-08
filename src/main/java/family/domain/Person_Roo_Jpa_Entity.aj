@@ -15,6 +15,14 @@ privileged aspect Person_Roo_Jpa_Entity {
     @Column(name = "version")
     private java.lang.Integer Person.version;
     
+    public java.lang.Long Person.getId() {
+        return this.id;
+    }
+    
+    public void Person.setId(java.lang.Long id) {
+        this.id = id;
+    }
+    
     public java.lang.Integer Person.getVersion() {
         return this.version;
     }

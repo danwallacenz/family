@@ -6,6 +6,10 @@
         <menu:category id="c_person" z="Cz66KzcF6GdyygpbYfiE+EkFFFA=">
             <menu:item id="i_person_new" messageCode="global_menu_new" url="/people?form" z="IlD8NFD64X8egaRrgHbQeWKT68I="/>
             <menu:item id="i_person_list" messageCode="global_menu_list" url="/people?page=1&amp;size=${empty param.size ? 10 : param.size}" z="MFjeqYeiMgVzk2P/OWfFpXZhhS4="/>
+            <menu:item id="fi_person_fatherormother" messageCode="global_menu_find" url="/people?find=ByFatherOrMother&amp;form" z="mbtRICDaAeNNcgoPCNdNAaL4oKw="/>
+            <menu:item id="fi_person_mother" messageCode="global_menu_find" url="/people?find=ByMother&amp;form" z="tA5cyqNJzydP2l31btsQj0oU+CI="/>
+            <menu:item id="fi_person_motherandfather" messageCode="global_menu_find" url="/people?find=ByMotherAndFather&amp;form" z="kHjZkmTwcsQ8yAMLxetxfap4wuM="/>
+            <menu:item id="fi_person_namelike" messageCode="global_menu_find" url="/people?find=ByNameLike&amp;form" z="0athZh4JSyJ+4BFwCeHOoPEQgIk="/>
         </menu:category>
     </menu:menu>
 </div>

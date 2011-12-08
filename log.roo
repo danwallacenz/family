@@ -144,3 +144,13 @@ backup
 perform package
 perform package
 perform clean
+// Spring Roo 1.2.0.RC1 [rev dcaa483] log opened at 2011-12-08 15:59:42
+perform package
+help perform 
+perform tests
+perform tests
+perform tests
+perform clean
+perform tests
+perform tests
+perform package

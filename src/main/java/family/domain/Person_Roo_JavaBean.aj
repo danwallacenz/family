@@ -3,9 +3,35 @@
 
 package family.domain;
 
+import family.domain.Person;
 import family.domain.Sex;
+import java.util.Set;
 
 privileged aspect Person_Roo_JavaBean {
+    
+    public java.lang.String Person.getName() {
+        return this.name;
+    }
+    
+    public void Person.setName(java.lang.String name) {
+        this.name = name;
+    }
+    
+    public Person Person.getFather() {
+        return this.father;
+    }
+    
+    public Person Person.getMother() {
+        return this.mother;
+    }
+    
+    public Set<Person> Person.getChildren() {
+        return this.children;
+    }
+    
+    public void Person.setChildren(Set<Person> children) {
+        this.children = children;
+    }
     
     public Sex Person.getSex() {
         return this.sex;
@@ -13,6 +39,5 @@ privileged aspect Person_Roo_JavaBean {
     
     public void Person.setSex(Sex sex) {
         this.sex = sex;
-    }
-    
+    }    
 }
