@@ -144,3 +144,14 @@ backup
 perform package
 perform package
 perform clean
+// Spring Roo 1.2.0.RC1 [rev dcaa483] log opened at 2011-12-06 20:51:58
+perform eclipse
+perform package
+// Spring Roo 1.2.0.RC1 [rev dcaa483] log opened at 2011-12-07 07:40:50
+perform package
+quit
+// Spring Roo 1.2.0.RC1 [rev dcaa483] log closed at 2011-12-07 07:41:17
+// Spring Roo 1.2.0.RC1 [rev dcaa483] log opened at 2011-12-09 21:29:50
+perform clean
+perform tests
+perform package
