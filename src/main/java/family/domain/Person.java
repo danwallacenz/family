@@ -94,35 +94,35 @@ public class Person {
 		this.setFather(null);
 	}
 	
-    public java.lang.String getName() {
-        return this.name;
-    }
-    
-    public void setName(java.lang.String name) {
-        this.name = name;
-    }
-	
-    public Person getFather() {
-        return this.father;
-    }
-    
-    public Person getMother() {
-        return this.mother;
-    } 
-    
-    public Set<Person>getChildren() {
-        return this.children;
-    }
-    
-    public void setChildren(Set<Person> children) {
-        this.children = children;
-    }
-    
-    public java.lang.Long getId() {
-        return this.id;
-    }
-    
-    public void setId(java.lang.Long id) {
-        this.id = id;
-    }    
+//    public java.lang.String getName() {
+//        return this.name;
+//    }
+//    
+//    public void setName(java.lang.String name) {
+//        this.name = name;
+//    }
+//	
+//    public Person getFather() {
+//        return this.father;
+//    }
+//    
+//    public Person getMother() {
+//        return this.mother;
+//    } 
+//    
+//    public Set<Person>getChildren() {
+//        return this.children;
+//    }
+//    
+//    public void setChildren(Set<Person> children) {
+//        this.children = children;
+//    }
+//    
+//    public java.lang.Long getId() {
+//        return this.id;
+//    }
+//    
+//    public void setId(java.lang.Long id) {
+//        this.id = id;
+//    }    
 }
