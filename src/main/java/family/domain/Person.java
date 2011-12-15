@@ -74,11 +74,19 @@ public class Person {
 	@Enumerated
 	private Sex sex;
 
+	/**
+	 * TODO remove from previous father's children, if any.
+	 * @param father
+	 */
 	public void setFather(family.domain.Person father) {
 		this.father = father;
 		this.father.getChildren().add(this);
 	}
 
+	/**
+	 * TODO remove from previous mother's children, if any.
+	 * @param mother
+	 */
 	public void setMother(family.domain.Person mother) {
 		this.mother = mother;
 		this.mother.getChildren().add(this);
