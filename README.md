@@ -1,7 +1,7 @@
-This repo implements a service which exposes a RESTful JSON interface which manipulates genealogical data.
-It is designed to be used as a service upon which different experimental Javascript clients can be evaluated.
+**This repo implements a service which exposes a RESTful JSON interface which manipulates genealogical data.
+It is designed to be used as a service upon which different experimental Javascript clients can be evaluated.**
 
-**Family API**
+***Family API***
 
     URL - http://localhost:8080/family
      
@@ -20,7 +20,7 @@ It is designed to be used as a service upon which different experimental Javascr
      Update collaborators. Do not return their URIs. 
      Return status: 200 OK.
 
-**What**
+***What***
 
  * Spring Roo
  * MySQL
