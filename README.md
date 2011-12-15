@@ -20,6 +20,10 @@ It is designed to be used as a service upon which different experimental Javascr
      Update collaborators. Do not return their URIs. 
      Return status: 200 OK.
 
+**What**
+
+  Spring Roo
+  MySQL
 
     
     
