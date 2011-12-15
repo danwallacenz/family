@@ -8,7 +8,7 @@ It is designed to be used as a service upon which different experimental Javascr
     GET - $URL/person/{id} Return a JSON representation of a Person.
      Return status: 200 OK.
     
-    POST - $URL/person/{id}  Create a Person given a JSON representation. 
+    POST - $URL/person/  Create a Person given a JSON representation. 
      Return a URI for that Person.  
      Return status: 201 created.
 
