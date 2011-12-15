@@ -22,8 +22,9 @@ It is designed to be used as a service upon which different experimental Javascr
 
 **What**
 
-  Spring Roo
-  MySQL
+ * Spring Roo
+ * MySQL
+ * Maven
 
     
     
