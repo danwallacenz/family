@@ -36,7 +36,7 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private java.lang.Long id;
-   
+    
     
 	/*
 	 * Custom Finders
