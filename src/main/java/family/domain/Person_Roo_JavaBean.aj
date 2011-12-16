@@ -9,6 +9,14 @@ import java.util.Set;
 
 privileged aspect Person_Roo_JavaBean {
     
+    public java.lang.Long Person.getId() {
+        return this.id;
+    }
+    
+    public void Person.setId(java.lang.Long id) {
+        this.id = id;
+    }
+    
     public java.lang.String Person.getName() {
         return this.name;
     }
@@ -39,5 +47,6 @@ privileged aspect Person_Roo_JavaBean {
     
     public void Person.setSex(Sex sex) {
         this.sex = sex;
-    }    
+    }
+    
 }

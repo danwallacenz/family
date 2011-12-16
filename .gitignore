@@ -1,3 +1,8 @@
 target/
 .settings/
+<<<<<<< HEAD
 log.roo
+=======
+.classpath
+.project
+>>>>>>> 5b207f99c36c3da73bf9c8ab03147a4a292f1795

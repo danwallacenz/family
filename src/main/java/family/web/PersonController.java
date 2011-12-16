@@ -57,6 +57,9 @@ public class PersonController {
      * @param id
      * @param motherId
      * @return
+     * 
+     * TODO remove child from previous father's children if present. 
+     * 
      */
     @RequestMapping(value = "/{id}/father/{fatherId}", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseBody
