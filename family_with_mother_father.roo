@@ -69,7 +69,7 @@ perform package
 // mvn tomcat:run
 
 // Find Person id = 1
-// curl -i -H "Accept: application/json" http://localhost:8080/family/people/1
+// curl -i -H "Accept: application/json" http://localhost:8080/family/people/5
 
 // Find all people
 // curl -i -H "Accept: application/json" http://localhost:8080/family/people
