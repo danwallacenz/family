@@ -37,9 +37,9 @@ privileged aspect Person_Roo_JavaBean {
         return this.children;
     }
     
-    public void Person.setChildren(Set<Person> children) {
-        this.children = children;
-    }
+//    public void Person.setChildren(Set<Person> children) {
+//        this.children = children;
+//    }
     
     public Sex Person.getSex() {
         return this.sex;

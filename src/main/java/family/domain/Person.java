@@ -32,6 +32,11 @@ import flexjson.JSONSerializer;
 		"findPeopleByFatherOrMother" })
 public class Person {
 
+	public Person(){
+		this.setSex(Sex.NOT_KNOWN);
+		this.children = new HashSet<family.domain.Person>();
+	}
+	
 	private static Logger logger = LoggerFactory.getLogger(Person.class);
 
     @Id
@@ -112,36 +117,20 @@ public class Person {
         return serializer.serialize(this);
     }
 	
-	
-//    public java.lang.String getName() {
-//        return this.name;
-//    }
-//    
-//    public void setName(java.lang.String name) {
-//        this.name = name;
-//    }
-//	
-//    public Person getFather() {
-//        return this.father;
-//    }
-//    
-//    public Person getMother() {
-//        return this.mother;
-//    } 
-//    
-//    public Set<Person>getChildren() {
-//        return this.children;
-//    }
-//    
-//    public void setChildren(Set<Person> children) {
-//        this.children = children;
-//    }
-//    
-//    public java.lang.Long getId() {
-//        return this.id;
-//    }
-//    
-//    public void setId(java.lang.Long id) {
-//        this.id = id;
-//    }    
+    public void setChildren(final Set<Person> children) {
+    	Set<Person> oldChildren = this.children;
+        for (Person oldChild : oldChildren) {
+        	oldChild.setFather(null);
+        	
+		}
+        this.children = children;
+        for (Person newChild : this.children) {
+        	if(this.getSex().equals(Sex.MALE)){
+        		newChild.setFather(this);
+        	}
+        	if(this.getSex().equals(Sex.FEMALE)){
+        		newChild.setMother(this);
+        	}        	
+		}
+    }
 }
