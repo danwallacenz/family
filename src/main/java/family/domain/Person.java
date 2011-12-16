@@ -22,6 +22,8 @@ import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import flexjson.JSONSerializer;
+
 @RooJavaBean
 @RooToString
 @RooJson
@@ -54,6 +56,7 @@ public class Person {
 		return q;
 	}
 
+	
 	@Size(max = 30)
 	private String name;
 
@@ -93,6 +96,14 @@ public class Person {
 		father.getChildren().remove(this);
 		this.setFather(null);
 	}
+	
+    public java.lang.String toJson() {
+    	JSONSerializer serializer = new JSONSerializer()
+		.exclude("*.class","father.father","father.mother","mother.father","mother.mother","children.father", "children.mother", "*.version")
+		.include("children");
+        return serializer.serialize(this);
+    }
+	
 	
 //    public java.lang.String getName() {
 //        return this.name;
