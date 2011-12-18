@@ -29,17 +29,21 @@ privileged aspect Person_Roo_JavaBean {
         return this.father;
     }
     
+    public void Person.setFather(Person father) {
+        this.father = father;
+    }
+    
     public Person Person.getMother() {
         return this.mother;
     }
     
-    public Set<Person> Person.getChildren() {
-        return this.children;
+    public void Person.setMother(Person mother) {
+        this.mother = mother;
     }
     
-//    public void Person.setChildren(Set<Person> children) {
-//        this.children = children;
-//    }
+    public void Person.setChildren(Set<Person> children) {
+        this.children = children;
+    }
     
     public Sex Person.getSex() {
         return this.sex;

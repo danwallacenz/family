@@ -54,52 +54,39 @@ public class PersonTest {
 		p.setChildren(children);
 
 	}
-	
-	
-	@Test
-	public void testUpdateChildren(){
-		
-		Person child3 = new Person();
-		child3.setName("child3"); 
-		child3.setId(6L);
-
-		Person child4 = new Person();
-		child4.setName("child4"); 
-		child4.setId(7L);
-		
-		Set<Person> newChildren = new HashSet<family.domain.Person>();
-		newChildren.add(child3);
-		newChildren.add(child4);
-		p.setChildren(newChildren);
-		
-		// Are children replaced correctly?
-		Assert.assertTrue("child3 is not in p's children", p.getChildren().contains(child3));
-		Assert.assertTrue("child4 is not in p's children", p.getChildren().contains(child4));
-		Assert.assertFalse("child1 should not be in p's children", p.getChildren().contains(child1));
-		Assert.assertFalse("child2 should not be in p's children", p.getChildren().contains(child2));
-		
-		// Are the new children's father correct?
-		Assert.assertEquals("p should be child3's father", p, child3.getFather());
-		Assert.assertEquals("p should be child4's father", p, child4.getFather());
-		
-		// Are the old children's father null?
-		Assert.assertNull("child1's father should be null", child1.getFather());
-		Assert.assertNull("child2's father should be null", child2.getFather());
+	 @Test
+	public void testAddFather(){
+		Person newDad = new Person();
+		Person oldDad = p.getFather();
+		p.addFather(newDad);
+		Assert.assertSame("wrong dad - new one not set",newDad, p.getFather());
+		Assert.assertTrue("new dad is missing a child",newDad.getChildren().contains(p));
+		Assert.assertFalse("old dad has a child too many.",oldDad.getChildren().contains(p));
 	}
 	
-//    @Test
-//	public void testSerializePerson(){
-//		JSONSerializer serializer = new JSONSerializer();	
-//		String json =  serializer.serialize( p );	
-//		System.out.println(json);
-//	}
-//	
-//    public Person fromJsonToPerson(java.lang.String json) {
-//        return new JSONDeserializer<Person>().use(null, Person.class).deserialize(json);
-//    }
-//	
-//    public java.lang.String toJson(Person person) {
-//        return new JSONSerializer().exclude("*.class").serialize(person);
-//    }
-
+	 @Test
+	public void testRemoveFather(){
+		Person oldDad = p.getFather();
+		p.removeFather();
+		Assert.assertNull("still has that dad", p.getFather());	
+		Assert.assertFalse("old dad has a child too many.",oldDad.getChildren().contains(p));
+	}
+	
+	 @Test
+	public void testAddMother(){
+		Person newMum = new Person();
+		Person oldMum = p.getMother();
+		p.addMother(newMum);
+		Assert.assertSame("wrong mum - new one not set",newMum, p.getMother());
+		Assert.assertTrue("new mum is missing a child",newMum.getChildren().contains(p));
+		Assert.assertFalse("old mum has a child too many.",oldMum.getChildren().contains(p));
+	}
+	
+	 @Test
+	public void testRemoveMother(){
+		Person oldMum = p.getMother();
+		p.removeMother();
+		Assert.assertNull("still has that mum", p.getMother());	
+		Assert.assertFalse("old mum has a child too many.",oldMum.getChildren().contains(p));
+	}
 }

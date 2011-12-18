@@ -3,4 +3,5 @@ target/
 log.roo
 .classpath
 .project
-ajcore*
+ajcore
+*.tmproj

@@ -82,34 +82,6 @@ public class Person {
 	@Enumerated
 	private Sex sex;
 
-	/**
-	 * TODO remove from previous father's children, if any.
-	 * @param father
-	 */
-	public void setFather(family.domain.Person father) {
-		this.father = father;
-		this.father.getChildren().add(this);
-	}
-
-	/**
-	 * TODO remove from previous mother's children, if any.
-	 * @param mother
-	 */
-	public void setMother(family.domain.Person mother) {
-		this.mother = mother;
-		this.mother.getChildren().add(this);
-	}
-
-	public void removeMother(family.domain.Person mother) {
-		mother.getChildren().remove(this);
-		this.setMother(null);
-	}
-
-	public void removeFather(family.domain.Person father) {
-		father.getChildren().remove(this);
-		this.setFather(null);
-	}
-	
     public java.lang.String toJson() {
     	JSONSerializer serializer = new JSONSerializer()
 		.exclude("*.class","father.father","father.mother","mother.father","mother.mother","children.father", "children.mother", "*.version")
@@ -117,20 +89,124 @@ public class Person {
         return serializer.serialize(this);
     }
 	
-    public void setChildren(final Set<Person> children) {
-    	Set<Person> oldChildren = this.children;
-        for (Person oldChild : oldChildren) {
-        	oldChild.setFather(null);
-        	
-		}
-        this.children = children;
-        for (Person newChild : this.children) {
-        	if(this.getSex().equals(Sex.MALE)){
-        		newChild.setFather(this);
-        	}
-        	if(this.getSex().equals(Sex.FEMALE)){
-        		newChild.setMother(this);
-        	}        	
-		}
+    //////////////////////////////////////////////
+    // Add and remove father, mother and children.
+    
+	/**
+	 * TODO remove from previous father's children, if any.
+	 * @param father
+	 */
+//	protected void setFather(Person father) {		
+//		this.father = father;
+//		this.father.getChildren().add(this);
+//	}
+
+	/**
+	 * TODO remove from previous mother's children, if any.
+	 * @param mother
+	 */
+//	protected void setMother(Person mother) {
+//		this.mother = mother;
+//		this.mother.getChildren().add(this);
+//	}
+
+
+	
+	/**
+	 * Manage the addition of a child - both sides of the relationship.
+	 * @param aChild
+	 */
+	protected void addChild(Person aChild){
+		this.getChildren().add(aChild);
+	}
+	
+	/**
+	 * Manage the removal of a child - both sides of the relationship.
+	 * Need to check both the unwanted child's mother and their father to determine which to remove. 
+	 * @param anUnwantedChild
+	 */
+    protected void removeChild(Person anUnwantedChild){
+    	if(this == anUnwantedChild.getMother()){
+    		anUnwantedChild.removeMother();
+    	}
+    	if(this == anUnwantedChild.getFather()){
+    		anUnwantedChild.removeFather();
+    	}
     }
+    
+//    protected void setChildren(final Set<Person> children) {
+//    	Set<Person> oldChildren = this.children;
+//        for (Person oldChild : oldChildren) {
+//        	oldChild.getFather().removeChild(oldChild);
+//        	oldChild.setFather(null);
+//        	
+//		}
+//        this.children = children;
+//        for (Person newChild : this.children) {
+//        	if(this.getSex().equals(Sex.MALE)){
+//        		newChild.setFather(this);
+//        	}
+//        	if(this.getSex().equals(Sex.FEMALE)){
+//        		newChild.setMother(this);
+//        	}        	
+//		}
+//    }
+
+	public Set<Person> getChildren() {
+		if( this.children == null ){
+			this.children = new HashSet<Person>();
+		}
+        return this.children;
+    }
+
+	//
+	/**
+	 *  Manage the move from one father to another. Current and next fathers may be null. 
+	 *  current father - remove this from his children.
+	 *  new father - add this to his children.
+	 *  set this father to new father.
+	 * @param newFather
+	 */
+	public void addFather(Person newFather) {
+		if(this.getFather() != null){
+			this.getFather().removeChild(this);
+		}
+		this.setFather(newFather);
+		this.getFather().addChild(this);		
+	}
+
+	/**
+	 * Manage the un-setting of a father. Remove this from his children if he exists.
+	 */
+	public void removeFather() {
+		if (this.getFather() != null){
+			this.getFather().getChildren().remove(this);
+			this.setFather(null);
+		}
+	}
+	
+	/**
+	 *  Manage the move from one mother to another. Current and next mothers may be null. 
+	 *  current mother - remove this from her children.
+	 *  new mother - add this to her children.
+	 *  set this mother to new mother.
+	 * @param newFather
+	 */
+	public void addMother(Person newMother) {
+		if(this.getMother() != null){
+			this.getMother().getChildren().remove(this);
+		}
+		this.setMother(newMother);
+		this.getMother().getChildren().add(this);		
+	}
+	/**
+	 * Manage the un-setting of a mother. Remove this from her children if she exists.
+	 */
+	public void removeMother() {
+		if (this.getMother() != null){
+			this.getMother().getChildren().remove(this);
+			this.setMother(null);
+		}
+	}
+	
 }

@@ -50,7 +50,7 @@ public class TestFlexJson {
 		child.setId(4L);
 		p.setVersion(4);
 		
-		child.setFather(p);
+		child.addFather(p);
 		
 		grandChild = new Person();
 		grandChild.setName("grandchild"); 
@@ -58,7 +58,7 @@ public class TestFlexJson {
 		grandChild.setSex(Sex.FEMALE);
 		p.setVersion(5);
 		
-		grandChild.setFather(child);
+		grandChild.addFather(child);
 		
 	}
 
