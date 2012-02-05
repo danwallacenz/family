@@ -1,5 +1,8 @@
 package family.web;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -9,7 +12,10 @@ import org.springframework.roo.addon.web.mvc.controller.finder.RooWebFinder;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -100,4 +106,25 @@ public class PersonController {
         headers.add("Content-Type", "application/text; charset=utf-8");
         return new ResponseEntity<String>(Person.toJsonArray(Person.findChildren(parentId).getResultList()), headers, HttpStatus.OK);
     }    
+    
+    @RequestMapping(value = "/{id}", headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<java.lang.String> showJson(@PathVariable("id") java.lang.Long id) {
+        Person person = Person.findPerson(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        if (person == null) {
+            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<String>(person.toJson(), headers, HttpStatus.OK);
+    }
+    
+    @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<java.lang.String> createFromJson(@RequestBody java.lang.String json) {
+        Person person = Person.fromJsonToPerson(json);
+        person.persist();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/text");
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+    }
 }

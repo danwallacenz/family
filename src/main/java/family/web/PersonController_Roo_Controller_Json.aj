@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 privileged aspect PersonController_Roo_Controller_Json {
     
-    @RequestMapping(value = "/{id}", headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<java.lang.String> PersonController.showJson(@PathVariable("id") java.lang.Long id) {
-        Person person = Person.findPerson(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/text; charset=utf-8");
-        if (person == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<String>(person.toJson(), headers, HttpStatus.OK);
-    }
+//    @RequestMapping(value = "/{id}", headers = "Accept=application/json")
+//    @ResponseBody
+//    public ResponseEntity<java.lang.String> PersonController.showJson(@PathVariable("id") java.lang.Long id) {
+//        Person person = Person.findPerson(id);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Content-Type", "application/text; charset=utf-8");
+//        if (person == null) {
+//            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<String>(person.toJson(), headers, HttpStatus.OK);
+//    }
     
     @RequestMapping(headers = "Accept=application/json")
     @ResponseBody
@@ -38,14 +38,14 @@ privileged aspect PersonController_Roo_Controller_Json {
         return new ResponseEntity<String>(Person.toJsonArray(result), headers, HttpStatus.OK);
     }
     
-    @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<java.lang.String> PersonController.createFromJson(@RequestBody java.lang.String json) {
-        Person person = Person.fromJsonToPerson(json);
-        person.persist();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/text");
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
-    }
+//    @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
+//    public ResponseEntity<java.lang.String> PersonController.createFromJson(@RequestBody java.lang.String json) {
+//        Person person = Person.fromJsonToPerson(json);
+//        person.persist();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Content-Type", "application/text");
+//        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+//    }
     
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<java.lang.String> PersonController.createFromJsonArray(@RequestBody java.lang.String json) {

@@ -89,4 +89,11 @@ public class PersonTest {
 		Assert.assertNull("still has that mum", p.getMother());	
 		Assert.assertFalse("old mum has a child too many.",oldMum.getChildren().contains(p));
 	}
+	 
+//	 @Test
+//	 public void testUpdatePersonRemoveChild(){
+//		 Set<Person> oldChildren = p.getChildren();
+//		 p.
+//	 }
+	 
 }

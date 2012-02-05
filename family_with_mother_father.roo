@@ -88,7 +88,7 @@ perform package
 // curl -i -X DELETE -H "Accept: application/json" http://localhost:8080/family/people/1
 
 // find by name like
-// curl -i -H "Accept: application/json" http://localhost:8090/family/people?name=dan&find=ByNameLike
+// curl -i -H "Accept: application/json" http://localhost:8080/family/people?name=dan&find=ByNameLike
 
 // set mother
 // curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/mother/2
