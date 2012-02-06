@@ -57,16 +57,16 @@ privileged aspect PersonController_Roo_Controller_Json {
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
     
-    @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<java.lang.String> PersonController.updateFromJson(@RequestBody java.lang.String json) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/text");
-        Person person = Person.fromJsonToPerson(json);
-        if (person.merge() == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
-    }
+//    @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
+//    public ResponseEntity<java.lang.String> PersonController.updateFromJson(@RequestBody java.lang.String json) {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Content-Type", "application/text");
+//        Person person = Person.fromJsonToPerson(json);
+//        if (person.merge() == null) {
+//            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<String>(headers, HttpStatus.OK);
+//    }
     
     @RequestMapping(value = "/jsonArray", method = RequestMethod.PUT, headers = "Accept=application/json")
     public ResponseEntity<java.lang.String> PersonController.updateFromJsonArray(@RequestBody java.lang.String json) {

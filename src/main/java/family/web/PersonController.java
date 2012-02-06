@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriTemplate;
 
 import family.domain.Person;
+import flexjson.JSONSerializer;
 
 @RooWebJson(jsonObject = Person.class)
 @Controller
@@ -102,23 +103,27 @@ public class PersonController {
     public ResponseEntity<java.lang.String> findChildren(@RequestParam("parentId") Long parentId) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/text; charset=utf-8");
-        return new ResponseEntity<String>(Person.toJsonArray(Person.findChildren(parentId).getResultList()), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(Person.toJsonArray(Person.findChildren(parentId).getResultList()),
+        		headers, HttpStatus.OK);
     }    
     
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<java.lang.String> showJson(@PathVariable("id") java.lang.Long id) {
+    public ResponseEntity<java.lang.String> showJson(@PathVariable("id") java.lang.Long id,
+    		HttpServletRequest httpServletRequest) {
         Person person = Person.findPerson(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         if (person == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<String>(person.toJson(), headers, HttpStatus.OK);
+        String personToJson = person.toJson();
+        return new ResponseEntity<String>(personToJson, headers, HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<java.lang.String> createFromJson(@RequestBody java.lang.String json, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<java.lang.String> createFromJson(@RequestBody java.lang.String json,
+    		HttpServletRequest httpServletRequest) {
         Person person = Person.fromJsonToPerson(json);
         person.persist();
         HttpHeaders headers = new HttpHeaders();
@@ -126,6 +131,39 @@ public class PersonController {
         String location = getLocationForChildResource(httpServletRequest, person.getId());
         headers.add("Location", location);
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+    }
+    
+    @RequestMapping(value = "/{id}",method = RequestMethod.PUT, headers = "Accept=application/json")
+    public ResponseEntity<java.lang.String> updateFromJson(@PathVariable("id") java.lang.Long id, 
+    		@RequestBody java.lang.String json,
+    		HttpServletRequest httpServletRequest) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        
+        // if no valid existing id, is present in the JSON, then
+    	// then the Person will be created rather than updated.
+       if(json.indexOf("\"id\":") == -1){
+    	   log.error("No id present in json:" + json);
+    	   // TODO add descriptive msg in body 
+    	   return new ResponseEntity<String>(headers, HttpStatus.BAD_REQUEST);
+       }
+        
+        Person personContainingUpdates = Person.fromJsonToPerson(json);
+        
+        try{
+	        if (personContainingUpdates.merge() == null) {
+	            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+	        }
+        }catch(Exception e){
+        	String errorMsg = "\nERROR updating Person with id" + id + "\n" + json +"\n" + e.getMessage();
+        	log.error(errorMsg);
+        	return new ResponseEntity<String>(errorMsg, headers, HttpStatus.NOT_MODIFIED);
+        }
+        //String location = getLocationForChildResource(httpServletRequest, id);
+        String location = httpServletRequest.getRequestURL().toString();
+        headers.add("Location", location);
+        return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
 
 	private String getLocationForChildResource(

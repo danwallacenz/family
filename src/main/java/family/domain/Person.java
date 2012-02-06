@@ -84,7 +84,7 @@ public class Person {
 
     public java.lang.String toJson() {
     	JSONSerializer serializer = new JSONSerializer()
-		.exclude("*.class","father.father","father.mother","mother.father","mother.mother","children.father", "children.mother", "*.version")
+		.exclude("*.class","father.father","father.mother","mother.father","mother.mother","children.father", "children.mother")
 		.include("children");
         return serializer.serialize(this);
     }

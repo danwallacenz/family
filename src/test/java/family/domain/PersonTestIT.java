@@ -12,9 +12,34 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
  
 public class PersonTestIT{ 
+   
+	private static final String HOST_AND_PORT = "http://localhost:8080";
+	private static final String APP_PATH = "/family/people/";
+	private static final String APP_URL = HOST_AND_PORT + APP_PATH;
 	
 	/**
-	 * curl -i -H "Accept: application/json" http://localhost:8080/family/people/5
+     * Tests creation of a new <code>Person</code> from a JSON <code>String</code> 
+     * and validate the HTTP response code (201 CREATED) and the LOCATION header.
+     * @throws Exception
+     */
+    @Test
+    public void createOnePersonFromJSON() throws Exception {
+	
+		RestAssured.requestContentType(JSON);
+		try {
+			given().header("Accept", "application/json")
+					.body("{ \"name\" : \"johnny\"}").then().expect()
+					.statusCode(201).and().response()
+					.header("Location", containsString(APP_URL)).when()
+					.post("/family/people");
+		} finally {
+			RestAssured.reset();
+		}
+    }
+    
+	/**
+	 * Tests getting a <code>Person</code>.
+	 * <p>curl -i -H "Accept: application/json" http://localhost:8080/family/people/5
 	 * @throws Exception
 	 */	
     @Test
@@ -23,33 +48,124 @@ public class PersonTestIT{
     	String newId = idOfPosted(personAsJson);
     	expect().log().all().body("name", equalTo("jonathan")).given().header("Accept", "application/json").when().get("/family/people/" + newId);     
     }
-   
+    
 	/**
-     * Accept=application/json
-     * @throws Exception
-     */
+	 * Tests updating a single<code>Person</code>.
+	 * @throws Exception
+	 */	
     @Test
-    public void createFromJSON() throws Exception {
-	
+    public void updateOnePerson() throws Exception {
+    	// create a test Person "dan2"
+    	String personAsJson ="{ \"name\" : \"dan2\"}";    	
+    	String newId = idOfPosted(personAsJson);
+    	
+    	// update him
+    	// BEWARE that if no valid i.e., existing id, is present in the JSON, then
+    	// then dan3 will be created rather than updated.
+    	String updatedPersonAsJson 
+    		= "{\"class\":\"family.domain.Person\",\"father\":null,\"id\":" 
+    			+ newId + ",\"mother\":null,\"name\":\"dan3\",\"version\":0}";
+
 		RestAssured.requestContentType(JSON);
 		try {
-			given().header("Accept", "application/json")
-					.body("{ \"name\" : \"johnny\"}").then().expect()
-					.statusCode(201).and().response()
-					.header("Location", containsString("http://localhost:8080/family/people/")).when()
-					.post("/family/people");
+			given().header("Accept", "application/json")					
+					.body(updatedPersonAsJson).then().expect()
+					.statusCode(200)
+					.and().response().header("Location", containsString("/family/people/" + newId))
+					.when().put("/family/people/" + newId);
 		} finally {
 			RestAssured.reset();
 		}
-    }
-    
+		
+		try {
+			// verify name and version have changed
+			expect().log().all().body("name", equalTo("dan3"))
+			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
+		} finally {
+			RestAssured.reset();
+		}
+	}
+   
+	/**
+	 * Tests updating a single<code>Person</code>.
+	 * @throws Exception
+	 */	
+    @Test
+    public void updateTwiceOnePerson() throws Exception {
+    	// create a test Person "dan2"
+    	String personAsJson ="{ \"name\" : \"dan2\"}";    	
+    	String newId = idOfPosted(personAsJson);
+    	
+    	// update him
+    	// BEWARE that if no valid i.e., existing id, is present in the JSON, then
+    	// then dan3 will be created rather than updated.
+    	int version = 0;
+    	String updatedPersonAsJson 
+    		= "{\"id\":"+ newId +",\"name\":\"dan3\",\"version\":" + version + "}";
+
+		RestAssured.requestContentType(JSON);
+		try {
+			given().header("Accept", "application/json")
+					//.body("{\"id\" : \"" + newId +"\", \"name\" : \"dan3\",}").then().expect()
+					.body(updatedPersonAsJson).then().expect()
+					.statusCode(200)
+					.and().response().header("Location", containsString("/family/people/" + newId))
+					.when().put("/family/people/" + newId);
+		} finally {
+			RestAssured.reset();
+		}
+		
+		try {
+			// verify name and version have changed
+			expect().log().all().body("name", equalTo("dan3"))
+			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
+		} finally {
+			RestAssured.reset();
+		}
+		
+    	// update him again
+    	// BEWARE that if no valid i.e., existing id, is present in the JSON, then
+    	// then dan3 will be created rather than updated.
+		// NB increment the version
+    	String reUpdatedPersonAsJson  
+    		= "{\"id\":" + newId+ ",\"name\":\"dan4\",\"version\":" + ++version + "}";
+
+		RestAssured.requestContentType(JSON);
+		try {
+			given().header("Accept", "application/json")
+					//.body("{\"id\" : \"" + newId +"\", \"name\" : \"dan3\",}").then().expect()
+					.body(reUpdatedPersonAsJson).then().expect()
+					.statusCode(200)
+					.and().response().header("Location", containsString("/family/people/" + newId))
+					.when().put("/family/people/" + newId);
+		} finally {
+			RestAssured.reset();
+		}
+		
+		try {
+			// verify name and version have changed
+			expect().log().all().body("name", equalTo("dan4"))
+			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
+		} finally {
+			RestAssured.reset();
+		}
+	}
+      
+    //================================================================================================
     // utility methods
+    /**
+     * Give a JSON <code>String</code> representing a <code>Person</code> ("{ \"name\" : \"johnny\"}"), 
+     * will save it to the database, validate the HTTP response code and Location header, and return 
+     * the id of the newly created <code>Person</code>.
+     * @param json
+     * @return new id
+     */
     private String idOfPosted(String json) {
     	Response response = 
     			given().header("Accept", "application/json")
     			.body(json).then().expect()
     			.statusCode(201).and().response()
-				.header("Location", containsString("http://localhost:8080/family/people/"))
+				.header("Location", containsString(APP_URL))
     			.when()
     			.post("/family/people");
     	String location = response.headers().getValue("Location");

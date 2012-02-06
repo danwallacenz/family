@@ -33,13 +33,13 @@ public class TestFlexJson {
 		mum.setName("mum");
 		mum.setSex(Sex.FEMALE);
 		mum.setId(2L);
-		p.setVersion(2);
+		mum.setVersion(2);
 		
 		dad = new Person();
 		dad.setName("dad"); 
 		dad.setSex(Sex.MALE);
 		dad.setId(3L);
-		p.setVersion(3);
+		dad.setVersion(3);
 		
 		p.setMother(mum);
 		p.setFather(dad);
@@ -48,7 +48,7 @@ public class TestFlexJson {
 		child.setName("child"); 
 		child.setSex(Sex.FEMALE);
 		child.setId(4L);
-		p.setVersion(4);
+		child.setVersion(4);
 		
 		child.addFather(p);
 		
@@ -56,7 +56,7 @@ public class TestFlexJson {
 		grandChild.setName("grandchild"); 
 		grandChild.setId(5L);
 		grandChild.setSex(Sex.FEMALE);
-		p.setVersion(5);
+		grandChild.setVersion(5);
 		
 		grandChild.addFather(child);
 		
@@ -73,31 +73,35 @@ public class TestFlexJson {
 	}
 	
 	@Test 
-	public void testFlexJsonSerialize(){
+	public void testFlexJsonSerializeThreeGenerations(){
 	 
-		serializer = new JSONSerializer()
-			.exclude("*.class","father.father","father.mother","mother.father","mother.mother","children.father", "children.mother", "*.version")
-			.include("children");
-		String json =  serializer.serialize( p );	
+//		serializer = new JSONSerializer()
+//			.exclude("*.class","father.father","father.mother","mother.father","mother.mother","children.father", "children.mother")
+//			.include("children");
+//		String json =  serializer.serialize( p );	
+		
+		String json = p.toJson();
 		System.out.println(json);
 
-		String expected  = "{\"children\":[{\"id\":4,\"name\":\"child\",\"sex\":\"FEMALE\"}],\"father\":{\"id\":3,\"name\":\"dad\",\"sex\":\"MALE\"},\"id\":1,\"mother\":{\"id\":2,\"name\":\"mum\",\"sex\":\"FEMALE\"},\"name\":\"p\",\"sex\":\"MALE\"}";
+		String expected 
+			= "{\"children\":[{\"id\":4,\"name\":\"child\",\"sex\":\"FEMALE\",\"version\":4}],\"father\":{\"id\":3,\"name\":\"dad\",\"sex\":\"MALE\",\"version\":3},\"id\":1,\"mother\":{\"id\":2,\"name\":\"mum\",\"sex\":\"FEMALE\",\"version\":2},\"name\":\"p\",\"sex\":\"MALE\",\"version\":1}";
 		Assert.assertEquals(expected, json);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@Test 
+	public void testFlexJsonSerializeSimple(){
+	 
+		Person dan2 = new Person();
+		dan2.setName("dan2");
+		dan2.setSex(Sex.MALE);
+		dan2.setId(1L);
+		dan2.setVersion(0);	
+		
+		String json = dan2.toJson();
+		System.out.println(json);
+
+		String expected 
+			= "{\"children\":[],\"father\":null,\"id\":1,\"mother\":null,\"name\":\"dan2\",\"sex\":\"MALE\",\"version\":0}";
+		Assert.assertEquals(expected, json);
+	}
 }
