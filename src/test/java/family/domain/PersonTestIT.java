@@ -116,7 +116,7 @@ public class PersonTestIT{
 		
 		try {
 			// verify name and version have changed
-			expect().log().all().body("name", equalTo("dan3"))
+			expect().log().all().body("name", equalTo("dan3")).and().that().body("version", equalTo(++version))
 			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
 		} finally {
 			RestAssured.reset();
@@ -127,7 +127,7 @@ public class PersonTestIT{
     	// then dan3 will be created rather than updated.
 		// NB increment the version
     	String reUpdatedPersonAsJson  
-    		= "{\"id\":" + newId+ ",\"name\":\"dan4\",\"version\":" + ++version + "}";
+    		= "{\"id\":" + newId+ ",\"name\":\"dan4\",\"version\":" + version + "}";
 
 		RestAssured.requestContentType(JSON);
 		try {
@@ -143,7 +143,7 @@ public class PersonTestIT{
 		
 		try {
 			// verify name and version have changed
-			expect().log().all().body("name", equalTo("dan4"))
+			expect().log().all().body("name", equalTo("dan4")).and().that().body("version", equalTo(++version))
 			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
 		} finally {
 			RestAssured.reset();
@@ -170,5 +170,60 @@ public class PersonTestIT{
     	String location = response.headers().getValue("Location");
     	String newId = location.substring(location.lastIndexOf("/") + 1);
     	return newId;
+	}
+    
+	/**
+	 * Tests updating a single<code>Person</code>.
+	 * @throws Exception
+	 */	
+    @Test
+    public void updateOnePersonBetter() throws Exception {
+    	
+    	int version = 0;
+    	
+    	// create a test Person "dan1"
+		Person person = new Person();
+		person.setName("dan1");
+		//person.setSex(Sex.MALE);
+		
+		// serialize person to JSON
+		String personJson = person.toJson(); 
+		
+		// POST person and retrieve the new id
+    	String newId = idOfPosted(personJson);
+    	
+    	// update person with id, a new name, and version = 0
+    	String newName = "dan2";
+		person.setId(new Long(newId));
+		person.setName(newName);
+		//person.setSex(Sex.MALE);
+		person.setVersion(version);
+		
+		// serialize updated person to JSON
+		String personUpdatedToJson = person.toJson();
+
+		// PUT (update) person
+		RestAssured.requestContentType(JSON);
+		try {
+			given().header("Accept", "application/json")					
+					.body(personUpdatedToJson).then().expect()
+					.statusCode(200)
+					.and().response().header(
+							"Location", containsString("/family/people/" + newId))
+					.when().put("/family/people/" + newId);
+		} finally {
+			RestAssured.reset();
+		}
+				
+		// verify name and version have changed by GETting person.
+		try {	
+			expect().log().all()
+			.that().body("name", equalTo(newName))
+			.and().that().body("version", equalTo(++version))
+			.given().header("Accept", "application/json")
+			.when().get("/family/people/" + newId); 
+		} finally {
+			RestAssured.reset();
+		}
 	}
 }
