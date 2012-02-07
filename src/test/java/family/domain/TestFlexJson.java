@@ -1,7 +1,8 @@
 package family.domain;
 
 
-import junit.framework.Assert;
+import static junit.framework.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -85,7 +86,7 @@ public class TestFlexJson {
 
 		String expected 
 			= "{\"children\":[{\"id\":4,\"name\":\"child\",\"sex\":\"FEMALE\",\"version\":4}],\"father\":{\"id\":3,\"name\":\"dad\",\"sex\":\"MALE\",\"version\":3},\"id\":1,\"mother\":{\"id\":2,\"name\":\"mum\",\"sex\":\"FEMALE\",\"version\":2},\"name\":\"p\",\"sex\":\"MALE\",\"version\":1}";
-		Assert.assertEquals(expected, json);
+		assertEquals(expected, json);
 	}
 	
 	@Test 
@@ -102,6 +103,36 @@ public class TestFlexJson {
 
 		String expected 
 			= "{\"children\":[],\"father\":null,\"id\":1,\"mother\":null,\"name\":\"dan2\",\"sex\":\"MALE\",\"version\":0}";
-		Assert.assertEquals(expected, json);
+		assertEquals(expected, json);
+	}
+	
+	@Test
+	public void testSerializeUnserializeOneGeneration(){
+		
+		Person dan = new Person();
+		dan.setId(1L);
+		dan.setName("dan1");
+		dan.setSex(Sex.MALE);
+		dan.setVersion(0);
+		
+		String danJson = dan.toJson();
+		System.out.println(danJson);
+		
+		Person dan1 = Person.fromJsonToPerson(danJson);
+		String dan1Json = dan1.toJson();
+		System.out.println(dan1Json);
+		
+		assertEquals("Person serialize/deserialize failed", danJson, dan1Json);		
+
+//		assertEquals("Person serialize/deserialize failed:\n" + json + "\n" + dan1.toJson() + "\n",
+//				dan, dan1);
+		
+//		Person dan2 = new Person();
+//		dan2.setId(1L);
+//		dan2.setName("dan1");
+//		dan2.setSex(Sex.MALE);
+//		dan2.setVersion(0); 
+		
+		//assertEquals(dan,dan2);
 	}
 }

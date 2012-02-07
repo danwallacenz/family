@@ -55,17 +55,16 @@ public class PersonTestIT{
 	 */	
     @Test
     public void updateOnePerson() throws Exception {
+    	
     	// create a test Person "dan2"
     	String personAsJson ="{ \"name\" : \"dan2\"}";    	
     	String newId = idOfPosted(personAsJson);
     	
     	// update him
-    	// BEWARE that if no valid i.e., existing id, is present in the JSON, then
-    	// then dan3 will be created rather than updated.
+    	String newName = "dan3";
     	String updatedPersonAsJson 
     		= "{\"class\":\"family.domain.Person\",\"father\":null,\"id\":" 
-    			+ newId + ",\"mother\":null,\"name\":\"dan3\",\"version\":0}";
-
+    			+ newId + ",\"mother\":null,\"name\":\""+newName+"\",\"version\":0}";
 		RestAssured.requestContentType(JSON);
 		try {
 			given().header("Accept", "application/json")					
@@ -77,9 +76,9 @@ public class PersonTestIT{
 			RestAssured.reset();
 		}
 		
-		try {
-			// verify name and version have changed
-			expect().log().all().body("name", equalTo("dan3"))
+		// verify name and version have changed
+		try {	
+			expect().log().all().body("name", equalTo(newName))
 			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
 		} finally {
 			RestAssured.reset();

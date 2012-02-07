@@ -22,8 +22,8 @@ import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import family.util.EqualsUtil;
 import flexjson.JSONSerializer;
-
 @RooJavaBean
 @RooToString
 @RooJson
@@ -208,5 +208,24 @@ public class Person {
 			this.setMother(null);
 		}
 	}
-	
-}
+
+//	@Override
+//	public boolean equals(Object that) {
+//		if ( this == that ) return true;
+//		  if ( !(that instanceof Person) ) return false;
+//		  Person aPerson = (Person)that;
+//		  return 
+//		    EqualsUtil.areEqual(this.name, aPerson.getName()) &&
+//		    EqualsUtil.areEqual(this.sex, aPerson.getSex()) &&
+//		    EqualsUtil.areEqual(this.mother, aPerson.getMother()) &&
+//		    EqualsUtil.areEqual(this.father, aPerson.getFather()) &&
+//		    EqualsUtil.areEqual(this.children, aPerson.getChildren()); //array!
+//	}
+//
+//	@Override
+//	public int hashCode() {		
+//		return super.hashCode() + 17 + this.getId().intValue() 
+//				+ 13 + ((this.getVersion() == null)?123:this.getVersion().intValue())
+//				+ 23 + ((this.getName()==null)?34:this.getName().hashCode());
+//	}
+}	
