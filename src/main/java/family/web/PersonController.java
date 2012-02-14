@@ -34,27 +34,40 @@ public class PersonController {
     
     /**
      * curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/mother/2
-     * @param id
+     * @param id child id
      * @param motherId
-     * @return
+     * @return child as JSON
+     * 
+     * TODO do we need the Accept Header?
      */
     @RequestMapping(value = "/{id}/mother/{motherId}", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<java.lang.String> addMother(
-    		@PathVariable("id") java.lang.Long id, @PathVariable("motherId") java.lang.Long motherId) {
+    		@PathVariable("id") java.lang.Long id, @PathVariable("motherId") java.lang.Long motherId, HttpServletRequest httpServletRequest) {
         
     	Person child = Person.findPerson(id);
         Person mother = Person.findPerson(motherId);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/text");
+        headers.add("Content-Type", "application/json");
         if (child == null || mother == null ) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        child.setMother(mother);
+        
+        child.addMother(mother);
         mother.merge();
-        log.debug("added mother (id=" + motherId + ") to child (id=" + id + "). json='" + child.toJson() + "'");
-        return new ResponseEntity<String>(child.toJson(), headers, HttpStatus.OK);
+        
+        // TODO tidy this 
+        StringBuffer requestUrl = httpServletRequest.getRequestURL();       
+        requestUrl.delete(requestUrl.lastIndexOf("mother") - 1, requestUrl.length());
+		String location = requestUrl.toString();
+		String baseURL = requestUrl.delete(requestUrl.lastIndexOf("/"), requestUrl.length()).toString();
+		
+        headers.add("Location", location);
+        log.debug("location=" + location +
+        		" added mother (id=" + motherId + ") to child (id=" + id + "). json='" 
+        		+ child.toJson(location) + "'");
+        return new ResponseEntity<String>(child.toJson(baseURL), headers, HttpStatus.OK);
     }
     
     /**
@@ -69,20 +82,22 @@ public class PersonController {
     @RequestMapping(value = "/{id}/father/{fatherId}", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<java.lang.String> addFather(
-    		@PathVariable("id") java.lang.Long id, @PathVariable("fatherId") java.lang.Long fatherId) {
+    		@PathVariable("id") java.lang.Long id, @PathVariable("fatherId") java.lang.Long fatherId, HttpServletRequest httpServletRequest) {
         
     	Person child = Person.findPerson(id);
         Person father = Person.findPerson(fatherId);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/text");
+        headers.add("Content-Type", "application/json");
         if (child == null || father == null ) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
         child.setFather(father);
         father.merge();
-        log.debug("added father (id=" + fatherId + ") to child (id=" + id + "). json='" + child.toJson() + "'");
-        return new ResponseEntity<String>(child.toJson(), headers, HttpStatus.OK);
+        String hostUrl = httpServletRequest.getRequestURL().toString();
+        
+        log.debug("added father (id=" + fatherId + ") to child (id=" + id + "). json='" + child.toJson(hostUrl) + "'");
+        return new ResponseEntity<String>(child.toJson(hostUrl), headers, HttpStatus.OK);
     }
     
     /**
@@ -100,13 +115,19 @@ public class PersonController {
     
     @RequestMapping(params = "find=children", headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<java.lang.String> findChildren(@RequestParam("parentId") Long parentId) {
+    public ResponseEntity<java.lang.String> findChildren(@RequestParam("parentId") Long parentId, HttpServletRequest httpServletRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/text; charset=utf-8");
         return new ResponseEntity<String>(Person.toJsonArray(Person.findChildren(parentId).getResultList()),
         		headers, HttpStatus.OK);
     }    
     
+    /**
+     * 
+     * @param id
+     * @param httpServletRequest
+     * @return
+     */
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<java.lang.String> showJson(@PathVariable("id") java.lang.Long id,
@@ -117,22 +138,49 @@ public class PersonController {
         if (person == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        String personToJson = person.toJson();
+        
+        StringBuffer hostUrl = httpServletRequest.getRequestURL();
+        hostUrl.delete(hostUrl.lastIndexOf("/"), hostUrl.length());
+        String personToJson = person.toJson(hostUrl.toString());
         return new ResponseEntity<String>(personToJson, headers, HttpStatus.OK);
     }
     
+    /**
+     * 
+     * @param json
+     * @param httpServletRequest
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
+    @ResponseBody
     public ResponseEntity<java.lang.String> createFromJson(@RequestBody java.lang.String json,
     		HttpServletRequest httpServletRequest) {
-        Person person = Person.fromJsonToPerson(json);
-        person.persist();
-        HttpHeaders headers = new HttpHeaders();
+        
+    	HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
+        
+        Person person = null;
+    	try{
+    		person = Person.fromJsonToPerson(json);
+    	}catch(Exception e){
+    		return new ResponseEntity<String>(json, headers, HttpStatus.BAD_REQUEST);
+    	}
+        person.persist();
+
         String location = getLocationForChildResource(httpServletRequest, person.getId());
         headers.add("Location", location);
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        String hostUrl = httpServletRequest.getRequestURL().toString();
+        String personToJson = person.toJson(hostUrl);
+        return new ResponseEntity<String>(personToJson, headers, HttpStatus.CREATED);
     }
     
+    /**
+     * 
+     * @param id
+     * @param json
+     * @param httpServletRequest
+     * @return
+     */
     @RequestMapping(value = "/{id}",method = RequestMethod.PUT, headers = "Accept=application/json")
     public ResponseEntity<java.lang.String> updateFromJson(@PathVariable("id") java.lang.Long id, 
     		@RequestBody java.lang.String json,
@@ -149,9 +197,9 @@ public class PersonController {
     	   return new ResponseEntity<String>(headers, HttpStatus.BAD_REQUEST);
        }
         
-        Person personContainingUpdates = Person.fromJsonToPerson(json);
-        
-        try{
+       try{
+    	   	Person personContainingUpdates = Person.fromJsonToPerson(json);        
+
 	        if (personContainingUpdates.merge() == null) {
 	            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
 	        }
@@ -160,15 +208,23 @@ public class PersonController {
         	log.error(errorMsg);
         	return new ResponseEntity<String>(errorMsg, headers, HttpStatus.NOT_MODIFIED);
         }
-        //String location = getLocationForChildResource(httpServletRequest, id);
-        String location = httpServletRequest.getRequestURL().toString();
+        StringBuffer url = httpServletRequest.getRequestURL();
+        //url.delete(url.lastIndexOf("/"), url.length());
+        String location = url.toString();
         headers.add("Location", location);
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
 
+    /**
+     * 
+     * @param httpServletRequest
+     * @param childId
+     * @return
+     */
 	private String getLocationForChildResource(
 			HttpServletRequest httpServletRequest, Object childId) {
 		StringBuffer url = httpServletRequest.getRequestURL();
+		//url.delete(url.lastIndexOf("/") + 1, url.length());
 		UriTemplate template = new UriTemplate(url.append("/{childId}").toString());
 		String location = template.expand(childId).toASCIIString();
 		return location;

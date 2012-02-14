@@ -2,13 +2,16 @@ package family.domain;
 
 
 import static junit.framework.Assert.*;
-import static org.hamcrest.Matchers.*;
+
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import family.util.PersonTransformer;
 import flexjson.JSONSerializer;
+import flexjson.transformer.Transformer;
 
 public class TestFlexJson {
 
@@ -18,6 +21,8 @@ public class TestFlexJson {
 	private Person child;
 	private Person grandChild;
 	private JSONSerializer serializer;	
+	
+	private String appUrl = "http://localhost:8080/family/people";
 	
 	@Before
 	public void setup(){
@@ -42,8 +47,8 @@ public class TestFlexJson {
 		dad.setId(3L);
 		dad.setVersion(3);
 		
-		p.setMother(mum);
-		p.setFather(dad);
+		//p.addMother(mum);
+		//p.addFather(dad);
 		
 		child = new Person();
 		child.setName("child"); 
@@ -53,13 +58,13 @@ public class TestFlexJson {
 		
 		child.addFather(p);
 		
-		grandChild = new Person();
-		grandChild.setName("grandchild"); 
-		grandChild.setId(5L);
-		grandChild.setSex(Sex.FEMALE);
-		grandChild.setVersion(5);
-		
-		grandChild.addFather(child);
+//		grandChild = new Person();
+//		grandChild.setName("grandchild"); 
+//		grandChild.setId(5L);
+//		grandChild.setSex(Sex.FEMALE);
+//		grandChild.setVersion(5);
+//		
+//		grandChild.addFather(child);
 		
 	}
 
@@ -73,19 +78,21 @@ public class TestFlexJson {
 		grandChild = null;
 	}
 	
-	@Test 
+	//@Test 
 	public void testFlexJsonSerializeThreeGenerations(){
 	 
-//		serializer = new JSONSerializer()
-//			.exclude("*.class","father.father","father.mother","mother.father","mother.mother","children.father", "children.mother")
-//			.include("children");
-//		String json =  serializer.serialize( p );	
+		serializer = new JSONSerializer();
+		serializer.transform(new PersonTransformer(), Person.class)
+			.exclude("*.class","father.father","father.mother","mother.father","mother.mother")
+			//.include("children.father.id, children.mother.id");
+			.include("children").prettyPrint(false);
+		String json =  serializer.serialize( p );	
 		
-		String json = p.toJson();
+//		String json = p.toJson(); 
 		System.out.println(json);
 
 		String expected 
-			= "{\"children\":[{\"id\":4,\"name\":\"child\",\"sex\":\"FEMALE\",\"version\":4}],\"father\":{\"id\":3,\"name\":\"dad\",\"sex\":\"MALE\",\"version\":3},\"id\":1,\"mother\":{\"id\":2,\"name\":\"mum\",\"sex\":\"FEMALE\",\"version\":2},\"name\":\"p\",\"sex\":\"MALE\",\"version\":1}";
+			= "{\"id\":1,\"name\":\"p\",\"version\":1,\"sex\":\"MALE\",\"father\":{\"id\":3,\"name\":\"dad\",\"version\":3,\"sex\":\"MALE\",\"father\":null,\"mother\":null,\"children\":[{\"id\":1,\"version\":1,\"name\":\"p\",\"sex\":\"MALE\",\"father\":3,\"mother\":2}]},\"mother\":{\"id\":2,\"name\":\"mum\",\"version\":2,\"sex\":\"FEMALE\",\"father\":null,\"mother\":null,\"children\":[{\"id\":1,\"version\":1,\"name\":\"p\",\"sex\":\"MALE\",\"father\":3,\"mother\":2}]},\"children\":[{\"id\":4,\"version\":4,\"name\":\"child\",\"sex\":\"FEMALE\",\"father\":1,\"mother\":\"null\"}]}";
 		assertEquals(expected, json);
 	}
 	
@@ -93,17 +100,209 @@ public class TestFlexJson {
 	public void testFlexJsonSerializeSimple(){
 	 
 		Person dan2 = new Person();
-		dan2.setName("dan2");
+		dan2.setName("Daniel Wallace");
 		dan2.setSex(Sex.MALE);
 		dan2.setId(1L);
 		dan2.setVersion(0);	
-		
-		String json = dan2.toJson();
-		System.out.println(json);
+			
+    	JSONSerializer serializer = new JSONSerializer();
+		serializer.transform(new PersonTransformer(), Person.class)
+			.exclude("*.class","father.father","father.mother","mother.father","mother.mother")
+			//.include("children.father.id, children.mother.id");
+			.include("children").prettyPrint(false);
+		String json =  serializer.serialize( dan2 );
 
-		String expected 
-			= "{\"children\":[],\"father\":null,\"id\":1,\"mother\":null,\"name\":\"dan2\",\"sex\":\"MALE\",\"version\":0}";
-		assertEquals(expected, json);
+		String expectedJSON = "{" +
+    		"\"id\":1," +	
+    		"\"name\":\"Daniel Wallace\"," +
+      		"\"version\":0," +
+      		"\"sex\":\"MALE\"," +
+      		"\"father\":null," +
+      		"\"mother\":null," +
+      		"\"children\":[]," +
+      		"\"links\":" +
+      			"[" +
+    	  			"{" +
+    	  				"\"rel\":\"self\"," +
+    	  				"\"href\":\"http://localhost:8080/family/people/1\"," +
+    	  				"\"title\":\"Daniel Wallace\"" +
+    	  			"}," +
+    	   			"{" +
+    	  				"\"rel\":\"father\"," +
+    	  				"\"href\":\"http://localhost:8080/family/people/1/father\"," +
+    	  				"\"title\":\"Father\"" +
+    	  			"}," +
+    	   			"{" +
+    	  				"\"rel\":\"mother\"," +
+    	  				"\"href\":\"http://localhost:8080/family/people/1/mother\"," +
+    	  				"\"title\":\"Mother\"" +
+    	  			"}," +
+    	  			"{" +
+    	  				"\"rel\":\"children\"," +
+    	  				"\"href\":\"http://localhost:8080/family/people/1/children\"," +
+    	  				"\"title\":\"Children\"" +
+    	  			"}" +
+      		 	"]" +
+    	"}";
+		assertEquals(expectedJSON, json);
+	}
+	
+	@Test
+	public void mother(){
+		
+		Person dan = new Person();
+		dan.setName("Daniel Roy Wallace");
+		dan.setSex(Sex.MALE);
+		dan.setId(1L);
+		dan.setVersion(0);
+		
+		Person joan = new Person();
+		joan.setName("Joan Wallace");
+		joan.setSex(Sex.FEMALE);
+		joan.setId(2L);
+		joan.setVersion(0);
+		
+		dan.addMother(joan);
+		
+		assertEquals( joan, dan.getMother());
+		assertTrue(joan.getChildren().contains(dan));
+		joan.setVersion(1);
+		dan.setVersion(1);
+	
+		String danJSON =  dan.toJson(appUrl);
+		
+		String expectedDanJSON = "{" +
+		    "\"id\":1," +
+		    "\"name\":\"Daniel Roy Wallace\"," +
+		    "\"version\":1," +
+		    "\"sex\":\"MALE\"," +
+		    "\"father\":null," +
+		    "\"mother\":{" +
+		        "\"id\":2," +
+		        "\"name\":\"Joan Wallace\"," +
+		        "\"sex\":\"FEMALE\"," +
+		        "\"version\":1," +
+		        "\"links\":[" +
+		            "{" +
+		                "\"rel\":\"self\"," +
+		                "\"href\":\"http://localhost:8080/family/people/2\"," +
+		                "\"title\":\"Joan Wallace\"" +
+		            "}," +
+		            "{" +
+		                "\"rel\":\"father\"," +
+		                "\"href\":\"http://localhost:8080/family/people/2/father\"," +
+		                "\"title\":\"Father\"" +
+		            "}," +
+		            "{" +
+		                "\"rel\":\"mother\"," +
+		                "\"href\":\"http://localhost:8080/family/people/2/mother\"," +
+		                "\"title\":\"Mother\"" +
+		            "}," +
+		            "{" +
+		                "\"rel\":\"children\"," +
+		                "\"href\":\"http://localhost:8080/family/people/2/children\"," +
+		                "\"title\":\"Children\"" +
+		            "}" +
+		        "]" +
+		    "}," +
+		    "\"children\":[" +
+		
+		    "]," +
+		    "\"links\":[" +
+		        "{" +
+		            "\"rel\":\"self\"," +
+		            "\"href\":\"http://localhost:8080/family/people/1\"," +
+		            "\"title\":\"Daniel Roy Wallace\"" +
+		        "}," +
+		        "{" +
+		            "\"rel\":\"father\"," +
+		            "\"href\":\"http://localhost:8080/family/people/1/father\"," +
+		            "\"title\":\"Father\"" +
+		        "}," +
+		        "{" +
+		            "\"rel\":\"mother\"," +
+		            "\"href\":\"http://localhost:8080/family/people/2\"," +
+		            "\"title\":\"Joan Wallace\"" +
+		        "}," +
+		        "{" +
+		            "\"rel\":\"children\"," +
+		            "\"href\":\"http://localhost:8080/family/people/1/children\"," +
+		            "\"title\":\"Children\"" +
+		        "}" +
+		    "]" +
+		"}";
+		
+		assertEquals(expectedDanJSON, danJSON);
+		
+		// Check the mother's JSON
+		
+		String joanJSON =  joan.toJson(appUrl);
+		String expectedJoanJSON = "{" +
+		    "\"id\":2," +
+		    "\"name\":\"Joan Wallace\"," +
+		    "\"version\":1," +
+		    "\"sex\":\"FEMALE\"," +
+		    "\"father\":null," +
+		    "\"mother\":null," +
+		    "\"children\":[" +
+		        "{" +
+		            "\"id\":1," +
+		            "\"version\":1," +
+		            "\"name\":\"Daniel Roy Wallace\"," +
+		            "\"sex\":\"MALE\"," +
+		            "\"father\":\"null\"," +
+		            "\"mother\":2," +
+		            "\"links\":[" +
+		                "{" +
+		                    "\"rel\":\"self\"," +
+		                    "\"href\":\"http://localhost:8080/family/people/1\"," +
+		                    "\"title\":\"Daniel Roy Wallace\"" +
+		                "}," +
+		                "{" +
+		                    "\"rel\":\"father\"," +
+		                    "\"href\":\"http://localhost:8080/family/people/1/father\"," +
+		                    "\"title\":\"Father\"" +
+		                "}," +
+		                "{" +
+		                    "\"rel\":\"mother\"," +
+		                    "\"href\":\"http://localhost:8080/family/people/2\"," +
+		                    "\"title\":\"Joan Wallace\"" +
+		                "}," +
+		                "{" +
+		                    "\"rel\":\"children\"," +
+		                    "\"href\":\"http://localhost:8080/family/people/1/children\"," +
+		                    "\"title\":\"Children\"" +
+		                "}" +
+		            "]" +
+		        "}" +
+		    "]," +
+		    "\"links\":[" +
+		        "{" +
+		            "\"rel\":\"self\"," +
+		            "\"href\":\"http://localhost:8080/family/people/2\"," +
+		            "\"title\":\"Joan Wallace\"" +
+		        "}," +
+		        "{" +
+		            "\"rel\":\"father\"," +
+		            "\"href\":\"http://localhost:8080/family/people/2/father\"," +
+		            "\"title\":\"Father\"" +
+		        "}," +
+		        "{" +
+		            "\"rel\":\"mother\"," +
+		            "\"href\":\"http://localhost:8080/family/people/2/mother\"," +
+		            "\"title\":\"Mother\"" +
+		        "}," +
+		        "{" +
+		            "\"rel\":\"children\"," +
+		            "\"href\":\"http://localhost:8080/family/people/2/children\"," +
+		            "\"title\":\"Children\"" +
+		        "}" +
+		    "]" +
+		"}";
+		
+		assertEquals(expectedJoanJSON, joanJSON);
+		System.out.println(Person.fromJsonToPerson(danJSON));
+		//System.out.println(Person.fromJsonToPerson(joanJSON));
 	}
 	
 	@Test
@@ -115,24 +314,49 @@ public class TestFlexJson {
 		dan.setSex(Sex.MALE);
 		dan.setVersion(0);
 		
-		String danJson = dan.toJson();
+		String danJson = dan.toJson(appUrl);
 		System.out.println(danJson);
 		
 		Person dan1 = Person.fromJsonToPerson(danJson);
-		String dan1Json = dan1.toJson();
+		String dan1Json = dan1.toJson(appUrl);
 		System.out.println(dan1Json);
+		
+		System.out.println(dan);
+		System.out.println(dan1);
 		
 		assertEquals("Person serialize/deserialize failed", danJson, dan1Json);		
 
-//		assertEquals("Person serialize/deserialize failed:\n" + json + "\n" + dan1.toJson() + "\n",
-//				dan, dan1);
+	}
+	
+	//@Test 
+	public void testFlexJsonSerializeDeserialize(){
+	 
+		serializer = new JSONSerializer();
+		serializer.transform(new PersonTransformer(), Person.class)
+			.exclude("*.class","father.father","father.mother","mother.father","mother.mother")
+			.include("children").prettyPrint(false);
+		String json =  serializer.serialize( p );	
+
+		String expected 
+			="{\"id\":1,\"name\":\"p\",\"version\":1,\"sex\":\"MALE\"," +
+					"\"father\":null," +
+					"\"mother\":null," +
+					"\"children\":[{\"id\":4,\"version\":4,\"name\":\"child\",\"sex\":\"FEMALE\"," +
+						"\"father\":1," + // Attempt to deserialize this '1'.
+						"\"mother\":\"null\"}]}";
+		assertEquals(expected, json);
 		
-//		Person dan2 = new Person();
-//		dan2.setId(1L);
-//		dan2.setName("dan1");
-//		dan2.setSex(Sex.MALE);
-//		dan2.setVersion(0); 
+		System.out.println(json);
 		
-		//assertEquals(dan,dan2);
+		Person pDeserialized = null;
+		try {
+			pDeserialized = Person.fromJsonToPerson(json);
+		} catch (Exception e) {
+			System.out.println("\nERROR:" + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		System.out.println(pDeserialized);
+		
 	}
 }

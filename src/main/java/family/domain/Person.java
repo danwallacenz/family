@@ -22,7 +22,8 @@ import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import family.util.EqualsUtil;
+import family.util.PersonTransformer;
+import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 @RooJavaBean
 @RooToString
@@ -61,6 +62,15 @@ public class Person {
 		return q;
 	}
 
+	/**
+	 * Deserialize JSON into a Person
+	 * @param json
+	 * @return
+	 */
+	public static Person fromJsonToPerson(java.lang.String json) {
+		return new JSONDeserializer<Person>().use(null, Person.class)
+				.deserialize(json);
+	}
 	
 	@Size(max = 30)
 	private String name;
@@ -82,13 +92,18 @@ public class Person {
 	@Enumerated
 	private Sex sex;
 
-    public java.lang.String toJson() {
-    	JSONSerializer serializer = new JSONSerializer()
-		.exclude("*.class","father.father","father.mother","mother.father","mother.mother","children.father", "children.mother")
-		.include("children");
-        return serializer.serialize(this);
+	/**
+	 * 
+	 * @param appUrl
+	 * @return
+	 */
+    public java.lang.String toJson(String appUrl) { 
+    	JSONSerializer serializer = new JSONSerializer();
+    	serializer.transform(new PersonTransformer(appUrl), Person.class);
+		String json =  serializer.serialize( this );
+		return json;
     }
-	
+	    
     //////////////////////////////////////////////
     // Add and remove father, mother and children.
     

@@ -5,6 +5,8 @@ import static com.jayway.restassured.RestAssured.given;
 import static groovyx.net.http.ContentType.JSON;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.*;
+import static junit.framework.Assert.*;
+
 
 import org.junit.Test;
 
@@ -36,6 +38,71 @@ public class PersonTestIT{
 			RestAssured.reset();
 		}
     }
+    
+	/**
+     * Tests creation of a new <code>Person</code> from a JSON <code>String</code> 
+     * and validate the HTTP response code (201 CREATED) and the LOCATION header.
+     * @throws Exception
+     */
+    @Test
+    public void createOnePersonFromJSONNEW() throws Exception {
+
+        Response response = responseOfPosted("{ \"name\" : \"Daniel Wallace\",\"sex\":\"MALE\"}");
+    	
+        String location = response.headers().getValue("Location");
+    	String newId = location.substring(location.lastIndexOf("/") + 1);
+    	
+        String expectedJSON = "{" +
+        		"\"id\":" + newId + "," +	
+        		"\"name\":\"Daniel Wallace\"," +
+          		"\"version\":0," +
+          		"\"sex\":\"MALE\"," +
+          		"\"father\":null," +
+          		"\"mother\":null," +
+          		"\"children\":[]," +
+          		"\"links\":" +
+          			"[" +
+        	  			"{" +
+        	  				"\"rel\":\"self\"," +
+        	  				"\"href\":\"http://localhost:8080/family/people/" + newId + "\"," +
+        	  				"\"title\":\"Daniel Wallace\"" +
+        	  			"}," +
+        	   			"{" +
+        	  				"\"rel\":\"father\"," +
+        	  				"\"href\":\"http://localhost:8080/family/people/" + newId + "/father\"," +
+        	  				"\"title\":\"Father\"" +
+        	  			"}," +
+        	   			"{" +
+        	  				"\"rel\":\"mother\"," +
+        	  				"\"href\":\"http://localhost:8080/family/people/" + newId + "/mother\"," +
+        	  				"\"title\":\"Mother\"" +
+        	  			"}," +
+        	  			"{" +
+        	  				"\"rel\":\"children\"," +
+        	  				"\"href\":\"http://localhost:8080/family/people/" + newId + "/children\"," +
+        	  				"\"title\":\"Children\"" +
+        	  			"}" +
+          		 	"]" +
+        	"}";
+    	
+        
+    	assertEquals(expectedJSON, response.body().asString());
+//		RestAssured.requestContentType(JSON);
+//		try {
+//			given().header("Accept", "application/json")
+//					.body("{ \"name\" : \"Daniel Wallace\",\"sex\":\"MALE\"}").then().expect()
+//					.statusCode(201)
+//					.and().response().header("Location", containsString(APP_URL))
+//					.and().response().body(equalTo(expectedJSON))
+//					.when()
+//					.post("/family/people");
+//		} finally {
+//			RestAssured.reset();
+//		}
+    }
+
+    
+    
     
 	/**
 	 * Tests getting a <code>Person</code>.
@@ -172,6 +239,18 @@ public class PersonTestIT{
     	return newId;
 	}
     
+    
+    private Response responseOfPosted(String json) {
+    	Response response = 
+    			given().header("Accept", "application/json")
+    			.body(json).then().expect()
+    			.statusCode(201).and().response()
+				.header("Location", containsString(APP_URL))
+    			.when()
+    			.post("/family/people");
+    	return response;
+	}
+    
 	/**
 	 * Tests updating a single<code>Person</code>.
 	 * @throws Exception
@@ -184,10 +263,10 @@ public class PersonTestIT{
     	// create a test Person "dan1"
 		Person person = new Person();
 		person.setName("dan1");
-		//person.setSex(Sex.MALE);
+		person.setSex(Sex.MALE);
 		
 		// serialize person to JSON
-		String personJson = person.toJson(); 
+		String personJson = person.toJson(APP_URL); 
 		
 		// POST person and retrieve the new id
     	String newId = idOfPosted(personJson);
@@ -196,11 +275,11 @@ public class PersonTestIT{
     	String newName = "dan2";
 		person.setId(new Long(newId));
 		person.setName(newName);
-		//person.setSex(Sex.MALE);
+		person.setSex(Sex.MALE);
 		person.setVersion(version);
 		
 		// serialize updated person to JSON
-		String personUpdatedToJson = person.toJson();
+		String personUpdatedToJson = person.toJson(APP_URL);
 
 		// PUT (update) person
 		RestAssured.requestContentType(JSON);
@@ -225,5 +304,149 @@ public class PersonTestIT{
 		} finally {
 			RestAssured.reset();
 		}
+	}
+  
+    /**
+     * 
+     */
+    @Test
+    public void mother(){
+    	
+//    	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\",\"sex\":\"FEMALE\"}";
+    	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\"}";
+    	// Save Rachel
+    	String rachelId = idOfPosted(rachelJSON);
+    	
+//    	String isaacJSON = "{ \"name\": \"Issac Williams\",\"sex\": \"MALE\"}";
+    	String isaacJSON = "{ \"name\": \"Issac Williams\"}";
+    	// Save Isaac
+    	String isaacId = idOfPosted(isaacJSON); 
+    	
+		String expectedBodyJSON 
+			= "{" +
+					"\"id\":" + isaacId + "," +
+					"\"name\":\"Issac Williams\"" +
+					",\"version\":1," +
+					"\"sex\":\"NOT_KNOWN\"," +
+					"\"father\":null," +
+					"\"mother\":" +
+						"{" +
+							"\"id\":" + rachelId + "," +
+							"\"name\":\"Rachel Margaret Wallace\"," +
+							"\"sex\":\"NOT_KNOWN\"," +
+							"\"version\":1," +
+							"\"links\":" +
+							"[" +
+								"{\"rel\":\"self\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
+								"{\"rel\":\"father\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/father\",\"title\":\"Father\"}," +
+								"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/mother\",\"title\":\"Mother\"}," +
+								"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/children\",\"title\":\"Children\"}" +
+							"]" +
+						"}," +
+					"\"children\":[]," +
+					"\"links\":" +
+						"[" +
+							"{\"rel\":\"self\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "\",\"title\":\"Issac Williams\"}," +
+							"{\"rel\":\"father\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "/father\",\"title\":\"Father\"}," +
+							"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
+							"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "/children\",\"title\":\"Children\"}" +
+							"]" +
+			"}";
+
+		RestAssured.requestContentType(JSON);
+		try {
+			Response addMotherResponse = 
+    			given().header("Accept", "application/json")
+    			.then().
+    			expect()
+    			.statusCode(200).and().response()
+				.header("Location", containsString(APP_URL + isaacId))
+    			.when()
+    			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+			
+
+			String body = addMotherResponse.body().asString();
+			System.out.println(body);
+			
+			assertEquals(expectedBodyJSON, body);
+			
+		} finally {
+			RestAssured.reset();
+		}
+		
+		
+    }
+    
+	/**
+	 * Tests updating a single<code>Person</code>.
+	 * @throws Exception
+	 * @deprecated
+	 */	
+    //@Test
+    public void postFatherAnSon() throws Exception {
+    	
+    	int version = 0;
+    	
+    	// create a test Person "father"
+		Person father = new Person();
+		father.setName("father");
+		//father.setSex(Sex.MALE);
+		
+		// serialize father to JSON
+		String fatherJson = father.toJson(APP_URL); 
+		
+		// POST father and retrieve the new id
+    	String newFatherId = idOfPosted(fatherJson);
+    	
+    	// set father's id and version
+    	father.setId(new Long(newFatherId));
+    	father.setVersion(version);
+    	
+    	// create a test Person "son"
+		Person son = new Person();
+		son.setName("son");
+		//son.setSex(Sex.MALE);
+		
+		// serialize son to JSON
+		String sonJson = son.toJson(APP_URL); 
+		
+		// POST son and retrieve the new id
+    	String newSonId = idOfPosted(sonJson);
+    	
+    	// set son's id and version
+    	son.setId(new Long(newSonId));
+    	son.setVersion(version);
+    	
+    	son.addFather(father);
+    	assertTrue(father.getChildren().contains(son));
+    	assertTrue(son.getFather().equals(father));
+    	
+    	// serialize updated person to JSON
+    	String fatherUpdatedJSON = father.toJson(APP_URL);
+    	System.out.println(fatherUpdatedJSON);
+   	
+		// PUT (update) person
+		RestAssured.requestContentType(JSON);
+		try {
+			given().header("Accept", "application/json")					
+					.body(fatherUpdatedJSON).then().expect()
+					.statusCode(200)
+					.and().response().header(
+							"Location", containsString("/family/people/" + newFatherId))
+					.when().put("/family/people/" + newFatherId);
+		} finally {
+			RestAssured.reset();
+		}
+//				
+//		// verify name and version have changed by GETting person.
+//		try {	
+//			expect().log().all()
+//			.that().body("name", equalTo(newName))
+//			.and().that().body("version", equalTo(++version))
+//			.given().header("Accept", "application/json")
+//			.when().get("/family/people/" + newId); 
+//		} finally {
+//			RestAssured.reset();
+//		}
 	}
 }
