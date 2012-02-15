@@ -2,11 +2,15 @@ package family.domain;
 
 import static com.jayway.restassured.RestAssured.expect;
 import static com.jayway.restassured.RestAssured.given;
-import static groovyx.net.http.ContentType.JSON;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.*;
-import static junit.framework.Assert.*;
+import static com.jayway.restassured.RestAssured.*;
 
+import static com.jayway.restassured.path.json.JsonPath.from;
+import static groovyx.net.http.ContentType.JSON;
+import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+
+import java.util.List;
 
 import org.junit.Test;
 
@@ -295,7 +299,7 @@ public class PersonTestIT{
      * 
      */
     @Test
-    public void ensureThatSettingAPersonsMotherIsCorrect(){
+    public void ensureThatAPersonsJSONIsCorrectAfterSettingMother(){
     	
     	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\",\"sex\":\"FEMALE\"}";
     	// Save Rachel
@@ -304,6 +308,22 @@ public class PersonTestIT{
     	String isaacJSON = "{ \"name\": \"Issac Williams\",\"sex\": \"MALE\"}";
     	// Save Isaac
     	String isaacId = idOfPosted(isaacJSON); 
+    	
+		// Set Rachel as Isaac's mother.
+		RestAssured.requestContentType(JSON);
+		try {
+			Response addMotherResponse = 
+    			given().header("Accept", "application/json")
+    			.then().
+    			expect()
+    			.statusCode(200).and().response()
+				.header("Location", containsString(APP_URL + isaacId))
+    			.when()
+    			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+			
+			// Ensure that Isaac has been updated properly with Rachel as his mother
+			String addMotherResponseBody = addMotherResponse.body().asString();
+			System.out.println(addMotherResponseBody);
     	
 		String expectedIsaacJSON 
 			= "{" +
@@ -343,7 +363,25 @@ public class PersonTestIT{
 							"}" +
 						"]" + 		
 			"}";
-
+		
+			assertEquals(expectedIsaacJSON, addMotherResponseBody);
+			
+		} finally {
+			RestAssured.reset();
+		}
+    }
+    
+    @Test
+    public void ensureThatAMothersJSONIsCorrectAfterSettingMother(){
+    	
+    	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\",\"sex\":\"FEMALE\"}";
+    	// Save Rachel
+    	String rachelId = idOfPosted(rachelJSON);
+    	
+    	String isaacJSON = "{ \"name\": \"Issac Williams\",\"sex\": \"MALE\"}";
+    	// Save Isaac
+    	String isaacId = idOfPosted(isaacJSON); 
+    	
 		// Set Rachel as Isaac's mother.
 		RestAssured.requestContentType(JSON);
 		try {
@@ -356,14 +394,68 @@ public class PersonTestIT{
     			.when()
     			.put("/family/people/" + isaacId + "/mother/" + rachelId);
 			
-			// Ensure that Isaac has been updated properly with Rachel as his mother
-			String addMotherResponseBody = addMotherResponse.body().asString();
-			System.out.println(addMotherResponseBody);
+			// Ensure that Rachel has been updated properly with Isaac as a child.
+			String addMotherResponseBodyForIsaac = addMotherResponse.body().asString();
+			System.out.println(addMotherResponseBodyForIsaac); 
+    	
+			List<String> affectedParties 
+				= from(addMotherResponseBodyForIsaac).get("affectedParties.href");
+			System.out.println("affectedParties=\n" + affectedParties);// e.g. [http://localhost:8080/family/people/9]
+			String rachelsHref = affectedParties.get(0);
+			String rachelsJson = given().header("Accept", "application/json").get(rachelsHref).asString();
+			System.out.println("rachelsJson=\n" + rachelsJson);
 			
-			assertEquals(expectedIsaacJSON, addMotherResponseBody);
+			String expectedMothersJson = 
+			"{\"id\":" + rachelId + "," +
+			"\"name\":\"Rachel Margaret Wallace\"," +
+			"\"version\":1," +
+			"\"sex\":\"FEMALE\"," +
+			"\"father\":null," +
+			"\"mother\":null," +
+			"\"children\":" +
+			"[" +
+				"{" +
+					"\"id\":" + isaacId + "," +
+					"\"version\":1," +
+					"\"name\":\"Issac Williams\"," +
+					"\"sex\":\"MALE\"," +
+					"\"father\":\"null\"," +
+					"\"mother\":" + rachelId + "," +
+					"\"links\":" +
+					"[" +
+						"{" +
+							"\"rel\":\"self\"," +
+							"\"href\":\"http://localhost:8080/family/people/" + isaacId + "\"," +
+							"\"title\":\"Issac Williams\"}," +
+						"{" +
+							"\"rel\":\"father\"," +
+							"\"href\":\"http://localhost:8080/family/people/" + isaacId + "/father\"," +
+							"\"title\":\"Father\"}," +
+						"{" +
+							"\"rel\":\"mother\"," +
+							"\"href\":\"http://localhost:8080/family/people/" + rachelId + "\"," +
+							"\"title\":\"Rachel Margaret Wallace\"}," +
+						"{" +
+							"\"rel\":\"children\"," +
+							"\"href\":\"http://localhost:8080/family/people/" + isaacId + "/children\"," +
+							"\"title\":\"Children\"}" +
+					"]" +
+				"}" +
+			"]," +
+			"\"links\":" +
+			"[" +
+				"{\"rel\":\"self\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
+				"{\"rel\":\"father\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/father\",\"title\":\"Father\"}," +
+				"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/mother\",\"title\":\"Mother\"}," +
+				"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/children\",\"title\":\"Children\"}" +
+			"]" +
+		"}";
+
+		assertEquals(expectedMothersJson, rachelsJson);
 			
 		} finally {
 			RestAssured.reset();
 		}
-    }
+    }    
+    
 }
