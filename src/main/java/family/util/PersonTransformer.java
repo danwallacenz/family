@@ -8,126 +8,30 @@ import flexjson.transformer.AbstractTransformer;
 
 public class PersonTransformer extends AbstractTransformer {
 
-	
-	
 	public PersonTransformer() {
 		super();
 	}
 
-	public PersonTransformer(String url) {
+	public PersonTransformer(final String url) {
 		super();
 		this.url = url;
 	}
 	
+	public PersonTransformer(final String url, final Set<Person>affectedParties) {
+		super();
+		this.url = url;
+		this.affectedParties = affectedParties;
+	}
+	
 	private String url = "http://localhost:8080/family/people";
+	
+	private Set<Person> affectedParties;
 	
     @Override
     public Boolean isInline() {
         return Boolean.TRUE;
     }
-//	@Override
-//	public void transform(Object object) {
-//		
-//		// Start the object
-//		TypeContext typeContext = getContext().writeOpenObject();
-//		typeContext.setFirst(false);
-//
-//	    Person person = (Person) object;
-//		
-//		// Write out the fields
-//	    getContext().writeName("id");
-//	    getContext().transform(person.getId());
-//	    getContext().writeComma();
-//	    getContext().writeName("name");
-//	    getContext().transform(person.getName());
-//	    getContext().writeComma();
-//	    getContext().writeName("version");
-//	    getContext().transform(person.getVersion());
-//	    getContext().writeComma();
-//	    getContext().writeName("sex");
-//	    getContext().transform(person.getSex());
-//	    getContext().writeComma();
-//	    getContext().writeName("father");
-//	    getContext().transform(person.getFather());
-//	    getContext().writeComma();
-//	    getContext().writeName("mother");
-//	    getContext().transform(person.getMother());
-//	    getContext().writeComma();
-//		// Write out the phone numbers
-//	    getContext().writeName("children");
-//	    
-//		// Open the Array of Phone Numbers
-//	    TypeContext itemTypeContext = getContext().writeOpenArray();
-//
-//	    Set<Person> children = person.getChildren();
-//	    for(Person child : children){
-//			// Add a comma after each child object is written
-//            if (!itemTypeContext.isFirst()) getContext().writeComma();
-//            itemTypeContext.setFirst(false);
-//			// Open the child object and write the fields
-//			getContext().writeOpenObject();
-//    	    getContext().writeName("id");
-//    	    getContext().transform(child.getId());
-//    	    getContext().writeComma();
-//    	    getContext().writeName("version");
-//    	    getContext().transform(child.getVersion());
-//    	    getContext().writeComma();
-//    	    getContext().writeName("name");
-//    	    getContext().transform(child.getName());
-//    	    getContext().writeComma();
-//    	    getContext().writeName("sex");
-//    	    getContext().transform(child.getSex());
-//    	    getContext().writeComma();
-//    	    getContext().writeName("father");
-//    	    getContext().transform(child.getFather()==null?"null":child.getFather().getId());
-//    	    getContext().writeComma();
-//    	    getContext().writeName("mother");
-//    	    getContext().transform(child.getMother()==null?"null":child.getMother().getId());
-//			// Close the phone object
-//    	    getContext().writeCloseObject();
-//        }
-//		// Close the Array of Phone Numbers
-//        getContext().writeCloseArray();
-//
-//		// Close the Person Object
-//	    getContext().writeCloseObject();
-//		
-//	}
-	
-//	String expectedJSON = "{" +
-//    		"\"id\" : 1," +	
-//    		"\"name\" : \"Daniel Wallace\"," +
-//      		"\"sex\" : \"MALE\"," +
-//      		"\"father\": null," +
-//      		"\"mother\": null," +
-//      		"\"children\" : null," +
-//      		"\"version\" : 0," +
-//      		"\"links\" :" +
-//      			"[" +
-//    	  			"{" +
-//    	  				"\"rel\" : \"self\"," +
-//    	  				"\"href\": \"http://localhost:8080/family/people/1\"," +
-//    	  				"\"title\": \"Daniel Wallace\"" +
-//    	  			"}," +
-//    	   			"{" +
-//    	  				"\"rel\" : \"father\"," +
-//    	  				"\"href\": \"http://localhost:8080/family/people/1/father\"," +
-//    	  				"\"title\": \"Father\"" +
-//    	  			"}," +
-//    	   			"{" +
-//    	  				"\"rel\" : \"mother\"," +
-//    	  				"\"href\": \"http://localhost:8080/family/people/1/mother\"," +
-//    	  				"\"title\": \"Mother\"" +
-//    	  			"}," +
-//    	  			"{" +
-//    	  				"\"rel\" : \"children\"," +
-//    	  				"\"href\": \"http://localhost:8080/family/people/1/children\"," +
-//    	  				"\"title\": \"children\"" +
-//    	  			"}" +
-//      		 	"] " +
-//    	"}";
 
-	
 	@Override
 	public void transform(Object object) {
 		
@@ -165,9 +69,41 @@ public class PersonTransformer extends AbstractTransformer {
         
 	    writeLinks(person);
 
+	    if(affectedParties != null){
+	    	 getContext().writeComma();
+	    	writeAffectedParties(person);
+	    }
+	    
 		// Close the Person Object
 	    getContext().writeCloseObject();
 		
+	}
+
+	private void writeAffectedParties(Person  person) {
+		// Write out the affectedParties objects		
+		getContext().writeName("affectedParties");
+	    // Open the Array of affectedParties
+	    TypeContext itemTypeContext = getContext().writeOpenArray();
+	    
+	    for(Person affectedParty : affectedParties){
+			// Add a comma after each affectedParty object is written
+            if (!itemTypeContext.isFirst()) getContext().writeComma();
+            itemTypeContext.setFirst(false);
+			// Open the affectedParty object and write the fields
+			getContext().writeOpenObject();
+    	    getContext().writeName("id");
+    	    getContext().transform(affectedParty.getId());
+    	    getContext().writeComma();
+    	    getContext().writeName("name");
+    	    getContext().transform(affectedParty.getName());
+    	    getContext().writeComma();
+    	    getContext().writeName("href");
+    	    getContext().transform(url + "/" + affectedParty.getId());
+			// Close the affectedParty object
+    	    getContext().writeCloseObject();
+        }
+		// Close the Array of affectedParties
+        getContext().writeCloseArray();
 	}
 
 	private void writeMother(Person person) {
@@ -261,8 +197,7 @@ public class PersonTransformer extends AbstractTransformer {
 }
 
 	private void writeLinks(Person person) {
-		// Write out the link objects
-		
+		// Write out the link objects		
 		getContext().writeName("links");
 		getContext().writeOpenArray();
 		// self

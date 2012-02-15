@@ -1,5 +1,8 @@
 package family.web;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -20,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriTemplate;
 
 import family.domain.Person;
-import flexjson.JSONSerializer;
 
 @RooWebJson(jsonObject = Person.class)
 @Controller
@@ -62,12 +64,18 @@ public class PersonController {
         requestUrl.delete(requestUrl.lastIndexOf("mother") - 1, requestUrl.length());
 		String location = requestUrl.toString();
 		String baseURL = requestUrl.delete(requestUrl.lastIndexOf("/"), requestUrl.length()).toString();
+        
+		headers.add("Location", location);
+    
+		// affected parties i.e. mother
+		Set<Person> affectedParties = new HashSet<Person>();
+		affectedParties.add(mother);
 		
-        headers.add("Location", location);
         log.debug("location=" + location +
         		" added mother (id=" + motherId + ") to child (id=" + id + "). json='" 
-        		+ child.toJson(location) + "'");
-        return new ResponseEntity<String>(child.toJson(baseURL), headers, HttpStatus.OK);
+        		+ child.toJson(baseURL, affectedParties) + "'");
+		
+        return new ResponseEntity<String>(child.toJson(baseURL, affectedParties), headers, HttpStatus.OK);
     }
     
     /**
@@ -193,7 +201,7 @@ public class PersonController {
     	// then the Person will be created rather than updated.
        if(json.indexOf("\"id\":") == -1){
     	   log.error("No id present in json:" + json);
-    	   // TODO add descriptive msg in body 
+    	   // TODO add descriptive status JSON to body 
     	   return new ResponseEntity<String>(headers, HttpStatus.BAD_REQUEST);
        }
         

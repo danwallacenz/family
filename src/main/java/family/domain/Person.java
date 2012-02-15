@@ -103,6 +103,13 @@ public class Person {
 		String json =  serializer.serialize( this );
 		return json;
     }
+    
+    public java.lang.String toJson(String appUrl, Set<Person> affectedParties) { 
+    	JSONSerializer serializer = new JSONSerializer();
+    	serializer.transform(new PersonTransformer(appUrl, affectedParties), Person.class);
+		String json =  serializer.serialize( this );
+		return json;
+    }
 	    
     //////////////////////////////////////////////
     // Add and remove father, mother and children.

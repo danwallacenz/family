@@ -25,7 +25,7 @@ public class PersonTestIT{
      * @throws Exception
      */
     @Test
-    public void createOnePersonFromJSON() throws Exception {
+    public void ensureThatCreatingOnePersonFromJSONIsCorrect() throws Exception {
 	
 		RestAssured.requestContentType(JSON);
 		try {
@@ -41,11 +41,12 @@ public class PersonTestIT{
     
 	/**
      * Tests creation of a new <code>Person</code> from a JSON <code>String</code> 
-     * and validate the HTTP response code (201 CREATED) and the LOCATION header.
+     * and validate the HTTP response code (201 CREATED), the Response body,
+     * and the LOCATION header.
      * @throws Exception
      */
     @Test
-    public void createOnePersonFromJSONNEW() throws Exception {
+    public void ensureThatCreatingAPersonReturnsTheCorrectJsonInTheResponseBody() throws Exception {
 
         Response response = responseOfPosted("{ \"name\" : \"Daniel Wallace\",\"sex\":\"MALE\"}");
     	
@@ -84,25 +85,9 @@ public class PersonTestIT{
         	  			"}" +
           		 	"]" +
         	"}";
-    	
-        
+    	     
     	assertEquals(expectedJSON, response.body().asString());
-//		RestAssured.requestContentType(JSON);
-//		try {
-//			given().header("Accept", "application/json")
-//					.body("{ \"name\" : \"Daniel Wallace\",\"sex\":\"MALE\"}").then().expect()
-//					.statusCode(201)
-//					.and().response().header("Location", containsString(APP_URL))
-//					.and().response().body(equalTo(expectedJSON))
-//					.when()
-//					.post("/family/people");
-//		} finally {
-//			RestAssured.reset();
-//		}
     }
-
-    
-    
     
 	/**
 	 * Tests getting a <code>Person</code>.
@@ -110,7 +95,7 @@ public class PersonTestIT{
 	 * @throws Exception
 	 */	
     @Test
-    public void getPerson() throws Exception {
+    public void ensureThatASimpleSaveAndReadAreCorrect() throws Exception {
     	String personAsJson ="{ \"name\" : \"jonathan\"}";
     	String newId = idOfPosted(personAsJson);
     	expect().log().all().body("name", equalTo("jonathan")).given().header("Accept", "application/json").when().get("/family/people/" + newId);     
@@ -121,7 +106,7 @@ public class PersonTestIT{
 	 * @throws Exception
 	 */	
     @Test
-    public void updateOnePerson() throws Exception {
+    public void ensureThatUpdatingAPersonIsCorrect() throws Exception {
     	
     	// create a test Person "dan2"
     	String personAsJson ="{ \"name\" : \"dan2\"}";    	
@@ -157,7 +142,7 @@ public class PersonTestIT{
 	 * @throws Exception
 	 */	
     @Test
-    public void updateTwiceOnePerson() throws Exception {
+    public void ensureThatRepeatedUpdatesToAPersonAreCorrect() throws Exception {
     	// create a test Person "dan2"
     	String personAsJson ="{ \"name\" : \"dan2\"}";    	
     	String newId = idOfPosted(personAsJson);
@@ -256,7 +241,7 @@ public class PersonTestIT{
 	 * @throws Exception
 	 */	
     @Test
-    public void updateOnePersonBetter() throws Exception {
+    public void ensureThatVersionIsIncrementedAfterAPersonIsUpdated() throws Exception {
     	
     	int version = 0;
     	
@@ -310,30 +295,28 @@ public class PersonTestIT{
      * 
      */
     @Test
-    public void mother(){
+    public void ensureThatSettingAPersonsMotherIsCorrect(){
     	
-//    	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\",\"sex\":\"FEMALE\"}";
-    	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\"}";
+    	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\",\"sex\":\"FEMALE\"}";
     	// Save Rachel
     	String rachelId = idOfPosted(rachelJSON);
     	
-//    	String isaacJSON = "{ \"name\": \"Issac Williams\",\"sex\": \"MALE\"}";
-    	String isaacJSON = "{ \"name\": \"Issac Williams\"}";
+    	String isaacJSON = "{ \"name\": \"Issac Williams\",\"sex\": \"MALE\"}";
     	// Save Isaac
     	String isaacId = idOfPosted(isaacJSON); 
     	
-		String expectedBodyJSON 
+		String expectedIsaacJSON 
 			= "{" +
 					"\"id\":" + isaacId + "," +
 					"\"name\":\"Issac Williams\"" +
 					",\"version\":1," +
-					"\"sex\":\"NOT_KNOWN\"," +
+					"\"sex\":\"MALE\"," +
 					"\"father\":null," +
 					"\"mother\":" +
 						"{" +
 							"\"id\":" + rachelId + "," +
 							"\"name\":\"Rachel Margaret Wallace\"," +
-							"\"sex\":\"NOT_KNOWN\"," +
+							"\"sex\":\"FEMALE\"," +
 							"\"version\":1," +
 							"\"links\":" +
 							"[" +
@@ -351,8 +334,17 @@ public class PersonTestIT{
 							"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
 							"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "/children\",\"title\":\"Children\"}" +
 							"]" +
+					",\"affectedParties\":" +
+						"[" +
+							"{" +		
+								"\"id\":"+ rachelId +"," +
+								"\"name\":\"Rachel Margaret Wallace\"," +
+								"\"href\":\"http://localhost:8080/family/people/" + rachelId + "\"" +
+							"}" +
+						"]" + 		
 			"}";
 
+		// Set Rachel as Isaac's mother.
 		RestAssured.requestContentType(JSON);
 		try {
 			Response addMotherResponse = 
@@ -364,89 +356,14 @@ public class PersonTestIT{
     			.when()
     			.put("/family/people/" + isaacId + "/mother/" + rachelId);
 			
-
-			String body = addMotherResponse.body().asString();
-			System.out.println(body);
+			// Ensure that Isaac has been updated properly with Rachel as his mother
+			String addMotherResponseBody = addMotherResponse.body().asString();
+			System.out.println(addMotherResponseBody);
 			
-			assertEquals(expectedBodyJSON, body);
+			assertEquals(expectedIsaacJSON, addMotherResponseBody);
 			
 		} finally {
 			RestAssured.reset();
 		}
-		
-		
     }
-    
-	/**
-	 * Tests updating a single<code>Person</code>.
-	 * @throws Exception
-	 * @deprecated
-	 */	
-    //@Test
-    public void postFatherAnSon() throws Exception {
-    	
-    	int version = 0;
-    	
-    	// create a test Person "father"
-		Person father = new Person();
-		father.setName("father");
-		//father.setSex(Sex.MALE);
-		
-		// serialize father to JSON
-		String fatherJson = father.toJson(APP_URL); 
-		
-		// POST father and retrieve the new id
-    	String newFatherId = idOfPosted(fatherJson);
-    	
-    	// set father's id and version
-    	father.setId(new Long(newFatherId));
-    	father.setVersion(version);
-    	
-    	// create a test Person "son"
-		Person son = new Person();
-		son.setName("son");
-		//son.setSex(Sex.MALE);
-		
-		// serialize son to JSON
-		String sonJson = son.toJson(APP_URL); 
-		
-		// POST son and retrieve the new id
-    	String newSonId = idOfPosted(sonJson);
-    	
-    	// set son's id and version
-    	son.setId(new Long(newSonId));
-    	son.setVersion(version);
-    	
-    	son.addFather(father);
-    	assertTrue(father.getChildren().contains(son));
-    	assertTrue(son.getFather().equals(father));
-    	
-    	// serialize updated person to JSON
-    	String fatherUpdatedJSON = father.toJson(APP_URL);
-    	System.out.println(fatherUpdatedJSON);
-   	
-		// PUT (update) person
-		RestAssured.requestContentType(JSON);
-		try {
-			given().header("Accept", "application/json")					
-					.body(fatherUpdatedJSON).then().expect()
-					.statusCode(200)
-					.and().response().header(
-							"Location", containsString("/family/people/" + newFatherId))
-					.when().put("/family/people/" + newFatherId);
-		} finally {
-			RestAssured.reset();
-		}
-//				
-//		// verify name and version have changed by GETting person.
-//		try {	
-//			expect().log().all()
-//			.that().body("name", equalTo(newName))
-//			.and().that().body("version", equalTo(++version))
-//			.given().header("Accept", "application/json")
-//			.when().get("/family/people/" + newId); 
-//		} finally {
-//			RestAssured.reset();
-//		}
-	}
 }
