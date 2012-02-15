@@ -6,7 +6,7 @@ import static com.jayway.restassured.RestAssured.*;
 
 import static com.jayway.restassured.path.json.JsonPath.from;
 import static groovyx.net.http.ContentType.JSON;
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -458,4 +458,61 @@ public class PersonTestIT{
 		}
     }    
     
+    @Test
+    public void ensureThatAllPartiesUpdateCorrectlyWhenMotherIsReplaced(){
+    	
+    	String originalMotherJson = "{ \"name\" : \"Roberta Wilks\",\"sex\":\"FEMALE\"}";
+    	// Save originalMother
+    	String originalMotherId = idOfPosted(originalMotherJson);
+    	
+    	String sonJSON = "{ \"name\": \"Johnny Wallace-Wilks\",\"sex\": \"MALE\"}";
+    	// Save son
+    	String sonId = idOfPosted(sonJSON); 
+    	
+    	String newMotherJSON = "{ \"name\": \"Helen Baxter\",\"sex\": \"MALE\"}";
+    	// Save son
+    	String newMotherId = idOfPosted(newMotherJSON);
+    	
+		// Set originalMother as son's mother.
+		RestAssured.requestContentType(JSON);
+		try {
+			Response addMotherResponse = 
+    			given().header("Accept", "application/json")
+    			.then()
+    			.expect()
+    			.statusCode(200).and().response()
+				.header("Location", containsString(APP_URL + sonId))
+    			.when()
+    			.put("/family/people/" + sonId + "/mother/" + originalMotherId);
+			
+			Response replaceMotherResponse = 
+	    			given().header("Accept", "application/json")
+	    			.then()
+	    			.expect()
+	    			.statusCode(200).and().response()
+					.header("Location", containsString(APP_URL + sonId))
+	    			.when()
+	    			.put("/family/people/" + sonId + "/mother/" + newMotherId);	
+						
+			String addMotherResponseBodyForOriginalMother = addMotherResponse.body().asString();
+			System.out.println(addMotherResponseBodyForOriginalMother); 
+    	
+			List<String> affectedPartiesOfOriginalAddMother 
+				= from(addMotherResponseBodyForOriginalMother).get("affectedParties.href");
+			
+			assertEquals("Expected one affected party", 1, affectedPartiesOfOriginalAddMother.size());
+			
+			String addMotherResponseBodyForNewMother = replaceMotherResponse.body().asString();
+			System.out.println(addMotherResponseBodyForNewMother); 
+			
+			List<String> affectedPartiesWhenReplacingMother 
+				= from(addMotherResponseBodyForNewMother).get("affectedParties.href");
+			
+			assertEquals("Expected two affected parties", 2, affectedPartiesWhenReplacingMother.size());
+
+			
+		} finally {
+			RestAssured.reset();
+		}
+    }
 }

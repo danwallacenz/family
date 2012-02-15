@@ -56,6 +56,7 @@ public class PersonController {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
         
+        Person oldMother = child.getMother();
         child.addMother(mother);
         mother.merge();
         
@@ -67,9 +68,12 @@ public class PersonController {
         
 		headers.add("Location", location);
     
-		// affected parties i.e. mother
+		// affected parties i.e. mother (and possibly the old mother)
 		Set<Person> affectedParties = new HashSet<Person>();
 		affectedParties.add(mother);
+		if(oldMother != null){
+			affectedParties.add(oldMother);
+		}
 		
         log.debug("location=" + location +
         		" added mother (id=" + motherId + ") to child (id=" + id + "). json='" 
