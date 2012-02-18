@@ -110,7 +110,7 @@ public class PersonTransformer extends AbstractTransformer {
 	    getContext().writeName("mother");
 	    Person mother = person.getMother();
 	    if(mother == null){
-	    	getContext().transform(null);
+	    	getContext().transform("null");
 	    }else{
 	    	getContext().writeOpenObject();
 	    	getContext().writeName("id");
@@ -134,7 +134,7 @@ public class PersonTransformer extends AbstractTransformer {
 	    getContext().writeName("father");
 	    Person father = person.getFather();
 	    if(father == null){
-	    	getContext().transform(null);
+	    	getContext().transform("null");
 	    }else{
 	    	getContext().writeOpenObject();
 	    	getContext().writeName("id");

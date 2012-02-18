@@ -177,6 +177,11 @@ public class PersonController {
     	}catch(Exception e){
     		return new ResponseEntity<String>(json, headers, HttpStatus.BAD_REQUEST);
     	}
+    	// Disallow id or version in a create request body.
+    	if(json.indexOf("\"id\"") != -1 || json.indexOf("'id'") != -1 
+    			|| json.indexOf("\"version\"") != -1 || json.indexOf("'version'") != -1){
+    		return new ResponseEntity<String>(json, headers, HttpStatus.NOT_ACCEPTABLE);
+    	}
         person.persist();
 
         String location = getLocationForChildResource(httpServletRequest, person.getId());
@@ -203,7 +208,7 @@ public class PersonController {
         
         // if no valid existing id, is present in the JSON, then
     	// then the Person will be created rather than updated.
-       if(json.indexOf("\"id\":") == -1){
+       if(!(json.indexOf("\"id\"") == -1 || json.indexOf("'id'") == -1)){
     	   log.error("No id present in json:" + json);
     	   // TODO add descriptive status JSON to body 
     	   return new ResponseEntity<String>(headers, HttpStatus.BAD_REQUEST);

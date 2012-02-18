@@ -6,7 +6,7 @@ import static com.jayway.restassured.RestAssured.*;
 
 import static com.jayway.restassured.path.json.JsonPath.from;
 import static groovyx.net.http.ContentType.JSON;
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -62,8 +62,8 @@ public class PersonTestIT{
         		"\"name\":\"Daniel Wallace\"," +
           		"\"version\":0," +
           		"\"sex\":\"MALE\"," +
-          		"\"father\":null," +
-          		"\"mother\":null," +
+          		"\"father\":\"null\"," +
+          		"\"mother\":\"null\"," +
           		"\"children\":[]," +
           		"\"links\":" +
           			"[" +
@@ -249,27 +249,18 @@ public class PersonTestIT{
     	
     	int version = 0;
     	
-    	// create a test Person "dan1"
-		Person person = new Person();
-		person.setName("dan1");
-		person.setSex(Sex.MALE);
-		
-		// serialize person to JSON
-		String personJson = person.toJson(APP_URL); 
+    	// create a test Person.
+		String personJson = "{ \"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\"}";
 		
 		// POST person and retrieve the new id
     	String newId = idOfPosted(personJson);
     	
     	// update person with id, a new name, and version = 0
-    	String newName = "dan2";
-		person.setId(new Long(newId));
-		person.setName(newName);
-		person.setSex(Sex.MALE);
-		person.setVersion(version);
+    	String newName = "Danny Wallace";
 		
-		// serialize updated person to JSON
-		String personUpdatedToJson = person.toJson(APP_URL);
-
+    	String personUpdatedToJson 
+    		= "{\"id\" : " + newId + ",\"name\" : \"" + newName + "\",\"sex\" : \"MALE\", \"version\" : " + version + "}";
+    	
 		// PUT (update) person
 		RestAssured.requestContentType(JSON);
 		try {
@@ -331,7 +322,7 @@ public class PersonTestIT{
 					"\"name\":\"Issac Williams\"" +
 					",\"version\":1," +
 					"\"sex\":\"MALE\"," +
-					"\"father\":null," +
+					"\"father\":\"null\"," +
 					"\"mother\":" +
 						"{" +
 							"\"id\":" + rachelId + "," +
@@ -410,8 +401,8 @@ public class PersonTestIT{
 			"\"name\":\"Rachel Margaret Wallace\"," +
 			"\"version\":1," +
 			"\"sex\":\"FEMALE\"," +
-			"\"father\":null," +
-			"\"mother\":null," +
+			"\"father\":\"null\"," +
+			"\"mother\":\"null\"," +
 			"\"children\":" +
 			"[" +
 				"{" +
