@@ -173,14 +173,17 @@ public class PersonController {
         
         Person person = null;
     	try{
-    		person = Person.fromJsonToPerson(json);
+    		person = Person.fromJsonToPerson(json);// bad json
     	}catch(Exception e){
-    		return new ResponseEntity<String>(json, headers, HttpStatus.BAD_REQUEST);
+    		log.error("Bad JSON:" + json);
+    		return new ResponseEntity<String>(
+    				createExceptionJson(HttpStatus.BAD_REQUEST, e), headers, HttpStatus.BAD_REQUEST);
     	}
     	// Disallow id or version in a create request body.
     	if(json.indexOf("\"id\"") != -1 || json.indexOf("'id'") != -1 
     			|| json.indexOf("\"version\"") != -1 || json.indexOf("'version'") != -1){
-    		return new ResponseEntity<String>(json, headers, HttpStatus.NOT_ACCEPTABLE);
+    		log.error("JSON contains an 'id' or a 'version':" + json);
+    		return new ResponseEntity<String>(createExceptionJson(HttpStatus.NOT_ACCEPTABLE, "JSON contains an 'id' or a 'version':" + json), headers, HttpStatus.NOT_ACCEPTABLE);
     	}
         person.persist();
 
@@ -191,7 +194,30 @@ public class PersonController {
         return new ResponseEntity<String>(personToJson, headers, HttpStatus.CREATED);
     }
     
-    /**
+    private String createExceptionJson(HttpStatus badRequest, String msg) {
+		StringBuffer exceptionJson 
+			= new StringBuffer("{\"exception\" :")
+		.append("{\"code\" : ")
+		.append(badRequest.value()).append(",")
+		.append("\"name\" : \"").append(badRequest.name()).append("\"")
+		.append("}}");
+		return exceptionJson.toString();
+	}
+
+    private String createExceptionJson(HttpStatus badRequest, Exception e) {
+		StringBuffer exceptionJson 
+			= new StringBuffer("{\"exception\" :")
+		.append("{\"code\" : ")
+		.append(badRequest.value()).append(",")
+		.append("\"name\" : \"").append(badRequest.name()).append("\",")
+		.append("\"message\" : \"").append(e.getMessage())
+		.append("\"")
+		.append("}}");
+		return exceptionJson.toString();
+	}
+
+    
+	/**
      * 
      * @param id
      * @param json
@@ -208,16 +234,28 @@ public class PersonController {
         
         // if no valid existing id, is present in the JSON, then
     	// then the Person will be created rather than updated.
-       if(!(json.indexOf("\"id\"") == -1 || json.indexOf("'id'") == -1)){
+       if(json.indexOf("\"id\"") == -1 && json.indexOf("'id'") == -1){
     	   log.error("No id present in json:" + json);
     	   // TODO add descriptive status JSON to body 
-    	   return new ResponseEntity<String>(headers, HttpStatus.BAD_REQUEST);
+    	   return new ResponseEntity<String>("No id present in json:" + json, headers, HttpStatus.BAD_REQUEST);
+       }
+       // must have a version too.
+       if(json.indexOf("version") == -1){
+    	   log.error("No version present in json:" + json);
+    	   // TODO add descriptive status JSON to body 
+    	   return new ResponseEntity<String>("No version present in json:" + json, headers, HttpStatus.BAD_REQUEST);
        }
         
+       	Person personContainingUpdates = null;
+       	Person updatedPerson = null;
        try{
-    	   	Person personContainingUpdates = Person.fromJsonToPerson(json);        
-
-	        if (personContainingUpdates.merge() == null) {
+    	   personContainingUpdates = Person.fromJsonToPerson(json);        
+	   	}catch(Exception e){
+			return new ResponseEntity<String>(e.getMessage()  + "\n" + json, headers, HttpStatus.BAD_REQUEST);
+		}
+       	try{
+    	   updatedPerson = personContainingUpdates.merge();
+	        if (updatedPerson == null) {
 	            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
 	        }
         }catch(Exception e){
@@ -229,7 +267,9 @@ public class PersonController {
         //url.delete(url.lastIndexOf("/"), url.length());
         String location = url.toString();
         headers.add("Location", location);
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
+        String hostUrl = httpServletRequest.getRequestURL().toString();
+        String updatedPersonToJson = updatedPerson.toJson(hostUrl);
+        return new ResponseEntity<String>(updatedPersonToJson, headers, HttpStatus.OK);
     }
 
     /**
