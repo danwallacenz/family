@@ -40,7 +40,7 @@ public class PersonController {
      * @param motherId
      * @return child as JSON
      * 
-     * TODO do we need the Accept Header?
+     * TODO SHOULD THIS BE A POST AS A PUT WILL NOT BE IDEMPOTENT IF THERE IS AN EXISTING MOTHER?
      */
     @RequestMapping(value = "/{id}/mother/{motherId}", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseBody
@@ -68,6 +68,7 @@ public class PersonController {
         
 		headers.add("Location", location);
     
+		// TODO Add self to affected parties??
 		// affected parties i.e. mother (and possibly the old mother)
 		Set<Person> affectedParties = new HashSet<Person>();
 		affectedParties.add(mother);
