@@ -1,6 +1,8 @@
 package family.web;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +72,7 @@ public class PersonController {
     
 		// TODO Add self to affected parties??
 		// affected parties i.e. mother (and possibly the old mother)
-		Set<Person> affectedParties = new HashSet<Person>();
+		List<Person> affectedParties = new ArrayList<Person>();
 		affectedParties.add(mother);
 		if(oldMother != null){
 			affectedParties.add(oldMother);

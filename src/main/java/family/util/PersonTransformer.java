@@ -1,5 +1,6 @@
 package family.util;
 
+import java.util.List;
 import java.util.Set;
 
 import family.domain.Person;
@@ -17,7 +18,7 @@ public class PersonTransformer extends AbstractTransformer {
 		this.url = url;
 	}
 	
-	public PersonTransformer(final String url, final Set<Person>affectedParties) {
+	public PersonTransformer(final String url, final List<Person>affectedParties) {
 		super();
 		this.url = url;
 		this.affectedParties = affectedParties;
@@ -25,7 +26,7 @@ public class PersonTransformer extends AbstractTransformer {
 	
 	private String url = "http://localhost:8080/family/people";
 	
-	private Set<Person> affectedParties;
+	private List<Person> affectedParties;
 	
     @Override
     public Boolean isInline() {
@@ -180,7 +181,13 @@ public class PersonTransformer extends AbstractTransformer {
     	    getContext().transform(child.getSex());
     	    getContext().writeComma();
     	    getContext().writeName("father");
-    	    getContext().transform(child.getFather()==null?"null":child.getFather().getId());
+    	    Person father = child.getFather();
+    	    if(father == null){
+    	    	getContext().transform((String)"null");// BUG here
+    	    }else{
+    	    	getContext().transform(child.getFather().getId());	
+    	    }
+//    	    getContext().transform(child.getFather()==null?"null":child.getFather().getId());
     	    getContext().writeComma();
     	    getContext().writeName("mother");
     	    getContext().transform(child.getMother()==null?"null":child.getMother().getId());

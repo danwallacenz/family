@@ -1,6 +1,7 @@
 package family.domain;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -104,7 +105,7 @@ public class Person {
 		return json;
     }
     
-    public java.lang.String toJson(String appUrl, Set<Person> affectedParties) { 
+    public java.lang.String toJson(String appUrl, List<Person> affectedParties) { 
     	JSONSerializer serializer = new JSONSerializer();
     	serializer.transform(new PersonTransformer(appUrl, affectedParties), Person.class);
 		String json =  serializer.serialize( this );
