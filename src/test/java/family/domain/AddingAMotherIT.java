@@ -138,7 +138,7 @@ public class AddingAMotherIT extends FuncAbstract{
      * 
      */
     //@Test
-    public void ensureThatAPersonsJSONIsCorrectAfterAddingMother(){
+    public void ensureThatAPersonsJSONIsCorrectInTheResponseBodyAfterAddingMother(){
     	
     	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\",\"sex\":\"FEMALE\"}";
     	// Save Rachel
@@ -210,11 +210,23 @@ public class AddingAMotherIT extends FuncAbstract{
 		}
     }
     
+    // GET the mothter
+    @Test
+    public void shouldUpdateTheMotherCorrectly(){
+    	fail("todo");
+    }
+    
+    // GET the child
+    @Test
+    public void shouldUpdateTheChildCorrectly(){
+    	fail("todo");
+    }
+    
     /**
      * TODO Move this to GettingAPersonIT shouldReturnCorrectMotherRepresentationAfterAddingAMother
      */
     @Test
-    public void ensureThatAMothersJSONIsCorrectAfterAddingMother(){
+    public void ensureThatAMothersJSONIsCorrectInTheResponseBodyAfterAddingMother(){
     	
     	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\",\"sex\":\"FEMALE\"}";
     	// Save Rachel

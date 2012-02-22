@@ -462,4 +462,92 @@ public class ReplacingAMotherIT extends FuncAbstract{
 			RestAssured.reset();
 		}
     }
+
+    @Test
+    public void shouldUpdateTheChildCorrectly(){
+    	String originalMotherJson = "{ \"name\" : \"Roberta Wilks\",\"sex\":\"FEMALE\"}";
+    	// Save originalMother
+    	String originalMotherId = idOfPosted(originalMotherJson);
+    	
+    	String sonJSON = "{ \"name\": \"Johnny Wallace-Wilks\",\"sex\": \"MALE\"}";
+    	// Save son
+    	String sonId = idOfPosted(sonJSON); 
+    	
+    	String newMotherJSON = "{ \"name\": \"Helen Baxter\",\"sex\": \"FEMALE\"}";
+    	// Save son
+    	String replacementMotherId = idOfPosted(newMotherJSON);
+
+    	// Set originalMother as son's mother.
+    	// This behaviour is tested in AddingAMotherIT
+
+		given().header("Accept", "application/json")
+		.then().expect().that().statusCode(200)
+			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
+			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
+			
+		// Then Replace her with new mother
+		given().header("Accept", "application/json")
+		.then().expect().that().statusCode(200)
+			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
+			.when().put("/family/people/" + sonId + "/mother/" + replacementMotherId);
+		
+    	// Get the child from the server	
+		Response childsGetResponse = 
+			given()
+			.log().everything()
+			.header("Accept", "application/json")
+			.then().expect()
+				.that().statusCode(200)
+				.and().that().response().contentType(JSON)
+				.and().that().body("id", equalTo(new Integer(sonId)))
+				.and().that().body("name", equalTo("Johnny Wallace-Wilks"))
+				.and().that().body("sex", equalTo("MALE"))
+				.and().that().body("version", equalTo(2)) // 0 on creation, 1 on addition of mother, 2 on replacement of mother.
+				
+				.and().that().body("mother.id", equalTo(new Integer(replacementMotherId)))
+				.and().that().body("mother.name", equalTo("Helen Baxter"))				
+				.and().that().body("mother.sex", equalTo("FEMALE"))
+				.and().that().body("mother.version", equalTo(1))
+				
+				.and().that().body("mother.links.size()", equalTo(4))
+				.and().that().body("mother.links.getAt(0).rel", equalTo("self"))
+				.and().that().body("mother.links.getAt(0).href", equalTo(APP_URL + "/" + replacementMotherId))
+				.and().that().body("mother.links.getAt(0).title", equalTo("Helen Baxter"))
+				.and().that().body("mother.links.getAt(1).rel", equalTo("father"))
+				.and().that().body("mother.links.getAt(1).href", equalTo(APP_URL + "/" + replacementMotherId +"/father"))
+				.and().that().body("mother.links.getAt(1).title", equalTo("Father"))
+				.and().that().body("mother.links.getAt(2).rel", equalTo("mother"))
+				.and().that().body("mother.links.getAt(2).href", equalTo(APP_URL + "/" + replacementMotherId + "/mother"))
+				.and().that().body("mother.links.getAt(2).title", equalTo("Mother"))
+				.and().that().body("mother.links.getAt(3).rel", equalTo("children"))
+				.and().that().body("mother.links.getAt(3).href", equalTo(APP_URL + "/" + replacementMotherId +"/children"))
+				.and().that().body("mother.links.getAt(3).title", equalTo("Children"))
+				
+				
+				.and().that().body("father", equalTo("null"))
+				 
+				.and().that().body("children.size()", equalTo(0))
+
+				.and().that().body("links.size()", equalTo(4))
+				.and().that().body("links.getAt(0).rel", equalTo("self"))
+				.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + sonId))
+				.and().that().body("links.getAt(0).title", equalTo("Johnny Wallace-Wilks"))
+				.and().that().body("links.getAt(1).rel", equalTo("father"))
+				.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + sonId +"/father"))
+				.and().that().body("links.getAt(1).title", equalTo("Father"))
+				.and().that().body("links.getAt(2).rel", equalTo("mother"))
+				.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + replacementMotherId))
+				.and().that().body("links.getAt(2).title", equalTo("Helen Baxter"))
+				.and().that().body("links.getAt(3).rel", equalTo("children"))
+				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + sonId +"/children"))
+				.and().that().body("links.getAt(3).title", equalTo("Children"))
+			.when().log().everything()
+			.when().get("/family/people/" + sonId);
+		
+		System.out.println(
+				childsGetResponse.getBody().jsonPath().get("father").getClass());
+		
+		//System.out.println(replacementMothersGetResponse);
+    }
+
 }
