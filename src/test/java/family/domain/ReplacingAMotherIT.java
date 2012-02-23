@@ -23,7 +23,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
     /**
      * 
      */
-    @Test
+    //@Test
     public void ensureThatAPersonsJSONIsCorrectAfterSettingMother(){
     	
     	fail("Check that this is covered in AddingAMotherIT");
@@ -97,7 +97,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 		}
     }
     
-    @Test
+    //@Test
     public void ensureThatAMothersJSONIsCorrectAfterSettingMother(){
     	
     	fail("Move to GettingAPersonIT.shouldReturnAMothersRepresentationCorrectlyWhenGettingThemAfterAddingAMother");
