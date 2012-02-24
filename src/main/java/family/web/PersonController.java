@@ -91,7 +91,6 @@ public class PersonController {
      * @param motherId
      * @return
      * 
-     * TODO remove child from previous father's children if present. 
      * 
      */
     @RequestMapping(value = "/{id}/father/{fatherId}", method = RequestMethod.PUT, headers = "Accept=application/json")
@@ -107,12 +106,31 @@ public class PersonController {
         if (child == null || father == null ) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        child.setFather(father);
+        Person oldFather = child.getFather();
+        child.addFather(father);
         father.merge();
-        String hostUrl = httpServletRequest.getRequestURL().toString();
         
-        log.debug("added father (id=" + fatherId + ") to child (id=" + id + "). json='" + child.toJson(hostUrl) + "'");
-        return new ResponseEntity<String>(child.toJson(hostUrl), headers, HttpStatus.OK);
+        // TODO tidy this 
+        StringBuffer requestUrl = httpServletRequest.getRequestURL();       
+        requestUrl.delete(requestUrl.lastIndexOf("father") - 1, requestUrl.length());
+		String location = requestUrl.toString();
+		String baseURL = requestUrl.delete(requestUrl.lastIndexOf("/"), requestUrl.length()).toString();
+        
+		headers.add("Location", location);
+    
+		// TODO Add self to affected parties??
+		// affected parties i.e. father (and possibly the old father)
+		List<Person> affectedParties = new ArrayList<Person>();
+		affectedParties.add(father);
+		if(oldFather != null){
+			affectedParties.add(oldFather);
+		}
+		
+        log.debug("location=" + location +
+        		" added mother (id=" + fatherId + ") to child (id=" + id + "). json='" 
+        		+ child.toJson(baseURL, affectedParties) + "'");
+		
+        return new ResponseEntity<String>(child.toJson(baseURL, affectedParties), headers, HttpStatus.OK);
     }
     
     /**
