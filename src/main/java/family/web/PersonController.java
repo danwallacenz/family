@@ -275,6 +275,34 @@ public class PersonController {
         return new ResponseEntity<String>(updatedPersonToJson, headers, HttpStatus.OK);
     }
 
+    
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+    public ResponseEntity<java.lang.String> deleteFromJson(@PathVariable("id") java.lang.Long id) {
+        Person person = Person.findPerson(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/text");
+        if (person == null) {
+            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        }
+        // Remove the mother
+        //if(person.getMother() != null){
+        person.removeMother();
+        //}
+        // Remove person as mother or father
+        if(person.getChildren() != null){
+        	for (Person child : person.getChildren()) {
+				if(child.getMother().equals(person)){
+					child.removeMother();
+				}
+				// TODO write test for deleting a father
+//				if(child.getFather().equals(person)){
+//					child.removeFather();// to test
+//				}
+			}
+        }
+        person.remove();
+        return new ResponseEntity<String>(headers, HttpStatus.OK);
+    }
     /**
      * 
      * @param httpServletRequest

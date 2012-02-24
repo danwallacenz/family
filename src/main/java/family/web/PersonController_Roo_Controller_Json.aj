@@ -80,17 +80,17 @@ privileged aspect PersonController_Roo_Controller_Json {
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<java.lang.String> PersonController.deleteFromJson(@PathVariable("id") java.lang.Long id) {
-        Person person = Person.findPerson(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/text");
-        if (person == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        }
-        person.remove();
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
-    }
+//    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+//    public ResponseEntity<java.lang.String> PersonController.deleteFromJson(@PathVariable("id") java.lang.Long id) {
+//        Person person = Person.findPerson(id);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Content-Type", "application/text");
+//        if (person == null) {
+//            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+//        }
+//        person.remove();
+//        return new ResponseEntity<String>(headers, HttpStatus.OK);
+//    }
     
     @RequestMapping(params = "find=ByFatherOrMother", headers = "Accept=application/json")
     @ResponseBody
