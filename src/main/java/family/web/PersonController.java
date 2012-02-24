@@ -285,9 +285,8 @@ public class PersonController {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
         // Remove the mother
-        //if(person.getMother() != null){
         person.removeMother();
-        //}
+        // TODO refactor this into a new method
         // Remove person as mother or father
         if(person.getChildren() != null){
         	for (Person child : person.getChildren()) {
