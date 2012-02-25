@@ -91,7 +91,6 @@ public class PersonController {
      * @param motherId
      * @return
      * 
-     * 
      */
     @RequestMapping(value = "/{id}/father/{fatherId}", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseBody
