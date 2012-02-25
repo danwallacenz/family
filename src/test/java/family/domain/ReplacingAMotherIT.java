@@ -269,11 +269,13 @@ public class ReplacingAMotherIT extends FuncAbstract{
     	// Set originalMother as son's mother.
     	// This behaviour is tested in AddingAMotherIT
 
+    	fail("TODO check affected parties - see ensureThatAllPartiesUpdateCorrectlyWhenMotherIsReplaced below");
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
 			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
 			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
-			
+
+		fail("TODO check affected parties - see ensureThatAllPartiesUpdateCorrectlyWhenMotherIsReplaced below");
 		// Then Replace her with new mother
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
@@ -365,6 +367,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
 			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
 			
+		fail("TODO check affected parties - see ensureThatAllPartiesUpdateCorrectlyWhenMotherIsReplaced below");
 		// Then Replace her with new mother
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)

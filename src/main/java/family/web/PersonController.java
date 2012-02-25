@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriTemplate;
 
 import family.domain.Person;
+import family.util.PersonTransformer;
+import flexjson.JSONSerializer;
 
 @RooWebJson(jsonObject = Person.class)
 @Controller
@@ -294,14 +296,26 @@ public class PersonController {
 
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<java.lang.String> deleteFromJson(@PathVariable("id") java.lang.Long id) {
+    public ResponseEntity<java.lang.String> deleteFromJson(@PathVariable("id") java.lang.Long id, HttpServletRequest httpRequest) {
         Person person = Person.findPerson(id);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/text");
+        headers.add("Content-Type", "application/json");
         if (person == null) {
+        	//TODO return a json exception object in the body
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        // Remove the mother
+        
+        // save the relations for returning in the response
+        // TODO no need to save these here, just call the new 
+        // List<Person> person.getAffectedParties() method mentioned below.
+        Set<Person> oldChildren = person.getChildren();
+        Set<Person> nonPersistentChildren = new HashSet();
+        for (Person child : oldChildren) {
+        	nonPersistentChildren.add(child);
+		}
+        Person oldMother = person.getMother();
+        Person oldFather = person.getFather();
+        
         person.removeMother();
         person.removeFather();
         // TODO refactor this into a new method on Person
@@ -317,8 +331,36 @@ public class PersonController {
 			}
         }
         person.remove();
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
+        
+        // TODO Make this a method on person (List<Person> person.getAffectedParties())
+        // and invoke before calling removeMother(), etc.
+		List<Person> affectedParties = new ArrayList<Person>();
+		if(oldMother != null){
+			affectedParties.add(oldMother);
+		}
+		if(oldFather != null){
+			affectedParties.add(oldFather);
+		}
+		for (Person child : nonPersistentChildren) {
+			affectedParties.add(child);
+		}
+		
+        // TODO tidy this 
+        StringBuffer requestUrl = httpRequest.getRequestURL();       
+		String baseURL = requestUrl.delete(requestUrl.lastIndexOf("/"), requestUrl.length()).toString();
+        log.debug("baseURL=" + baseURL +
+        		" json='" +
+        		 person.toJson(baseURL, affectedParties) + "'");
+        // TODO don't return the deleted person in the response body, just the affected parties.
+        /*
+         * This should be something like:
+        JSONSerializer serializer = new JSONSerializer();
+    	serializer.transform(new AffectedPartiesTransformer(appUrl), List<Person>.class);
+		String json =  serializer.serialize( affectedParties );
+         */
+        return new ResponseEntity<String>(person.toJson(baseURL, affectedParties), headers, HttpStatus.OK);        
     }
+    
     /**
      * 
      * @param httpServletRequest

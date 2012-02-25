@@ -39,7 +39,7 @@ public class PersonTransformer extends AbstractTransformer {
 		// Start the object
 		TypeContext typeContext = getContext().writeOpenObject();
 		typeContext.setFirst(false);
-
+		
 	    Person person = (Person) object;
 		
 		// Write out the fields
@@ -69,10 +69,10 @@ public class PersonTransformer extends AbstractTransformer {
 	    getContext().writeComma();
         
 	    writeLinks(person);
-
+		
 	    if(affectedParties != null){
 	    	 getContext().writeComma();
-	    	writeAffectedParties(person);
+	    	writeAffectedParties();
 	    }
 	    
 		// Close the Person Object
@@ -80,7 +80,7 @@ public class PersonTransformer extends AbstractTransformer {
 		
 	}
 
-	private void writeAffectedParties(Person  person) {
+	private void writeAffectedParties() {
 		// Write out the affectedParties objects		
 		getContext().writeName("affectedParties");
 	    // Open the Array of affectedParties
