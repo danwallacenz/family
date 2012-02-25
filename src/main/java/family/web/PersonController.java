@@ -303,17 +303,17 @@ public class PersonController {
         }
         // Remove the mother
         person.removeMother();
-        // TODO refactor this into a new method
+        person.removeFather();
+        // TODO refactor this into a new method on Person
         // Remove person as mother or father
         if(person.getChildren() != null){
         	for (Person child : person.getChildren()) {
-				if(child.getMother().equals(person)){
+				if(child.getMother() != null && child.getMother().equals(person)){
 					child.removeMother();
 				}
-				// TODO write test for deleting a father
-//				if(child.getFather().equals(person)){
-//					child.removeFather();// to test
-//				}
+				if(child.getFather() != null && child.getFather().equals(person)){
+					child.removeFather();
+				}
 			}
         }
         person.remove();
