@@ -1,9 +1,12 @@
 package family.domain;
 
+import family.util.PersonTransformer;
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
@@ -13,242 +16,139 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import family.util.PersonTransformer;
-import flexjson.JSONDeserializer;
-import flexjson.JSONSerializer;
 @RooJavaBean
 @RooToString
 @RooJson
-@RooJpaActiveRecord(finders = { "findPeopleByNameLike",
-		"findPeopleByMotherAndFather", "findPeopleByMother",
-		"findPeopleByFatherOrMother" })
+@RooJpaActiveRecord(finders = { "findPeopleByNameLike", "findPeopleByMotherAndFather", "findPeopleByMother", "findPeopleByFatherOrMother" })
 public class Person {
 
-	public Person(){
-		this.setSex(Sex.NOT_KNOWN);
-		this.children = new HashSet<family.domain.Person>();
-	}
-	
-	private static Logger logger = LoggerFactory.getLogger(Person.class);
+    private static Logger logger = LoggerFactory.getLogger(Person.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private java.lang.Long id;
-    
-    
-	/*
-	 * Custom Finders
-	 */
-	public static TypedQuery<Person> findChildren(Long parentId) {
-		if (parentId == null)
-			throw new IllegalArgumentException(
-					"The parentId argument is required");
-		EntityManager em = Person.entityManager();
-		TypedQuery<Person> q = em
-				.createQuery(
-						"SELECT o FROM Person AS o WHERE o.father.id = :parentId OR o.mother.id = :parentId",
-						Person.class);
-		q.setParameter("parentId", parentId);
-		return q;
-	}
+    private Long id;
 
-	/**
-	 * Deserialize JSON into a Person
-	 * @param json
-	 * @return
-	 */
-	public static Person fromJsonToPerson(java.lang.String json) {
-		return new JSONDeserializer<Person>().use(null, Person.class)
-				.deserialize(json);
-	}
-	
-	@Size(max = 30)
-	private String name;
+    @Size(max = 30)
+    private String name;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {
-			javax.persistence.CascadeType.PERSIST,
-			javax.persistence.CascadeType.REFRESH })
-	private family.domain.Person father;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { javax.persistence.CascadeType.PERSIST, javax.persistence.CascadeType.REFRESH })
+    private family.domain.Person father;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {
-			javax.persistence.CascadeType.PERSIST,
-			javax.persistence.CascadeType.REFRESH })
-	private family.domain.Person mother;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { javax.persistence.CascadeType.PERSIST, javax.persistence.CascadeType.REFRESH })
+    private family.domain.Person mother;
 
-	@ManyToMany(cascade = { javax.persistence.CascadeType.PERSIST,
-			javax.persistence.CascadeType.REFRESH }, fetch = FetchType.LAZY)
-	private Set<family.domain.Person> children = new HashSet<family.domain.Person>();
+    @ManyToMany(cascade = { javax.persistence.CascadeType.PERSIST, javax.persistence.CascadeType.REFRESH }, fetch = FetchType.LAZY)
+    private Set<family.domain.Person> children = new HashSet<family.domain.Person>();
 
-	@Enumerated
-	private Sex sex;
+    @Enumerated
+    private Sex sex;
 
-	/**
-	 * 
-	 * @param appUrl
-	 * @return
-	 */
-    public java.lang.String toJson(String appUrl) { 
-    	JSONSerializer serializer = new JSONSerializer();
-    	serializer.transform(new PersonTransformer(appUrl), Person.class);
-		String json =  serializer.serialize( this );
-		return json;
+    @Past
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date dob;
+
+    @Past
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date dod;
+
+    private String placeOfBirth;
+
+    private String placeOfDeath;
+
+    public Person() {
+        this.setSex(Sex.NOT_KNOWN);
+        this.children = new HashSet<family.domain.Person>();
     }
-    
-    public java.lang.String toJson(String appUrl, List<Person> affectedParties) { 
-    	JSONSerializer serializer = new JSONSerializer();
-    	serializer.transform(new PersonTransformer(appUrl, affectedParties), Person.class);
-		String json =  serializer.serialize( this );
-		return json;
+
+    public static TypedQuery<family.domain.Person> findChildren(Long parentId) {
+        if (parentId == null) throw new IllegalArgumentException("The parentId argument is required");
+        EntityManager em = Person.entityManager();
+        TypedQuery<Person> q = em.createQuery("SELECT o FROM Person AS o WHERE o.father.id = :parentId OR o.mother.id = :parentId", Person.class);
+        q.setParameter("parentId", parentId);
+        return q;
     }
-	    
-    //////////////////////////////////////////////
-    // Add and remove father, mother and children.
-    
-	/**
-	 * TODO remove from previous father's children, if any.
-	 * @param father
-	 */
-//	protected void setFather(Person father) {		
-//		this.father = father;
-//		this.father.getChildren().add(this);
-//	}
 
-	/**
-	 * TODO remove from previous mother's children, if any.
-	 * @param mother
-	 */
-//	protected void setMother(Person mother) {
-//		this.mother = mother;
-//		this.mother.getChildren().add(this);
-//	}
-
-
-	
-	/**
-	 * Manage the addition of a child - both sides of the relationship.
-	 * @param aChild
-	 */
-	protected void addChild(Person aChild){
-		this.getChildren().add(aChild);
-	}
-	
-	/**
-	 * Manage the removal of a child - both sides of the relationship.
-	 * Need to check both the unwanted child's mother and their father to determine which to remove. 
-	 * @param anUnwantedChild
-	 */
-    protected void removeChild(Person anUnwantedChild){
-    	if(this == anUnwantedChild.getMother()){
-    		anUnwantedChild.removeMother();
-    	}
-    	if(this == anUnwantedChild.getFather()){
-    		anUnwantedChild.removeFather();
-    	}
+    public static family.domain.Person fromJsonToPerson(String json) {
+        return new JSONDeserializer<Person>().use(null, Person.class).deserialize(json);
     }
-    
-//    protected void setChildren(final Set<Person> children) {
-//    	Set<Person> oldChildren = this.children;
-//        for (Person oldChild : oldChildren) {
-//        	oldChild.getFather().removeChild(oldChild);
-//        	oldChild.setFather(null);
-//        	
-//		}
-//        this.children = children;
-//        for (Person newChild : this.children) {
-//        	if(this.getSex().equals(Sex.MALE)){
-//        		newChild.setFather(this);
-//        	}
-//        	if(this.getSex().equals(Sex.FEMALE)){
-//        		newChild.setMother(this);
-//        	}        	
-//		}
-//    }
 
-	public Set<Person> getChildren() {
-		if( this.children == null ){
-			this.children = new HashSet<Person>();
-		}
+    public String toJson(String appUrl) {
+        JSONSerializer serializer = new JSONSerializer();
+        serializer.transform(new PersonTransformer(appUrl), Person.class);
+        String json = serializer.serialize(this);
+        return json;
+    }
+
+    public String toJson(String appUrl, List<family.domain.Person> affectedParties) {
+        JSONSerializer serializer = new JSONSerializer();
+        serializer.transform(new PersonTransformer(appUrl, affectedParties), Person.class);
+        String json = serializer.serialize(this);
+        return json;
+    }
+
+    protected void addChild(family.domain.Person aChild) {
+        this.getChildren().add(aChild);
+    }
+
+    protected void removeChild(family.domain.Person anUnwantedChild) {
+        if (this == anUnwantedChild.getMother()) {
+            anUnwantedChild.removeMother();
+        }
+        if (this == anUnwantedChild.getFather()) {
+            anUnwantedChild.removeFather();
+        }
+    }
+
+    public Set<family.domain.Person> getChildren() {
+        if (this.children == null) {
+            this.children = new HashSet<Person>();
+        }
         return this.children;
     }
 
-	//
-	/**
-	 *  Manage the move from one father to another. Current and next fathers may be null. 
-	 *  current father - remove this from his children.
-	 *  new father - add this to his children.
-	 *  set this father to new father.
-	 * @param newFather
-	 */
-	public void addFather(Person newFather) {
-		if(this.getFather() != null){
-			this.getFather().removeChild(this);
-		}
-		this.setFather(newFather);
-		this.getFather().addChild(this);		
-	}
+    public void addFather(family.domain.Person newFather) {
+        if (this.getFather() != null) {
+            this.getFather().removeChild(this);
+        }
+        this.setFather(newFather);
+        this.getFather().addChild(this);
+    }
 
-	/**
-	 * Manage the un-setting of a father. Remove this from his children if he exists.
-	 */
-	public void removeFather() {
-		if (this.getFather() != null){
-			this.getFather().getChildren().remove(this);
-			this.setFather(null);
-		}
-	}
-	
-	/**
-	 *  Manage the move from one mother to another. Current and next mothers may be null. 
-	 *  current mother - remove this from her children.
-	 *  new mother - add this to her children.
-	 *  set this mother to new mother.
-	 * @param newFather
-	 */
-	public void addMother(Person newMother) {
-		if(this.getMother() != null){
-			this.getMother().getChildren().remove(this);
-		}
-		this.setMother(newMother);
-		this.getMother().getChildren().add(this);		
-	}
-	/**
-	 * Manage the un-setting of a mother. Remove this from her children if she exists.
-	 */
-	public void removeMother() {
-		if (this.getMother() != null){
-			this.getMother().getChildren().remove(this);
-			this.setMother(null);
-		}
-	}
+    public void removeFather() {
+        if (this.getFather() != null) {
+            this.getFather().getChildren().remove(this);
+            this.setFather(null);
+        }
+    }
 
-//	@Override
-//	public boolean equals(Object that) {
-//		if ( this == that ) return true;
-//		  if ( !(that instanceof Person) ) return false;
-//		  Person aPerson = (Person)that;
-//		  return 
-//		    EqualsUtil.areEqual(this.name, aPerson.getName()) &&
-//		    EqualsUtil.areEqual(this.sex, aPerson.getSex()) &&
-//		    EqualsUtil.areEqual(this.mother, aPerson.getMother()) &&
-//		    EqualsUtil.areEqual(this.father, aPerson.getFather()) &&
-//		    EqualsUtil.areEqual(this.children, aPerson.getChildren()); //array!
-//	}
-//
-//	@Override
-//	public int hashCode() {		
-//		return super.hashCode() + 17 + this.getId().intValue() 
-//				+ 13 + ((this.getVersion() == null)?123:this.getVersion().intValue())
-//				+ 23 + ((this.getName()==null)?34:this.getName().hashCode());
-//	}
-}	
+    public void addMother(family.domain.Person newMother) {
+        if (this.getMother() != null) {
+            this.getMother().getChildren().remove(this);
+        }
+        this.setMother(newMother);
+        this.getMother().getChildren().add(this);
+    }
+
+    public void removeMother() {
+        if (this.getMother() != null) {
+            this.getMother().getChildren().remove(this);
+            this.setMother(null);
+        }
+    }
+}

@@ -8,6 +8,10 @@
         <field:select field="father" id="c_family_domain_Person_father" itemValue="id" items="${people}" path="/people" z="ujr8CYMn58B0PRJ/9tPi7nX1kIw="/>
         <field:select field="mother" id="c_family_domain_Person_mother" itemValue="id" items="${people}" path="/people" z="8Uav7qduicSXd2TEjzXDQ2GDa8Q="/>
         <field:select field="children" id="c_family_domain_Person_children" itemValue="id" items="${people}" multiple="true" path="/people" z="0juPMokQAIlvoE8gY67kxWsumHU="/>
+        <field:datetime dateTimePattern="${person_dob_date_format}" field="dob" id="c_family_domain_Person_dob" past="true" z="3fX1gBL96VdNqjtW0ul4h3UhV5I="/>
+        <field:datetime dateTimePattern="${person_dod_date_format}" field="dod" id="c_family_domain_Person_dod" past="true" z="K584TnMyeteGXygZn34mH36rD6I="/>
+        <field:input field="placeOfBirth" id="c_family_domain_Person_placeOfBirth" z="DmsGRS+nsXSPJvsckp3au7aCHj8="/>
+        <field:input field="placeOfDeath" id="c_family_domain_Person_placeOfDeath" z="/H7964qUZvXGtil0JCDI4nqr5n0="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_family_domain_Person" render="${not empty dependencies}" z="UkojSCoNwr/mFIKC157uDFS9emM="/>
 </div>

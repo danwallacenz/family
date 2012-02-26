@@ -1,5 +1,6 @@
 package family.util;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -54,7 +55,23 @@ public class PersonTransformer extends AbstractTransformer {
 	    getContext().writeComma();
 	    getContext().writeName("sex");
 	    getContext().transform(person.getSex());
-	    getContext().writeComma(); 
+	    getContext().writeComma();
+	    
+	    getContext().writeName("dob");
+	    getContext().transform(person.getDob() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(person.getDob()));
+	    getContext().writeComma();
+	  
+	    getContext().writeName("dod");
+	    getContext().transform(person.getDod() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(person.getDod()));
+	    getContext().writeComma();
+	    
+	    getContext().writeName("placeOfBirth");
+	    getContext().transform(person.getPlaceOfBirth());
+	    getContext().writeComma();
+	    
+	    getContext().writeName("placeOfDeath");
+	    getContext().transform(person.getPlaceOfDeath());
+	    getContext().writeComma();
 	    
 	    writeFather(person);
 	    
@@ -107,6 +124,7 @@ public class PersonTransformer extends AbstractTransformer {
         getContext().writeCloseArray();
 	}
 
+	// TODO add dob, dod placeOfBirth and placeOfDeath
 	private void writeMother(Person person) {
 	    getContext().writeName("mother");
 	    Person mother = person.getMother();
@@ -131,6 +149,7 @@ public class PersonTransformer extends AbstractTransformer {
 	    }
 	}
 
+	// TODO add dob, dod placeOfBirth and placeOfDeath
 	private void writeFather(Person person) {
 	    getContext().writeName("father");
 	    Person father = person.getFather();
@@ -155,6 +174,7 @@ public class PersonTransformer extends AbstractTransformer {
 	    }
 	}
 
+	// TODO add dob, dod placeOfBirth and placeOfDeath
 	private void writeChildren(Person person) {
 	    // Write out the children
 	    getContext().writeName("children");	    

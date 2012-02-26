@@ -117,6 +117,7 @@ public class TestFlexJson {
     		"\"name\":\"Daniel Wallace\"," +
       		"\"version\":0," +
       		"\"sex\":\"MALE\"," +
+      		"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
       		"\"father\":\"null\"," +
       		"\"mother\":\"null\"," +
       		"\"children\":[]," +
@@ -176,6 +177,7 @@ public class TestFlexJson {
 		    "\"name\":\"Daniel Roy Wallace\"," +
 		    "\"version\":1," +
 		    "\"sex\":\"MALE\"," +
+		    "\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
 		    "\"father\":\"null\"," +
 		    "\"mother\":{" +
 		        "\"id\":2," +
@@ -242,6 +244,7 @@ public class TestFlexJson {
 		    "\"name\":\"Joan Wallace\"," +
 		    "\"version\":1," +
 		    "\"sex\":\"FEMALE\"," +
+		    "\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
 		    "\"father\":\"null\"," +
 		    "\"mother\":\"null\"," +
 		    "\"children\":[" +

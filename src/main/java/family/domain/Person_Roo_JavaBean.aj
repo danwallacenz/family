@@ -5,6 +5,7 @@ package family.domain;
 
 import family.domain.Person;
 import family.domain.Sex;
+import java.util.Date;
 import java.util.Set;
 
 privileged aspect Person_Roo_JavaBean {
@@ -51,6 +52,38 @@ privileged aspect Person_Roo_JavaBean {
     
     public void Person.setSex(Sex sex) {
         this.sex = sex;
+    }
+    
+    public Date Person.getDob() {
+        return this.dob;
+    }
+    
+    public void Person.setDob(Date dob) {
+        this.dob = dob;
+    }
+    
+    public Date Person.getDod() {
+        return this.dod;
+    }
+    
+    public void Person.setDod(Date dod) {
+        this.dod = dod;
+    }
+    
+    public java.lang.String Person.getPlaceOfBirth() {
+        return this.placeOfBirth;
+    }
+    
+    public void Person.setPlaceOfBirth(java.lang.String placeOfBirth) {
+        this.placeOfBirth = placeOfBirth;
+    }
+    
+    public java.lang.String Person.getPlaceOfDeath() {
+        return this.placeOfDeath;
+    }
+    
+    public void Person.setPlaceOfDeath(java.lang.String placeOfDeath) {
+        this.placeOfDeath = placeOfDeath;
     }
     
 }

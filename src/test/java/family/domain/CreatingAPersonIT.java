@@ -4,7 +4,7 @@ import static com.jayway.restassured.RestAssured.expect;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.config.RestAssuredConfig.config;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.config.LogConfig;
+import com.jayway.restassured.response.Response;
 
 public class CreatingAPersonIT extends FuncAbstract {
 
@@ -88,6 +89,109 @@ public class CreatingAPersonIT extends FuncAbstract {
 		.and().that().body("version", equalTo(0))
 		.and().that().body("sex", equalTo("MALE"))
 		.and().that().body("version", equalTo(0))
+		.given().header("Accept", "application/json")
+		.when().get("/family/people/" + newId); 
+	}
+	
+	@Test
+	public void shouldWriteDOBDataToTheDatabase() {
+		
+		// TODO fix date format
+		// Create a Person in the database
+		String personAsJson = 
+				
+			"{ \"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\",\"dob\" : \"06/27/1957\"}";// This is a problem
+
+		String newId = idOfPosted(personAsJson);
+		
+		// Read him back from the server
+		expect().log().all()
+		.that().body("name", equalTo("Daniel Roy Wallace"))
+		.and().that().body("version", equalTo(0))
+		.and().that().body("dob", equalTo("27/06/1957"))
+		.given().header("Accept", "application/json")
+		.when().get("/family/people/" + newId); 
+	}
+	
+	@Test
+	public void shouldWriteDODDataToTheDatabase() {
+		
+		// TODO fix date format
+		// Create a Person in the database
+		String personAsJson = 
+				
+			"{ \"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\",\"dod\" : \"06/27/1957\"}";// This is a problem
+
+		String newId = idOfPosted(personAsJson);
+		
+		// Read him back from the server
+		expect().log().all()
+		.that().body("name", equalTo("Daniel Roy Wallace"))
+		.and().that().body("version", equalTo(0))
+		.and().that().body("dod", equalTo("27/06/1957"))
+		.given().header("Accept", "application/json")
+		.when().get("/family/people/" + newId); 
+	}
+	
+	@Test
+	public void shouldReturnA400BAD_REQUESTWhenDODIsInTheFuture() {
+		
+		// TODO fix date format
+		// Create a Person in the database
+		String personAsJsonInvalidDOD = 
+				
+			"{ \"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\",\"dod\" : \"06/27/2057\"}";// This is a problem
+
+		Response expectedErrorResponse 
+		= given()
+			.header("Accept", "application/json")
+			.and().body(personAsJsonInvalidDOD)
+			.with().contentType(ContentType.JSON)
+			.log().all()
+		.then()
+		.expect().that()
+		.body("exception.code",equalTo(HttpStatus.BAD_REQUEST.value()))
+		.body("exception.message",containsString("2057 must be in the past"))
+			.log().all()
+		.when().post(APP_URL);
+		 
+		System.out.println(expectedErrorResponse.asString());
+	}
+	
+	@Test
+	public void shouldWritePlaceOfBirthDataToTheDatabase() {
+		
+		// Create a Person in the database
+		String personAsJson = 
+				
+			"{ \"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\",\"placeOfBirth\" : \"Te Awamutu, New Zealand\"}";
+
+		String newId = idOfPosted(personAsJson);
+		
+		// Read him back from the server
+		expect().log().all()
+		.that().body("name", equalTo("Daniel Roy Wallace"))
+		.and().that().body("version", equalTo(0))
+		.and().that().body("placeOfBirth", equalTo("Te Awamutu, New Zealand"))
+		.given().header("Accept", "application/json")
+		.when().get("/family/people/" + newId); 
+	}
+	
+	@Test
+	public void shouldWritePlaceOfDeathDataToTheDatabase() {
+		
+		// Create a Person in the database
+		String personAsJson = 
+				
+			"{ \"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\",\"placeOfDeath\" : \"Unknown\"}";
+
+		String newId = idOfPosted(personAsJson);
+		
+		// Read him back from the server
+		expect().log().all()
+		.that().body("name", equalTo("Daniel Roy Wallace"))
+		.and().that().body("version", equalTo(0))
+		.and().that().body("placeOfDeath", equalTo("Unknown"))
 		.given().header("Accept", "application/json")
 		.when().get("/family/people/" + newId); 
 	}

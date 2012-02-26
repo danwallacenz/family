@@ -8,5 +8,9 @@
         <field:display field="father" id="s_family_domain_Person_father" object="${person}" z="67v2oTjtxEy7pf/tahRg9iXZYzc="/>
         <field:display field="mother" id="s_family_domain_Person_mother" object="${person}" z="Syu/GXoQ5JeXS8iXcuOrc7vlB4g="/>
         <field:display field="children" id="s_family_domain_Person_children" object="${person}" z="6IrK5MFBbAfPJV7JMWPvmsro8RQ="/>
+        <field:display date="true" dateTimePattern="${person_dob_date_format}" field="dob" id="s_family_domain_Person_dob" object="${person}" z="BOJyPgnZ7rVI1S8+KgZLWjC6HRs="/>
+        <field:display date="true" dateTimePattern="${person_dod_date_format}" field="dod" id="s_family_domain_Person_dod" object="${person}" z="KAuKFOnRhV4Z0PJD0zLKyKFc/fU="/>
+        <field:display field="placeOfBirth" id="s_family_domain_Person_placeOfBirth" object="${person}" z="H+t4cOwkbx9Meue+wdPi9GlTtL8="/>
+        <field:display field="placeOfDeath" id="s_family_domain_Person_placeOfDeath" object="${person}" z="XExXhxaNdWKJka6SOh6PINOjuKw="/>
     </page:show>
 </div>

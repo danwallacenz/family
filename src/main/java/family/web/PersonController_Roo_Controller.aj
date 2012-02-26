@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.joda.time.format.DateTimeFormat;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +28,7 @@ privileged aspect PersonController_Roo_Controller {
     public java.lang.String PersonController.create(@Valid Person person, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             uiModel.addAttribute("person", person);
+            addDateTimeFormatPatterns(uiModel);
             return "people/create";
         }
         uiModel.asMap().clear();
@@ -36,11 +39,13 @@ privileged aspect PersonController_Roo_Controller {
     @RequestMapping(params = "form", method = RequestMethod.GET)
     public java.lang.String PersonController.createForm(Model uiModel) {
         uiModel.addAttribute("person", new Person());
+        addDateTimeFormatPatterns(uiModel);
         return "people/create";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public java.lang.String PersonController.show(@PathVariable("id") java.lang.Long id, Model uiModel) {
+        addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("person", Person.findPerson(id));
         uiModel.addAttribute("itemId", id);
         return "people/show";
@@ -57,6 +62,7 @@ privileged aspect PersonController_Roo_Controller {
         } else {
             uiModel.addAttribute("people", Person.findAllPeople());
         }
+        addDateTimeFormatPatterns(uiModel);
         return "people/list";
     }
     
@@ -64,6 +70,7 @@ privileged aspect PersonController_Roo_Controller {
     public java.lang.String PersonController.update(@Valid Person person, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             uiModel.addAttribute("person", person);
+            addDateTimeFormatPatterns(uiModel);
             return "people/update";
         }
         uiModel.asMap().clear();
@@ -74,6 +81,7 @@ privileged aspect PersonController_Roo_Controller {
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
     public java.lang.String PersonController.updateForm(@PathVariable("id") java.lang.Long id, Model uiModel) {
         uiModel.addAttribute("person", Person.findPerson(id));
+        addDateTimeFormatPatterns(uiModel);
         return "people/update";
     }
     
@@ -95,6 +103,11 @@ privileged aspect PersonController_Roo_Controller {
     @ModelAttribute("sexes")
     public Collection<Sex> PersonController.populateSexes() {
         return Arrays.asList(Sex.class.getEnumConstants());
+    }
+    
+    void PersonController.addDateTimeFormatPatterns(Model uiModel) {
+        uiModel.addAttribute("person_dob_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("person_dod_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
     
     java.lang.String PersonController.encodeUrlPathSegment(java.lang.String pathSegment, HttpServletRequest httpServletRequest) {
