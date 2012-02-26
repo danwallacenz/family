@@ -124,8 +124,40 @@ public class GettingAPersonIT extends FuncAbstract{
 				.when().get("/family/people/" + sonId + "/mother");
 	}
 	
+	/**
+	 * I'm not sure that we need this  /children thing. We can just get the person. Children will come along with it.
+	 */
 	@Test
 	public void shouldReturnTheCorrectPeopleWhenGettingChildren(){
-		fail("TODO");
+    	String motherJson = "{ \"name\" : \"Roberta Lillian Wilks\",\"sex\":\"FEMALE\"}";
+    	// Save mother
+    	String motherId = idOfPosted(motherJson);
+    	
+    	String sonJSON = "{ \"name\": \"Johnny Wallace-Wilks\",\"sex\": \"MALE\"}";
+    	// Save son
+    	String sonId = idOfPosted(sonJSON); 
+
+    	// Set mother as son's mother.
+    	// This behaviour is tested in AddingAMotherIT
+		given().header("Accept", "application/json")
+		.then().expect().that().statusCode(200)
+			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
+			.when().put("/family/people/" + sonId + "/mother/" + motherId);
+		
+		// Get the children.	
+			Response childrenGetResponse = 
+				given()
+				.log().everything()
+				.header("Accept", "application/json")
+				.then().expect()
+					.that().statusCode(200)
+					.and().that().response().contentType(JSON)
+					.and().that().body("getAt(0).id", equalTo(new Integer(sonId)))
+
+				.when().log().everything()
+				.when().get("/family/people/" + motherId + "/children");
+			
+			System.out.println(childrenGetResponse.asString());
+			
 	}
 }

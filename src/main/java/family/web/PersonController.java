@@ -254,6 +254,26 @@ public class PersonController {
     }    
     
     /**
+     * I'm not sure that we need this. We can just get the person
+     * @param parentId
+     * @param httpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/{parentId}/children", method = RequestMethod.GET,  headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<java.lang.String> showJsonChildren(@PathVariable("parentId") Long parentId, HttpServletRequest httpServletRequest) {
+        Person parent = Person.findPerson(parentId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        if (parent == null) {
+            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        }
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(Person.toJsonArray(parent.getChildren()),
+        		headers, HttpStatus.OK);
+    }
+    
+    /**
      * 
      * @param id
      * @param httpServletRequest
