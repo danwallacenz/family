@@ -21,6 +21,11 @@ import org.springframework.http.HttpStatus;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 
+/**
+ * TODO add tests for dob, dod placeOfBirth and placeOfDeath
+ * @author danielwallace
+ *
+ */
 public class UpdatingAPersonIT extends FuncAbstract{
 
 	@Test
@@ -34,28 +39,13 @@ public class UpdatingAPersonIT extends FuncAbstract{
     	String updatedPersonAsJson 
     		= "{\"class\":\"family.domain.Person\",\"father\":null,\"id\":" 
     			+ newId + ",\"mother\":null,\"name\":\""+newName+"\",\"version\":0}";
-//		RestAssured.requestContentType(JSON);
-//		try {
 			given().header("Accept", "application/json")					
 					.body(updatedPersonAsJson)
 					.with().contentType(JSON)
 			.then().expect()
-//					.statusCode(200)
-//					.and().response().header("Location", containsString("/family/people/" + newId))
 			.body("version", equalTo(1))
 			.log().all()
 			.when().put("/family/people/" + newId);
-//		} finally {
-//			RestAssured.reset();
-//		}
-		
-		// verify name and version have changed
-//		try {	
-//			expect().log().all().body("name", equalTo(newName))
-//			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
-//		} finally {
-//			RestAssured.reset();
-//		}
     }
 	
 	@Test
@@ -69,27 +59,14 @@ public class UpdatingAPersonIT extends FuncAbstract{
     	String updatedPersonAsJson 
     		= "{\"class\":\"family.domain.Person\",\"father\":null,\"id\":" 
     			+ newId + ",\"mother\":null,\"name\":\""+newName+"\",\"version\":0}";
-		//RestAssured.requestContentType(JSON);
-		//try {
+
 			given().header("Accept", "application/json")					
 					.body(updatedPersonAsJson)
 					.with().contentType(JSON)
 			.then().expect()
-//					.statusCode(200)
 					.and().response().header("Location", containsString(APP_URL + "/" + newId))
-//					.body("version", equalTo(1))
 			.when().put("/family/people/" + newId);
-//		} finally {
-//			RestAssured.reset();
-//		}
-		
-		// verify name and version have changed
-//		try {	
-//			expect().log().all().body("name", equalTo(newName))
-//			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
-//		} finally {
-//			RestAssured.reset();
-//		}
+
     }
 	
 	@Test
@@ -104,30 +81,15 @@ public class UpdatingAPersonIT extends FuncAbstract{
 	    	String updatedPersonAsJson 
 	    		= "{\"class\":\"family.domain.Person\",\"father\":null,\"id\":" 
 	    			+ newId + ",\"mother\":null,\"name\":\""+newName+"\",\"version\":0}";
-//			RestAssured.requestContentType(JSON);
-//			try {
+
 				given().header("Accept", "application/json")					
 						.body(updatedPersonAsJson)
 						.with().contentType(JSON)
 				.then().expect()
-//						.statusCode(200)
-//						.and().response().header("Location", containsString("/family/people/" + newId))
 				.body("id", equalTo(new Integer(newId)))
 				.log().all()
 				.when().put("/family/people/" + newId);
-//			} finally {
-//				RestAssured.reset();
-//			}
-			
-			// verify name and version have changed
-//			try {	
-//				expect().log().all().body("name", equalTo(newName))
-//				.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
-//			} finally {
-//				RestAssured.reset();
-//			}
-//	    }	RestAssured.reset();
-//		}
+
     }
 	
 	@Test
@@ -162,29 +124,13 @@ public class UpdatingAPersonIT extends FuncAbstract{
     	String updatedPersonAsJson 
     		= "{\"class\":\"family.domain.Person\",\"father\":null,\"id\":" 
     			+ newId + ",\"mother\":null,\"name\":\""+newName+"\",\"version\":0}";
-//		RestAssured.requestContentType(JSON);
-//		try {
 			given().header("Accept", "application/json")					
 					.body(updatedPersonAsJson)
 					.with().contentType(JSON)
 			.then().expect()
-//					.statusCode(200)
-//					.and().response().header("Location", containsString("/family/people/" + newId))
 			.body("name", equalTo(newName))
 			.log().all()
 			.when().put("/family/people/" + newId);
-//		} finally {
-//			RestAssured.reset();
-//		}
-		
-		// verify name and version have changed
-//		try {	
-//			expect().log().all().body("name", equalTo(newName))
-//			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
-//		} finally {
-//			RestAssured.reset();
-//		}
-
     }
    
     @Test
@@ -198,28 +144,13 @@ public class UpdatingAPersonIT extends FuncAbstract{
     	String updatedPersonAsJson 
     		= "{\"class\":\"family.domain.Person\",\"father\":null,\"id\":" 
     			+ newId + ",\"mother\":null,\"name\":\""+newName+"\", \"sex\" : \"MALE\", \"version\":0}";
-//		RestAssured.requestContentType(JSON);
-//		try {
 			given().header("Accept", "application/json")					
 					.body(updatedPersonAsJson)
 					.with().contentType(JSON)
 			.then().expect()
-//					.statusCode(200)
-//					.and().response().header("Location", containsString("/family/people/" + newId))
 			.body("sex", equalTo("MALE"))
 			.log().all()
 			.when().put("/family/people/" + newId);
-//		} finally {
-//			RestAssured.reset();
-//		}
-		
-		// verify name and version have changed
-//		try {	
-//			expect().log().all().body("name", equalTo(newName))
-//			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
-//		} finally {
-//			RestAssured.reset();
-//		}
     }
     
 	@Test
@@ -243,6 +174,34 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		.when().put("/family/people/" + newId);
 	}
 	
+	@Test
+	public void shouldReturnA400BAD_REQUESTWhenDODIsInTheFuture() {
+		
+		// TODO fix date format
+		// Create a Person in the database
+		String personAsJson = 
+			"{ \"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\",\"dod\" : \"06/27/1957\"}";// This is a problem
+
+		String newId = idOfPosted(personAsJson);
+		
+		String personAsJsonInvalidDOD = 
+				"{ \"id\":" + newId + ",\"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\",\"dod\" : \"06/27/2057\", \"version\":0}";// This is a problem
+		
+		Response expectedErrorResponse 
+		= given()
+			.header("Accept", "application/json")
+			.and().body(personAsJsonInvalidDOD)
+			.with().contentType(ContentType.JSON)
+			.log().all()
+		.then()
+		.expect().that()
+		.body("exception.code",equalTo(HttpStatus.BAD_REQUEST.value()))
+		.body("exception.message",containsString("2057 must be in the past"))
+			.log().all()
+		.when().put("/family/people/" + newId);
+		 
+		System.out.println(expectedErrorResponse.asString());
+	}
 	
 	@Test
 	public void shouldReturnA400NOT_ACCEPTABLEStatusCodeWhenTheJsonInTheRequestBodyDoesNotContainAVersion() {

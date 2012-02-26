@@ -62,6 +62,7 @@ public class PersonTestIT{
         		"\"name\":\"Daniel Wallace\"," +
           		"\"version\":0," +
           		"\"sex\":\"MALE\"," +
+          		"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
           		"\"father\":\"null\"," +
           		"\"mother\":\"null\"," +
           		"\"children\":[]," +
@@ -316,12 +317,17 @@ public class PersonTestIT{
 			String addMotherResponseBody = addMotherResponse.body().asString();
 			System.out.println(addMotherResponseBody);
     	
+			/*
+			 * {"id":97,"name":"Issac Williams","version":1,"sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"father":"null","mother":{"id":96,"name":"Rachel Margaret Wallace","sex":"FEMALE","version":1,"links":[{"rel":"self","href":"http://localhost:8080/family/people/96","title":"Rachel Margaret Wallace"},{"rel":"father","href":"http://localhost:8080/family/people/96/father","title":"Father"},{"rel":"mother","href":"http://localhost:8080/family/people/96/mother","title":"Mother"},{"rel":"children","href":"http://localhost:8080/family/people/96/children","title":"Children"}]},"children":[],"links":[{"rel":"self","href":"http://localhost:8080/family/people/97","title":"Issac Williams"},{"rel":"father","href":"http://localhost:8080/family/people/97/father","title":"Father"},{"rel":"mother","href":"http://localhost:8080/family/people/96","title":"Rachel Margaret Wallace"},{"rel":"children","href":"http://localhost:8080/family/people/97/children","title":"Children"}],"affectedParties":[{"id":96,"name":"Rachel Margaret Wallace","href":"http://localhost:8080/family/people/96"}]}
+			 */
+			
 		String expectedIsaacJSON 
 			= "{" +
 					"\"id\":" + isaacId + "," +
 					"\"name\":\"Issac Williams\"" +
 					",\"version\":1," +
 					"\"sex\":\"MALE\"," +
+					"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
 					"\"father\":\"null\"," +
 					"\"mother\":" +
 						"{" +
@@ -401,6 +407,7 @@ public class PersonTestIT{
 			"\"name\":\"Rachel Margaret Wallace\"," +
 			"\"version\":1," +
 			"\"sex\":\"FEMALE\"," +
+			"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
 			"\"father\":\"null\"," +
 			"\"mother\":\"null\"," +
 			"\"children\":" +

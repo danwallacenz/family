@@ -7,6 +7,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.metadata.ConstraintDescriptor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -378,8 +382,14 @@ public class PersonController {
     			|| json.indexOf("\"version\"") != -1 || json.indexOf("'version'") != -1){
     		log.error("JSON contains an 'id' or a 'version':" + json);
     		return new ResponseEntity<String>(createExceptionJson(HttpStatus.NOT_ACCEPTABLE, "JSON contains an 'id' or a 'version':" + json), headers, HttpStatus.NOT_ACCEPTABLE);
+    	} 
+    	try{
+    		person.persist();
+    	}catch(Exception e){
+    		log.error("Bad JSON:" + json);
+    		return new ResponseEntity<String>(
+    				createExceptionJson(HttpStatus.BAD_REQUEST, e), headers, HttpStatus.BAD_REQUEST);
     	}
-        person.persist();
 
         String location = getLocationForChildResource(httpServletRequest, person.getId());
         headers.add("Location", location);
@@ -403,9 +413,21 @@ public class PersonController {
 			= new StringBuffer("{\"exception\" :")
 		.append("{\"code\" : ")
 		.append(badRequest.value()).append(",")
-		.append("\"name\" : \"").append(badRequest.name()).append("\",")
-		.append("\"message\" : \"").append(e.getMessage())
-		.append("\"")
+		.append("\"name\" : \"").append(badRequest.name()).append("\",");
+		if(e instanceof ConstraintViolationException){
+			ConstraintViolationException constraintViolationException = (ConstraintViolationException)e;
+			Set<ConstraintViolation<?>> constraintViolations = constraintViolationException.getConstraintViolations();
+			for (ConstraintViolation<?> constraintViolation : constraintViolations) {
+				ConstraintDescriptor<?> constraintDescriptor = constraintViolation.getConstraintDescriptor();
+				Object invalidValue = constraintViolation.getInvalidValue();
+				String errorMessage = constraintViolation.getMessage();
+				log.debug(invalidValue + " "  + errorMessage);
+				exceptionJson.append("\"message\" : \"").append(invalidValue + " "  + errorMessage);
+			}
+		}else{
+			exceptionJson.append("\"message\" : \"").append(e.getMessage());
+		}
+		exceptionJson.append("\"")
 		.append("}}");
 		return exceptionJson.toString();
 	}
@@ -453,12 +475,11 @@ public class PersonController {
 	            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
 	        }
         }catch(Exception e){
-        	String errorMsg = "\nERROR updating Person with id" + id + "\n" + json +"\n" + e.getMessage();
-        	log.error(errorMsg);
-        	return new ResponseEntity<String>(errorMsg, headers, HttpStatus.NOT_MODIFIED);
+    		log.error("Bad JSON:" + json);
+    		return new ResponseEntity<String>(
+    				createExceptionJson(HttpStatus.BAD_REQUEST, e), headers, HttpStatus.BAD_REQUEST);
         }
         StringBuffer url = httpServletRequest.getRequestURL();
-        //url.delete(url.lastIndexOf("/"), url.length());
         String location = url.toString();
         headers.add("Location", location);
         String hostUrl = httpServletRequest.getRequestURL().toString();

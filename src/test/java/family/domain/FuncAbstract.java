@@ -45,5 +45,14 @@ public abstract class FuncAbstract {
     			.post("/family/people");
     	return response;
 	}
+	
+	protected Response responseOfPostedNoValidation(String json) {
+    	Response response = 
+    			given().header("Accept", "application/json")
+    			.body(json)
+    			.when()
+    			.post("/family/people");
+    	return response;
+	}
 
 }
