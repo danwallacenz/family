@@ -12,9 +12,9 @@ import java.util.List;
 
 privileged aspect Person_Roo_Json {
     
-//    public static Person Person.fromJsonToPerson(java.lang.String json) {
-//        return new JSONDeserializer<Person>().use(null, Person.class).deserialize(json);
-//    }
+    public java.lang.String Person.toJson() {
+        return new JSONSerializer().exclude("*.class").serialize(this);
+    }
     
     public static java.lang.String Person.toJsonArray(Collection<Person> collection) {
         return new JSONSerializer().exclude("*.class").serialize(collection);
