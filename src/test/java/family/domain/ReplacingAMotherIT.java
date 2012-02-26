@@ -268,20 +268,51 @@ public class ReplacingAMotherIT extends FuncAbstract{
 
     	// Set originalMother as son's mother.
     	// This behaviour is tested in AddingAMotherIT
-
-    	fail("TODO check affected parties - see ensureThatAllPartiesUpdateCorrectlyWhenMotherIsReplaced below");
-		given().header("Accept", "application/json")
-		.then().expect().that().statusCode(200)
+    	//fail("TODO check affected parties - see ensureThatAllPartiesUpdateCorrectlyWhenMotherIsReplaced below");
+    	Response addOriginalMotherResponse = 
+	    	given().header("Accept", "application/json")
+			.then().expect().that().statusCode(200)
 			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
+			.and().that().body("affectedParties.size()", equalTo(1))
+			.and().that().body("affectedParties.getAt(0).id", equalTo(new Integer(originalMotherId)))
+			.and().that().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + originalMotherId))
+			.and().that().body("affectedParties.getAt(0).name", equalTo("Roberta Wilks"))
 			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
 
-		fail("TODO check affected parties - see ensureThatAllPartiesUpdateCorrectlyWhenMotherIsReplaced below");
-		// Then Replace her with new mother
-		given().header("Accept", "application/json")
-		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
+    	// Only the mother is affected here
+    	String addOriginalMotherResponseBodyContent = addOriginalMotherResponse.body().asString();
+		List<String> affectedPartiesWhenAddingMother 
+			= from(addOriginalMotherResponseBodyContent).get("affectedParties");
+    	String originalMotherAsAffectedPartyHref = from(addOriginalMotherResponseBodyContent).get("affectedParties.getAt(0).href");
+    	int originalMotherAsAffectedPartyId = from(addOriginalMotherResponseBodyContent).get("affectedParties.getAt(0).id");
+    	String originalMotherAsAffectedPartyName = from(addOriginalMotherResponseBodyContent).get("affectedParties.getAt(0).name");
+    	
+		// Then Replace her with new mother - check the affected parties
+	    Response addReplacementMotherResponse = 
+	    	given().header("Accept", "application/json")
+			.then().expect().that().statusCode(200)
+				.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
+				.and().that().body("affectedParties.size()", equalTo(2))
+				.and().that().body("affectedParties.getAt(0).id", equalTo(new Integer(replacementMotherId)))
+				.and().that().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + replacementMotherId))
+				.and().that().body("affectedParties.getAt(0).name", equalTo("Helen Baxter"))
+				.and().that().body("affectedParties.getAt(1).id", equalTo(new Integer(originalMotherId)))
+				.and().that().body("affectedParties.getAt(1).href", equalTo(APP_URL + "/" + originalMotherId))
+				.and().that().body("affectedParties.getAt(1).name", equalTo("Roberta Wilks"))
+
 			.when().put("/family/people/" + sonId + "/mother/" + replacementMotherId);
-		
+			
+    	// The original mother and the replacement mother are both affected here
+    	String addReplacementMotherResponseBodyContent = addReplacementMotherResponse.body().asString();
+		List<String> affectedPartiesWhenReplacingMother 
+			= from(addReplacementMotherResponseBodyContent).get("affectedParties");
+    	String originalMotherAsAffectedPartyAfterBeingReplacedPartyHref 
+    		= from(addReplacementMotherResponseBodyContent).get("affectedParties.getAt(0).href");
+    	int originalMotherAsAffectedPartyAfterBeingReplacedPartyId 
+    		= from(addReplacementMotherResponseBodyContent).get("affectedParties.getAt(0).id");
+    	String originalMotherAsAffectedPartyAfterBeingReplacedPartyName 
+    		= from(addReplacementMotherResponseBodyContent).get("affectedParties.getAt(0).name");
+	    
     	// Get the replacement mother from the server	
 		Response replacementMothersGetResponse = 
 			given()
@@ -367,7 +398,6 @@ public class ReplacingAMotherIT extends FuncAbstract{
 			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
 			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
 			
-		fail("TODO check affected parties - see ensureThatAllPartiesUpdateCorrectlyWhenMotherIsReplaced below");
 		// Then Replace her with new mother
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
