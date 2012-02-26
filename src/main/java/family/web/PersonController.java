@@ -277,6 +277,61 @@ public class PersonController {
     }
     
     /**
+     * Get a mother without her id
+     * @param id
+     * @param httpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/{id}/mother", headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<java.lang.String> showJsonMother(@PathVariable("id") java.lang.Long id,
+    		HttpServletRequest httpServletRequest) {
+        Person person = Person.findPerson(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        if (person == null) {
+            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        }
+        Person mother = person.getMother();
+        if (mother == null) {
+            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        }
+        StringBuffer hostUrl = httpServletRequest.getRequestURL();
+        hostUrl.delete(hostUrl.lastIndexOf("/mother"), hostUrl.length());
+        hostUrl.delete(hostUrl.lastIndexOf("/"), hostUrl.length());
+        String motherToJson = mother.toJson(hostUrl.toString());
+        return new ResponseEntity<String>(motherToJson, headers, HttpStatus.OK);
+    }
+    
+    
+    /**
+     * Get a father without his id
+     * @param id
+     * @param httpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/{id}/father", headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<java.lang.String> showJsonFather(@PathVariable("id") java.lang.Long id,
+    		HttpServletRequest httpServletRequest) {
+        Person person = Person.findPerson(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        if (person == null) {
+            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        }
+        Person father = person.getFather();
+        if (father == null) {
+            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        }
+        StringBuffer hostUrl = httpServletRequest.getRequestURL();
+        hostUrl.delete(hostUrl.lastIndexOf("/father"), hostUrl.length());
+        hostUrl.delete(hostUrl.lastIndexOf("/"), hostUrl.length());
+        String fatherToJson = father.toJson(hostUrl.toString());
+        return new ResponseEntity<String>(fatherToJson, headers, HttpStatus.OK);
+    }
+    
+    /**
      * 
      * @param json
      * @param httpServletRequest
