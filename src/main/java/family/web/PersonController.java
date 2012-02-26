@@ -88,6 +88,54 @@ public class PersonController {
     }
     
     /**
+     * Remove a mother. Don't delete her.
+     * curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/mother
+     * @param id
+     * @param fatherId
+     * @return
+     * 
+     */
+    @RequestMapping(value = "/{id}/mother", method = RequestMethod.PUT, headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<java.lang.String> removeMother(
+    		@PathVariable("id") java.lang.Long id, HttpServletRequest httpServletRequest) {
+        
+    	Person child = Person.findPerson(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        if (child == null ) {
+            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+        }
+        Person oldMother = child.getMother();
+        child.removeMother();
+        child.merge();
+        
+        // TODO tidy this 
+        StringBuffer requestUrl = httpServletRequest.getRequestURL();       
+        requestUrl.delete(requestUrl.lastIndexOf("mother") - 1, requestUrl.length());
+		String location = requestUrl.toString();
+		String baseURL = requestUrl.delete(requestUrl.lastIndexOf("/"), requestUrl.length()).toString();
+        
+		headers.add("Location", location);
+    
+		// TODO Add self to affected parties??
+		// affected parties = old mother
+		List<Person> affectedParties = new ArrayList<Person>();
+		if(oldMother != null){
+			affectedParties.add(oldMother);
+		}
+		
+        log.debug("location=" + location +
+        		" removed mother (" + (oldMother == null?"not found":"id = "+oldMother.getId()) + ") " +
+        				"for child (id=" + id + "). json='" 
+        		+ child.toJson(baseURL, affectedParties) + "'");
+		
+        return new ResponseEntity<String>(child.toJson(baseURL, affectedParties), headers, HttpStatus.OK);
+    }
+    
+    
+    /**
      * curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/father/3
      * @param id
      * @param motherId
