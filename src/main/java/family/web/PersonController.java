@@ -547,4 +547,12 @@ public class PersonController {
 		String location = template.expand(childId).toASCIIString();
 		return location;
 	}
+	
+    @RequestMapping(params = "find=ByNameLike", headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<java.lang.String> jsonFindPeopleByNameLike(@RequestParam("name") java.lang.String name) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByNameLike(name).getResultList()), headers, HttpStatus.OK);
+    }
 }

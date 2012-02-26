@@ -116,12 +116,12 @@ privileged aspect PersonController_Roo_Controller_Json {
         return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByMotherAndFather(mother, father).getResultList()), headers, HttpStatus.OK);
     }
     
-    @RequestMapping(params = "find=ByNameLike", headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<java.lang.String> PersonController.jsonFindPeopleByNameLike(@RequestParam("name") java.lang.String name) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/text; charset=utf-8");
-        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByNameLike(name).getResultList()), headers, HttpStatus.OK);
-    }
+//    @RequestMapping(params = "find=ByNameLike", headers = "Accept=application/json")
+//    @ResponseBody
+//    public ResponseEntity<java.lang.String> PersonController.jsonFindPeopleByNameLike(@RequestParam("name") java.lang.String name) {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Content-Type", "application/text; charset=utf-8");
+//        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByNameLike(name).getResultList()), headers, HttpStatus.OK);
+//    }
     
 }
