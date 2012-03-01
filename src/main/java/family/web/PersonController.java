@@ -563,7 +563,6 @@ public class PersonController {
 	private String getLocationForChildResource(
 			HttpServletRequest httpServletRequest, Object childId) {
 		StringBuffer url = httpServletRequest.getRequestURL();
-		//url.delete(url.lastIndexOf("/") + 1, url.length());
 		UriTemplate template = new UriTemplate(url.append("/{childId}").toString());
 		String location = template.expand(childId).toASCIIString();
 		return location;

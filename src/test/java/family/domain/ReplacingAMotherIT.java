@@ -45,7 +45,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
     			.statusCode(200).and().response()
 				.header("Location", containsString(APP_URL + "/" + isaacId))
     			.when()
-    			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+    			.put(appUrl() + "/" + isaacId + "/mother/" + rachelId);
 			
 			// Ensure that Isaac has been updated properly with Rachel as his mother
 			String addMotherResponseBody = addMotherResponse.body().asString();
@@ -120,7 +120,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
     			.statusCode(200).and().response()
 				.header("Location", containsString(APP_URL + "/" + isaacId))
     			.when()
-    			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+    			.put(appUrl() + "/" + isaacId + "/mother/" + rachelId);
 			
 			// Ensure that Rachel has been updated properly with Isaac as a child.
 			String addMotherResponseBodyForIsaac = addMotherResponse.body().asString();
@@ -207,7 +207,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
     		given().header("Accept", "application/json")
     		.then().expect().that().statusCode(200)
     			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-    			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
+    			.when().put(appUrl() + "/" + sonId + "/mother/" + originalMotherId);
 			
     	// Then Replace her with new mother	
 			Response replaceMotherResponse = 
@@ -249,7 +249,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 					.and().that().body("affectedParties.getAt(1).name", equalTo("Roberta Wilks"))
 					.and().that().body("affectedParties.getAt(1).href", equalTo(APP_URL + "/" + originalMotherId))
 				.when().log().everything()
-    			.when().put("/family/people/" + sonId + "/mother/" + replacementMotherId);
+    			.when().put(appUrl() + "/" + sonId + "/mother/" + replacementMotherId);
     }
     
     @Test
@@ -277,7 +277,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 			.and().that().body("affectedParties.getAt(0).id", equalTo(new Integer(originalMotherId)))
 			.and().that().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + originalMotherId))
 			.and().that().body("affectedParties.getAt(0).name", equalTo("Roberta Wilks"))
-			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
+			.when().put(appUrl() + "/" + sonId + "/mother/" + originalMotherId);
 
     	// Only the mother is affected here
     	String addOriginalMotherResponseBodyContent = addOriginalMotherResponse.body().asString();
@@ -300,7 +300,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 				.and().that().body("affectedParties.getAt(1).href", equalTo(APP_URL + "/" + originalMotherId))
 				.and().that().body("affectedParties.getAt(1).name", equalTo("Roberta Wilks"))
 
-			.when().put("/family/people/" + sonId + "/mother/" + replacementMotherId);
+			.when().put(appUrl() + "/" + sonId + "/mother/" + replacementMotherId);
 			
     	// The original mother and the replacement mother are both affected here
     	String addReplacementMotherResponseBodyContent = addReplacementMotherResponse.body().asString();
@@ -368,7 +368,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + replacementMotherId +"/children"))
 				.and().that().body("links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.when().get("/family/people/" + replacementMotherId);
+			.when().get(appUrl() + "/" + replacementMotherId);
 		
 		System.out.println(
 				replacementMothersGetResponse.getBody().jsonPath().get("children.getAt(0).father").getClass());
@@ -396,13 +396,13 @@ public class ReplacingAMotherIT extends FuncAbstract{
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
 			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
+			.when().put(appUrl() + "/" + sonId + "/mother/" + originalMotherId);
 			
 		// Then Replace her with new mother
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
 			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/mother/" + replacementMotherId);
+			.when().put(appUrl() + "/" + sonId + "/mother/" + replacementMotherId);
 		
     	// Get the original mother from the server	
 		Response originalMothersGetResponse = 
@@ -435,7 +435,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + originalMotherId +"/children"))
 				.and().that().body("links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.when().get("/family/people/" + originalMotherId);
+			.when().get(appUrl() + "/" + originalMotherId);
     }
     
     @Test
@@ -463,7 +463,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
     			.statusCode(200).and().response()
 				.header("Location", containsString(APP_URL + "/" + sonId))
     			.when()
-    			.put("/family/people/" + sonId + "/mother/" + originalMotherId);
+    			.put(appUrl() + "/" + sonId + "/mother/" + originalMotherId);
 			
 			Response replaceMotherResponse = 
 	    			given().header("Accept", "application/json")
@@ -472,7 +472,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 	    			.statusCode(200).and().response()
 					.header("Location", containsString(APP_URL + "/" + sonId))
 	    			.when()
-	    			.put("/family/people/" + sonId + "/mother/" + newMotherId);	
+	    			.put(appUrl() + "/" + sonId + "/mother/" + newMotherId);	
 						
 			String addMotherResponseBodyForOriginalMother = addMotherResponse.body().asString();
 			System.out.println(addMotherResponseBodyForOriginalMother); 
@@ -516,13 +516,13 @@ public class ReplacingAMotherIT extends FuncAbstract{
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
 			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
+			.when().put(appUrl() + "/" + sonId + "/mother/" + originalMotherId);
 			
 		// Then Replace her with new mother
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
 			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/mother/" + replacementMotherId);
+			.when().put(appUrl() + "/" + sonId + "/mother/" + replacementMotherId);
 		
     	// Get the child from the server	
 		Response childsGetResponse = 
@@ -575,7 +575,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + sonId +"/children"))
 				.and().that().body("links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.when().get("/family/people/" + sonId);
+			.when().get(appUrl() + "/" + sonId);
 		
 		System.out.println(
 				childsGetResponse.getBody().jsonPath().get("father").getClass());

@@ -36,7 +36,7 @@ public class SearchingForPeopleByNameIT extends FuncAbstract {
 					.and().that().response().contentType(JSON)
 					.and().that().body(containsString("Isaac Williams"))
 				.when().log().everything()
-				.when().get("/family/people/");
+				.when().get(appUrl() + "/");
 		
 		String searchResponseString = searchResponse.asString();
 		System.out.println("1 *** searchResponseString =" + searchResponseString);
@@ -53,7 +53,7 @@ public class SearchingForPeopleByNameIT extends FuncAbstract {
 					.and().that().body(containsString("Isaac Williams"))
 					.and().that().body(containsString("Brendon Williams"))
 				.when().log().everything()
-				.when().get("/family/people/");
+				.when().get(appUrl() + "/");
 	 	searchResponseString = searchResponse.asString();
 		System.out.println("2 *** searchResponseString =" + searchResponseString);
 	 
@@ -71,7 +71,7 @@ public class SearchingForPeopleByNameIT extends FuncAbstract {
 						.and().that().body(containsString("Brendon Williams"))
 						.and().that().body(containsString("Rachel Margaret Wallace"))
 					.when().log().everything()
-					.when().get("/family/people/");
+					.when().get(appUrl() + "/");
 		 	searchResponseString = searchResponse.asString();
 			System.out.println("2 *** searchResponseString =" + searchResponseString);
 	}

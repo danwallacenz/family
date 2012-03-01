@@ -46,8 +46,8 @@ public class RemovingAMotherIT extends FuncAbstract{
     	// This behaviour is tested in AddingAMotherIT
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/mother/" + originalMotherId);
 			
     	// Then remove the new mother	
 			Response removeMotherResponse = 
@@ -57,7 +57,7 @@ public class RemovingAMotherIT extends FuncAbstract{
 				.then().expect()
 					.that().statusCode(200)
 					.and().that().response().contentType(JSON)
-					.and().that().header("Location", containsString(APP_URL + "/" + sonId))
+					.and().that().header("Location", containsString(appUrl() + "/" + sonId))
 					.and().that().body("id", equalTo(new Integer(sonId)))
 					.and().that().body("name", equalTo("Johnny Wallace-Wilks"))
 					.and().that().body("sex", equalTo("MALE"))
@@ -67,23 +67,23 @@ public class RemovingAMotherIT extends FuncAbstract{
 					.and().that().body("children.size()", equalTo(0))
 					.and().that().body("links.size()", equalTo(4))
 					.and().that().body("links.getAt(0).rel", equalTo("self"))
-					.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + sonId))
+					.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + sonId))
 					.and().that().body("links.getAt(0).title", equalTo("Johnny Wallace-Wilks"))
 					.and().that().body("links.getAt(1).rel", equalTo("father"))
-					.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + sonId + "/father" ))
+					.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + sonId + "/father" ))
 					.and().that().body("links.getAt(1).title", equalTo("Father"))
 					.and().that().body("links.getAt(2).rel", equalTo("mother"))
-					.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + sonId +"/mother"))
+					.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + sonId +"/mother"))
 					.and().that().body("links.getAt(2).title", equalTo("Mother"))
 					.and().that().body("links.getAt(3).rel", equalTo("children"))
-					.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + sonId +"/children"))
+					.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + sonId +"/children"))
 					.and().that().body("links.getAt(3).title", equalTo("Children"))
 					.and().that().body("affectedParties.size()", equalTo(1))
 					.and().that().body("affectedParties.getAt(0).id", equalTo(new Integer(originalMotherId)))
 					.and().that().body("affectedParties.getAt(0).name", equalTo("Roberta Lillian Wilks"))
-					.and().that().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + originalMotherId))
+					.and().that().body("affectedParties.getAt(0).href", equalTo(appUrl() + "/" + originalMotherId))
 				.when().log().everything()
-    			.when().put("/family/people/" + sonId + "/mother");
+    			.when().put(appUrl() + "/"   + sonId + "/mother");
     }
     
     @Test
@@ -100,8 +100,8 @@ public class RemovingAMotherIT extends FuncAbstract{
     	// This behaviour is tested in AddingAMotherIT
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/mother/" + originalMotherId);
 			
 		// remove the mother
 		Response removeMotherResponse = 
@@ -113,7 +113,7 @@ public class RemovingAMotherIT extends FuncAbstract{
 				.and().that().response().contentType(JSON)	
 				.and().that().body("affectedParties.size()", equalTo(1))// TODO check son in affected parties
 				.when().log().everything()
-    			.put("/family/people/" + sonId + "/mother");
+    			.put(appUrl() + "/"   + sonId + "/mother");
 		
     	// Get the removed mother from the server	
 		Response removedMothersGetResponse = 
@@ -135,19 +135,19 @@ public class RemovingAMotherIT extends FuncAbstract{
 
 				.and().that().body("links.size()", equalTo(4))
 				.and().that().body("links.getAt(0).rel", equalTo("self"))
-				.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + originalMotherId))
+				.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + originalMotherId))
 				.and().that().body("links.getAt(0).title", equalTo("Roberta Lillian Wilks"))
 				.and().that().body("links.getAt(1).rel", equalTo("father"))
-				.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + originalMotherId +"/father"))
+				.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + originalMotherId +"/father"))
 				.and().that().body("links.getAt(1).title", equalTo("Father"))
 				.and().that().body("links.getAt(2).rel", equalTo("mother"))
-				.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + originalMotherId +"/mother"))
+				.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + originalMotherId +"/mother"))
 				.and().that().body("links.getAt(2).title", equalTo("Mother"))
 				.and().that().body("links.getAt(3).rel", equalTo("children"))
-				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + originalMotherId +"/children"))
+				.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + originalMotherId +"/children"))
 				.and().that().body("links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.when().get("/family/people/" + originalMotherId);
+			.when().get(appUrl() + "/" + originalMotherId);
     }
 
     @Test
@@ -164,10 +164,10 @@ public class RemovingAMotherIT extends FuncAbstract{
     	// This behaviour is tested in AddingAMotherIT
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
 			.and().that().body("version", equalTo(1))
 			.and().that().body("links.getAt(2).title", equalTo("Roberta Lillian Wilks"))
-			.when().put("/family/people/" + sonId + "/mother/" + originalMotherId);
+			.when().put(appUrl() + "/"   + sonId + "/mother/" + originalMotherId);
 		
 		// remove the mother
 		Response removeMotherResponse = 
@@ -181,7 +181,7 @@ public class RemovingAMotherIT extends FuncAbstract{
 				.and().that().body("affectedParties.size()", equalTo(1))
 				.and().that().body("affectedParties.getAt(0).id", equalTo(new Integer(originalMotherId)))
 				.when().log().everything()
-    			.put("/family/people/" + sonId + "/mother");
+    			.put(appUrl() + "/"   + sonId + "/mother");
 		
 		
     	// Get the child from the server	
@@ -205,19 +205,19 @@ public class RemovingAMotherIT extends FuncAbstract{
 
 				.and().that().body("links.size()", equalTo(4))
 				.and().that().body("links.getAt(0).rel", equalTo("self"))
-				.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + sonId))
+				.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + sonId))
 				.and().that().body("links.getAt(0).title", equalTo("Johnny Wallace-Wilks"))
 				.and().that().body("links.getAt(1).rel", equalTo("father"))
-				.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + sonId + "/father"))	
+				.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + sonId + "/father"))	
 				.and().that().body("links.getAt(1).title", equalTo("Father"))							
 				.and().that().body("links.getAt(2).rel", equalTo("mother"))								// this is what we are testing
-				.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + sonId +"/mother"))	// this is what we are testing
+				.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + sonId +"/mother"))	// this is what we are testing
 				.and().that().body("links.getAt(2).title", equalTo("Mother"))							// this is what we are testing
 				.and().that().body("links.getAt(3).rel", equalTo("children"))
-				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + sonId +"/children"))
+				.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + sonId +"/children"))
 				.and().that().body("links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.when().get("/family/people/" + sonId);
+			.when().get(appUrl() + "/" + sonId);
 		
 //		System.out.println(
 //				childsGetResponse.getBody().jsonPath().get("mother").getClass());

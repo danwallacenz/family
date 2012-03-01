@@ -17,11 +17,11 @@ import org.junit.Test;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
  
-public class PersonTestIT{ 
+public class PersonTestIT extends FuncAbstract{ 
    
-	private static final String HOST_AND_PORT = "http://localhost:8080";
-	private static final String APP_PATH = "/family/people/";
-	private static final String APP_URL = HOST_AND_PORT + APP_PATH;
+//	private static final String HOST_AND_PORT = "http://localhost:8080";
+//	private static final String APP_PATH = "/family/people/";
+//	private static final String appUrl() = HOST_AND_PORT + APP_PATH;
 	
 	/**
      * Tests creation of a new <code>Person</code> from a JSON <code>String</code> 
@@ -36,8 +36,8 @@ public class PersonTestIT{
 			given().header("Accept", "application/json")
 					.body("{ \"name\" : \"johnny\"}").then().expect()
 					.statusCode(201).and().response()
-					.header("Location", containsString(APP_URL)).when()
-					.post("/family/people");
+					.header("Location", containsString(appUrl())).when()
+					.post(appUrl());
 		} finally {
 			RestAssured.reset();
 		}
@@ -70,22 +70,22 @@ public class PersonTestIT{
           			"[" +
         	  			"{" +
         	  				"\"rel\":\"self\"," +
-        	  				"\"href\":\"http://localhost:8080/family/people/" + newId + "\"," +
+        	  				"\"href\":\"" + appUrl() + "/"  + newId + "\"," +
         	  				"\"title\":\"Daniel Wallace\"" +
         	  			"}," +
         	   			"{" +
         	  				"\"rel\":\"father\"," +
-        	  				"\"href\":\"http://localhost:8080/family/people/" + newId + "/father\"," +
+        	  				"\"href\":\"" + appUrl() + "/"  + newId + "/father\"," +
         	  				"\"title\":\"Father\"" +
         	  			"}," +
         	   			"{" +
         	  				"\"rel\":\"mother\"," +
-        	  				"\"href\":\"http://localhost:8080/family/people/" + newId + "/mother\"," +
+        	  				"\"href\":\"" + appUrl() + "/"  + newId + "/mother\"," +
         	  				"\"title\":\"Mother\"" +
         	  			"}," +
         	  			"{" +
         	  				"\"rel\":\"children\"," +
-        	  				"\"href\":\"http://localhost:8080/family/people/" + newId + "/children\"," +
+        	  				"\"href\":\"" + appUrl() + "/"  + newId + "/children\"," +
         	  				"\"title\":\"Children\"" +
         	  			"}" +
           		 	"]" +
@@ -103,7 +103,7 @@ public class PersonTestIT{
     public void ensureThatASimpleSaveAndReadAreCorrect() throws Exception {
     	String personAsJson ="{ \"name\" : \"jonathan\"}";
     	String newId = idOfPosted(personAsJson);
-    	expect().log().all().body("name", equalTo("jonathan")).given().header("Accept", "application/json").when().get("/family/people/" + newId);     
+    	expect().log().all().body("name", equalTo("jonathan")).given().header("Accept", "application/json").when().get(appUrl() + "/" + newId);     
     }
     
 	/**
@@ -127,8 +127,8 @@ public class PersonTestIT{
 			given().header("Accept", "application/json")					
 					.body(updatedPersonAsJson).then().expect()
 					.statusCode(200)
-					.and().response().header("Location", containsString("/family/people/" + newId))
-					.when().put("/family/people/" + newId);
+					.and().response().header("Location", containsString(appUrl() + "/" + newId))
+					.when().put(appUrl() + "/" + newId);
 		} finally {
 			RestAssured.reset();
 		}
@@ -136,7 +136,7 @@ public class PersonTestIT{
 		// verify name and version have changed
 		try {	
 			expect().log().all().body("name", equalTo(newName))
-			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
+			.given().header("Accept", "application/json").when().get(appUrl() + "/" + newId); 
 		} finally {
 			RestAssured.reset();
 		}
@@ -165,8 +165,8 @@ public class PersonTestIT{
 					//.body("{\"id\" : \"" + newId +"\", \"name\" : \"dan3\",}").then().expect()
 					.body(updatedPersonAsJson).then().expect()
 					.statusCode(200)
-					.and().response().header("Location", containsString("/family/people/" + newId))
-					.when().put("/family/people/" + newId);
+					.and().response().header("Location", containsString(appUrl() + "/" + newId))
+					.when().put(appUrl() + "/" + newId);
 		} finally {
 			RestAssured.reset();
 		}
@@ -174,7 +174,7 @@ public class PersonTestIT{
 		try {
 			// verify name and version have changed
 			expect().log().all().body("name", equalTo("dan3")).and().that().body("version", equalTo(++version))
-			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
+			.given().header("Accept", "application/json").when().get(appUrl() + "/" + newId); 
 		} finally {
 			RestAssured.reset();
 		}
@@ -192,8 +192,8 @@ public class PersonTestIT{
 					//.body("{\"id\" : \"" + newId +"\", \"name\" : \"dan3\",}").then().expect()
 					.body(reUpdatedPersonAsJson).then().expect()
 					.statusCode(200)
-					.and().response().header("Location", containsString("/family/people/" + newId))
-					.when().put("/family/people/" + newId);
+					.and().response().header("Location", containsString(appUrl() + "/" + newId))
+					.when().put(appUrl() + "/" + newId);
 		} finally {
 			RestAssured.reset();
 		}
@@ -201,7 +201,7 @@ public class PersonTestIT{
 		try {
 			// verify name and version have changed
 			expect().log().all().body("name", equalTo("dan4")).and().that().body("version", equalTo(++version))
-			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
+			.given().header("Accept", "application/json").when().get(appUrl() + "/" + newId); 
 		} finally {
 			RestAssured.reset();
 		}
@@ -216,30 +216,30 @@ public class PersonTestIT{
      * @param json
      * @return new id
      */
-    private String idOfPosted(String json) {
-    	Response response = 
-    			given().header("Accept", "application/json")
-    			.body(json).then().expect()
-    			.statusCode(201).and().response()
-				.header("Location", containsString(APP_URL))
-    			.when()
-    			.post("/family/people");
-    	String location = response.headers().getValue("Location");
-    	String newId = location.substring(location.lastIndexOf("/") + 1);
-    	return newId;
-	}
+//    private String idOfPosted(String json) {
+//    	Response response = 
+//    			given().header("Accept", "application/json")
+//    			.body(json).then().expect()
+//    			.statusCode(201).and().response()
+//				.header("Location", containsString(appUrl()))
+//    			.when()
+//    			.post("/family/people");
+//    	String location = response.headers().getValue("Location");
+//    	String newId = location.substring(location.lastIndexOf("/") + 1);
+//    	return newId;
+//	}
     
     
-    private Response responseOfPosted(String json) {
-    	Response response = 
-    			given().header("Accept", "application/json")
-    			.body(json).then().expect()
-    			.statusCode(201).and().response()
-				.header("Location", containsString(APP_URL))
-    			.when()
-    			.post("/family/people");
-    	return response;
-	}
+//    private Response responseOfPosted(String json) {
+//    	Response response = 
+//    			given().header("Accept", "application/json")
+//    			.body(json).then().expect()
+//    			.statusCode(201).and().response()
+//				.header("Location", containsString(appUrl()))
+//    			.when()
+//    			.post("/family/people");
+//    	return response;
+//	}
     
 	/**
 	 * Tests updating a single<code>Person</code>.
@@ -269,8 +269,8 @@ public class PersonTestIT{
 					.body(personUpdatedToJson).then().expect()
 					.statusCode(200)
 					.and().response().header(
-							"Location", containsString("/family/people/" + newId))
-					.when().put("/family/people/" + newId);
+							"Location", containsString(appUrl() + "/" + newId))
+					.when().put(appUrl() + "/" + newId);
 		} finally {
 			RestAssured.reset();
 		}
@@ -281,7 +281,7 @@ public class PersonTestIT{
 			.that().body("name", equalTo(newName))
 			.and().that().body("version", equalTo(++version))
 			.given().header("Accept", "application/json")
-			.when().get("/family/people/" + newId); 
+			.when().get(appUrl() + "/" + newId); 
 		} finally {
 			RestAssured.reset();
 		}
@@ -309,9 +309,9 @@ public class PersonTestIT{
     			.then().
     			expect()
     			.statusCode(200).and().response()
-				.header("Location", containsString(APP_URL + isaacId))
+				.header("Location", containsString(appUrl() + "/" + isaacId))
     			.when()
-    			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+    			.put(appUrl() + "/" + isaacId + "/mother/" + rachelId);
 			
 			// Ensure that Isaac has been updated properly with Rachel as his mother
 			String addMotherResponseBody = addMotherResponse.body().asString();
@@ -337,26 +337,26 @@ public class PersonTestIT{
 							"\"version\":1," +
 							"\"links\":" +
 							"[" +
-								"{\"rel\":\"self\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
-								"{\"rel\":\"father\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/father\",\"title\":\"Father\"}," +
-								"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/mother\",\"title\":\"Mother\"}," +
-								"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/children\",\"title\":\"Children\"}" +
+								"{\"rel\":\"self\",\"href\":\"" + appUrl() + "/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
+								"{\"rel\":\"father\",\"href\":\"" + appUrl() + "/"  + rachelId + "/father\",\"title\":\"Father\"}," +
+								"{\"rel\":\"mother\",\"href\":\"" + appUrl() + "/"  + rachelId + "/mother\",\"title\":\"Mother\"}," +
+								"{\"rel\":\"children\",\"href\":\"" + appUrl() + "/"  + rachelId + "/children\",\"title\":\"Children\"}" +
 							"]" +
 						"}," +
 					"\"children\":[]," +
 					"\"links\":" +
 						"[" +
-							"{\"rel\":\"self\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "\",\"title\":\"Issac Williams\"}," +
-							"{\"rel\":\"father\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "/father\",\"title\":\"Father\"}," +
-							"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
-							"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "/children\",\"title\":\"Children\"}" +
+							"{\"rel\":\"self\",\"href\":\"" + appUrl() + "/"  + isaacId + "\",\"title\":\"Issac Williams\"}," +
+							"{\"rel\":\"father\",\"href\":\"" + appUrl() + "/"  + isaacId + "/father\",\"title\":\"Father\"}," +
+							"{\"rel\":\"mother\",\"href\":\"" + appUrl() + "/"  + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
+							"{\"rel\":\"children\",\"href\":\"" + appUrl() + "/"  + isaacId + "/children\",\"title\":\"Children\"}" +
 							"]" +
 					",\"affectedParties\":" +
 						"[" +
 							"{" +		
 								"\"id\":"+ rachelId +"," +
 								"\"name\":\"Rachel Margaret Wallace\"," +
-								"\"href\":\"http://localhost:8080/family/people/" + rachelId + "\"" +
+								"\"href\":\"" + appUrl() + "/"  + rachelId + "\"" +
 							"}" +
 						"]" + 		
 			"}";
@@ -387,9 +387,9 @@ public class PersonTestIT{
     			.then().
     			expect()
     			.statusCode(200).and().response()
-				.header("Location", containsString(APP_URL + isaacId))
+				.header("Location", containsString(appUrl() + "/" + isaacId))
     			.when()
-    			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+    			.put(appUrl() + "/" + isaacId + "/mother/" + rachelId);
 			
 			// Ensure that Rachel has been updated properly with Isaac as a child.
 			String addMotherResponseBodyForIsaac = addMotherResponse.body().asString();
@@ -423,29 +423,29 @@ public class PersonTestIT{
 					"[" +
 						"{" +
 							"\"rel\":\"self\"," +
-							"\"href\":\"http://localhost:8080/family/people/" + isaacId + "\"," +
+							"\"href\":\"" + appUrl() + "/"  + isaacId + "\"," +
 							"\"title\":\"Issac Williams\"}," +
 						"{" +
 							"\"rel\":\"father\"," +
-							"\"href\":\"http://localhost:8080/family/people/" + isaacId + "/father\"," +
+							"\"href\":\"" + appUrl() + "/"  + isaacId + "/father\"," +
 							"\"title\":\"Father\"}," +
 						"{" +
 							"\"rel\":\"mother\"," +
-							"\"href\":\"http://localhost:8080/family/people/" + rachelId + "\"," +
+							"\"href\":\"" + appUrl() + "/"  + rachelId + "\"," +
 							"\"title\":\"Rachel Margaret Wallace\"}," +
 						"{" +
 							"\"rel\":\"children\"," +
-							"\"href\":\"http://localhost:8080/family/people/" + isaacId + "/children\"," +
+							"\"href\":\"" + appUrl() + "/"  + isaacId + "/children\"," +
 							"\"title\":\"Children\"}" +
 					"]" +
 				"}" +
 			"]," +
 			"\"links\":" +
 			"[" +
-				"{\"rel\":\"self\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
-				"{\"rel\":\"father\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/father\",\"title\":\"Father\"}," +
-				"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/mother\",\"title\":\"Mother\"}," +
-				"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/children\",\"title\":\"Children\"}" +
+				"{\"rel\":\"self\",\"href\":\"" + appUrl() + "/"  + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
+				"{\"rel\":\"father\",\"href\":\"" + appUrl() + "/"  + rachelId + "/father\",\"title\":\"Father\"}," +
+				"{\"rel\":\"mother\",\"href\":\"" + appUrl() + "/"  + rachelId + "/mother\",\"title\":\"Mother\"}," +
+				"{\"rel\":\"children\",\"href\":\"" + appUrl() + "/"  + rachelId + "/children\",\"title\":\"Children\"}" +
 			"]" +
 		"}";
 
@@ -479,18 +479,18 @@ public class PersonTestIT{
     			.then()
     			.expect()
     			.statusCode(200).and().response()
-				.header("Location", containsString(APP_URL + sonId))
+				.header("Location", containsString(appUrl() + "/"  + sonId))
     			.when()
-    			.put("/family/people/" + sonId + "/mother/" + originalMotherId);
+    			.put(appUrl() + "/" + sonId + "/mother/" + originalMotherId);
 			
 			Response replaceMotherResponse = 
 	    			given().header("Accept", "application/json")
 	    			.then()
 	    			.expect()
 	    			.statusCode(200).and().response()
-					.header("Location", containsString(APP_URL + sonId))
+					.header("Location", containsString(appUrl() + "/" + sonId))
 	    			.when()
-	    			.put("/family/people/" + sonId + "/mother/" + newMotherId);	
+	    			.put(appUrl() + "/" + sonId + "/mother/" + newMotherId);	
 						
 			String addMotherResponseBodyForOriginalMother = addMotherResponse.body().asString();
 			System.out.println(addMotherResponseBodyForOriginalMother); 

@@ -3,14 +3,35 @@ package family.domain;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
+
+import family.web.PersonController;
 
 public abstract class FuncAbstract {
 
-	protected static final String HOST_AND_PORT = "http://localhost:8080";
-	protected static final String APP_PATH = "/family/people";
-	protected static final String APP_URL = HOST_AND_PORT + APP_PATH;
+    private static Logger log = LoggerFactory.getLogger(FuncAbstract.class);
+    
+    /**
+     * Switch this on to target the local micro CloudFoundry then
+     *  clean and build this project.
+     */
+	protected boolean useMicroCloudFoundry = false;
 	
+	protected boolean useCloudFoundryDotCom = false;
+	
+	protected String MICRO_CLOUD_FOUNDRY_URL = "http://family.danwallacenz.cloudfoundry.me";
+	protected String CLOUD_FOUNDRY_DOT_COM_URL = "http://family.danwallacenz.api.cloudfoundry.com";
+	protected  String DEFAULT_HOST_URL = "http://localhost:8080/family"; 
+	
+	protected String APP_URL = null;
 	
     //================================================================================================
     // utility methods
@@ -23,12 +44,12 @@ public abstract class FuncAbstract {
      */
 	protected String idOfPosted(String json) {
     	Response response = 
-    			given().header("Accept", "application/json")
-    			.body(json).then().expect()
+    			given().log().all().header("Accept", "application/json")
+    			.body(json).then().expect().log().all()
     			.statusCode(201).and().response()
 				.header("Location", containsString(APP_URL))
-    			.when()
-    			.post("/family/people");
+    			.when() 
+    			.post(appUrl() + "/");
     	String location = response.headers().getValue("Location");
     	String newId = location.substring(location.lastIndexOf("/") + 1);
     	return newId;
@@ -42,7 +63,7 @@ public abstract class FuncAbstract {
     			.statusCode(201).and().response()
 				.header("Location", containsString(APP_URL))
     			.when()
-    			.post("/family/people");
+    			.post(appUrl());
     	return response;
 	}
 	
@@ -51,8 +72,42 @@ public abstract class FuncAbstract {
     			given().header("Accept", "application/json")
     			.body(json)
     			.when()
-    			.post("/family/people");
+    			.post(appUrl());
     	return response;
 	}
-
+	
+	protected String appUrl(){
+		return APP_URL;
+	}
+	
+	@Before
+	public void init(){
+		 	
+		if(!useMicroCloudFoundry && !useCloudFoundryDotCom){
+			APP_URL = DEFAULT_HOST_URL;
+		}
+		if(useMicroCloudFoundry && useCloudFoundryDotCom){
+			String msg = "Both System properties USE_MICRO_CLOUD_FOUNDRY and USE_CLOUD_FOUNDRY_DOT_COM are set to true. Please sort this out.";
+			throw new RuntimeException(msg);
+		}
+		if(useMicroCloudFoundry){
+			APP_URL = MICRO_CLOUD_FOUNDRY_URL;
+		}
+		if(useCloudFoundryDotCom){
+			APP_URL = CLOUD_FOUNDRY_DOT_COM_URL;
+		}
+		APP_URL += "/people";
+		log.info("Using host: " + APP_URL );
+		log.debug("USE_MICRO_CLOUD_FOUNDRY = " + useMicroCloudFoundry);
+		log.debug("MICRO_CLOUD_FOUNDRY_URL = " + MICRO_CLOUD_FOUNDRY_URL);
+		log.debug("USE_CLOUD_FOUNDRY_DOT_COM = " + useCloudFoundryDotCom);
+		log.debug("CLOUD_FOUNDRY_DOT_COM_URL = " + CLOUD_FOUNDRY_DOT_COM_URL);
+	}
+	
+	@After
+	public void afterClass(){
+		
+		APP_URL = null;
+	
+	}
 }

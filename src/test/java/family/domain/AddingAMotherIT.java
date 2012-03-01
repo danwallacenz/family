@@ -36,27 +36,27 @@ public class AddingAMotherIT extends FuncAbstract{
 			.then().expect()
 				.that().statusCode(200)
 				.and().that().response().contentType(JSON)
-				.and().that().header("Location", containsString(APP_URL + "/" + isaacId))
+				.and().that().header("Location", containsString(appUrl() + "/" + isaacId))
 				.and().that().body("mother.id", equalTo(new Integer(rachelId)))
 				.and().that().body("mother.name", equalTo("Rachel Margaret Wallace"))
 				.and().that().body("mother.sex", equalTo("FEMALE"))
 				.and().that().body("mother.version", equalTo(1))
 				.and().that().body("mother.links.size()", equalTo(4))
 				.and().that().body("mother.links.getAt(0).rel", equalTo("self"))
-				.and().that().body("mother.links.getAt(0).href", equalTo(APP_URL + "/" + rachelId))
-				.and().that().body("mother.links.getAt(0).href.length()", greaterThan(APP_URL.length() + 1))
+				.and().that().body("mother.links.getAt(0).href", equalTo(appUrl() + "/" + rachelId))
+				.and().that().body("mother.links.getAt(0).href.length()", greaterThan(appUrl().length() + 1))
 				.and().that().body("mother.links.getAt(0).title", equalTo("Rachel Margaret Wallace"))
 				.and().that().body("mother.links.getAt(1).rel", equalTo("father"))
-				.and().that().body("mother.links.getAt(1).href", equalTo(APP_URL + "/" + rachelId +"/father"))
+				.and().that().body("mother.links.getAt(1).href", equalTo(appUrl() + "/" + rachelId +"/father"))
 				.and().that().body("mother.links.getAt(1).title", equalTo("Father"))
 				.and().that().body("mother.links.getAt(2).rel", equalTo("mother"))
-				.and().that().body("mother.links.getAt(2).href", equalTo(APP_URL + "/" + rachelId +"/mother"))
+				.and().that().body("mother.links.getAt(2).href", equalTo(appUrl() + "/" + rachelId +"/mother"))
 				.and().that().body("mother.links.getAt(2).title", equalTo("Mother"))
 				.and().that().body("mother.links.getAt(3).rel", equalTo("children"))
-				.and().that().body("mother.links.getAt(3).href", equalTo(APP_URL + "/" + rachelId +"/children"))
+				.and().that().body("mother.links.getAt(3).href", equalTo(appUrl() + "/" + rachelId +"/children"))
 				.and().that().body("mother.links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+			.put(appUrl() + "/"   + isaacId + "/mother/" + rachelId);
 	}
 		
 	@Test
@@ -78,7 +78,7 @@ public class AddingAMotherIT extends FuncAbstract{
 			.then().expect()
 				.that().statusCode(200)
 				.and().that().response().contentType(JSON)
-				.and().that().header("Location", containsString(APP_URL + "/" + isaacId))
+				.and().that().header("Location", containsString(appUrl() + "/" + isaacId))
 				.and().that().body("id", equalTo(new Integer(isaacId)))
 				.and().that().body("name", equalTo("Isaac Williams"))
 				.and().that().body("sex", equalTo("MALE"))
@@ -91,19 +91,19 @@ public class AddingAMotherIT extends FuncAbstract{
 				.and().that().body("children.size()", equalTo(0))
 				.and().that().body("links.size()", equalTo(4))
 				.and().that().body("links.getAt(0).rel", equalTo("self"))
-				.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + isaacId))
+				.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + isaacId))
 				.and().that().body("links.getAt(0).title", equalTo("Isaac Williams"))
 				.and().that().body("links.getAt(1).rel", equalTo("father"))
-				.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + isaacId +"/father"))
+				.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + isaacId +"/father"))
 				.and().that().body("links.getAt(1).title", equalTo("Father"))
 				.and().that().body("links.getAt(2).rel", equalTo("mother"))
-				.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + rachelId))
+				.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + rachelId))
 				.and().that().body("links.getAt(2).title", equalTo("Rachel Margaret Wallace"))
 				.and().that().body("links.getAt(3).rel", equalTo("children"))
-				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + isaacId +"/children"))
+				.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + isaacId +"/children"))
 				.and().that().body("links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+			.put(appUrl() + "/"   + isaacId + "/mother/" + rachelId);
 	}
 	
 	@Test
@@ -125,13 +125,13 @@ public class AddingAMotherIT extends FuncAbstract{
 			.then().expect()
 				.that().statusCode(200)
 				.and().that().response().contentType(JSON)
-				.and().that().header("Location", containsString(APP_URL + "/" + isaacId))
+				.and().that().header("Location", containsString(appUrl() + "/" + isaacId))
 				.and().that().body("affectedParties.size()", equalTo(1))
 				.and().that().body("affectedParties.getAt(0).id", equalTo(new Integer(rachelId)))
 				.and().that().body("affectedParties.getAt(0).name", equalTo("Rachel Margaret Wallace"))
-				.and().that().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + rachelId))
+				.and().that().body("affectedParties.getAt(0).href", equalTo(appUrl() + "/" + rachelId))
 			.when().log().everything()
-			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+			.put(appUrl() + "/"   + isaacId + "/mother/" + rachelId);
 	}
 	
     /**
@@ -156,9 +156,9 @@ public class AddingAMotherIT extends FuncAbstract{
     			.then().
     			expect()
     			.statusCode(200).and().response()
-				.header("Location", containsString(APP_URL + "/" + isaacId))
+				.header("Location", containsString(appUrl() + "/" + isaacId))
     			.when()
-    			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+    			.put(appUrl() + "/"   + isaacId + "/mother/" + rachelId);
 			
 			// Ensure that Isaac has been updated properly with Rachel as his mother
 			String addMotherResponseBody = addMotherResponse.body().asString();
@@ -179,26 +179,26 @@ public class AddingAMotherIT extends FuncAbstract{
 							"\"version\":1," +
 							"\"links\":" +
 							"[" +
-								"{\"rel\":\"self\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
-								"{\"rel\":\"father\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/father\",\"title\":\"Father\"}," +
-								"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/mother\",\"title\":\"Mother\"}," +
-								"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/children\",\"title\":\"Children\"}" +
+								"{\"rel\":\"self\",\"href\":\"" + appUrl() + "/"  + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
+								"{\"rel\":\"father\",\"href\":\"" + appUrl() + "/"  + rachelId + "/father\",\"title\":\"Father\"}," +
+								"{\"rel\":\"mother\",\"href\":\"" + appUrl() + "/"  + rachelId + "/mother\",\"title\":\"Mother\"}," +
+								"{\"rel\":\"children\",\"href\":\"" + appUrl() + "/"  + rachelId + "/children\",\"title\":\"Children\"}" +
 							"]" +
 						"}," +
 					"\"children\":[]," +
 					"\"links\":" +
 						"[" +
-							"{\"rel\":\"self\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "\",\"title\":\"Issac Williams\"}," +
-							"{\"rel\":\"father\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "/father\",\"title\":\"Father\"}," +
-							"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
-							"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + isaacId + "/children\",\"title\":\"Children\"}" +
+							"{\"rel\":\"self\",\"href\":\"" + appUrl() + "/"  + isaacId + "\",\"title\":\"Issac Williams\"}," +
+							"{\"rel\":\"father\",\"href\":\"" + appUrl() + "/"  + isaacId + "/father\",\"title\":\"Father\"}," +
+							"{\"rel\":\"mother\",\"href\":\"" + appUrl() + "/"  + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
+							"{\"rel\":\"children\",\"href\":\"" + appUrl() + "/"  + isaacId + "/children\",\"title\":\"Children\"}" +
 							"]" +
 					",\"affectedParties\":" +
 						"[" +
 							"{" +		
 								"\"id\":"+ rachelId +"," +
 								"\"name\":\"Rachel Margaret Wallace\"," +
-								"\"href\":\"http://localhost:8080/family/people/" + rachelId + "\"" +
+								"\"href\":\"" + appUrl() + "/"  + rachelId + "\"" +
 							"}" +
 						"]" + 		
 			"}";
@@ -228,8 +228,8 @@ public class AddingAMotherIT extends FuncAbstract{
 
 			.then().expect()
 				.statusCode(200).and().response()
-				.header("Location", containsString(APP_URL + "/" + isaacId))
-			.when().put("/family/people/" + isaacId + "/mother/" + rachelId);
+				.header("Location", containsString(appUrl() + "/" + isaacId))
+			.when().put(appUrl() + "/"   + isaacId + "/mother/" + rachelId);
 				
 		// Ensure that Rachel has been updated properly with Isaac as a child.
 		String addMotherResponseBodyForIsaac = addMotherResponse.body().asString(); 
@@ -259,30 +259,30 @@ public class AddingAMotherIT extends FuncAbstract{
 			
 			.and().that().body("children.getAt(0).links.size()", equalTo(4))
 			.and().that().body("children.getAt(0).links.getAt(0).rel", equalTo("self"))
-			.and().that().body("children.getAt(0).links.getAt(0).href", equalTo(APP_URL + "/" + isaacId))
+			.and().that().body("children.getAt(0).links.getAt(0).href", equalTo(appUrl() + "/" + isaacId))
 			.and().that().body("children.getAt(0).links.getAt(0).title", equalTo("Isaac Williams"))
 			.and().that().body("children.getAt(0).links.getAt(1).rel", equalTo("father"))
-			.and().that().body("children.getAt(0).links.getAt(1).href", equalTo(APP_URL + "/" + isaacId +"/father"))
+			.and().that().body("children.getAt(0).links.getAt(1).href", equalTo(appUrl() + "/" + isaacId +"/father"))
 			.and().that().body("children.getAt(0).links.getAt(1).title", equalTo("Father"))
 			.and().that().body("children.getAt(0).links.getAt(2).rel", equalTo("mother"))
-			.and().that().body("children.getAt(0).links.getAt(2).href", equalTo(APP_URL + "/" + rachelId))
+			.and().that().body("children.getAt(0).links.getAt(2).href", equalTo(appUrl() + "/" + rachelId))
 			.and().that().body("children.getAt(0).links.getAt(2).title", equalTo("Rachel Margaret Wallace"))
 			.and().that().body("children.getAt(0).links.getAt(3).rel", equalTo("children"))
-			.and().that().body("children.getAt(0).links.getAt(3).href", equalTo(APP_URL + "/" + isaacId +"/children"))
+			.and().that().body("children.getAt(0).links.getAt(3).href", equalTo(appUrl() + "/" + isaacId +"/children"))
 			.and().that().body("children.getAt(0).links.getAt(3).title", equalTo("Children"))
 	
 			.and().that().body("links.size()", equalTo(4))
 			.and().that().body("links.getAt(0).rel", equalTo("self"))
-			.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + rachelId))
+			.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + rachelId))
 			.and().that().body("links.getAt(0).title", equalTo("Rachel Margaret Wallace"))
 			.and().that().body("links.getAt(1).rel", equalTo("father"))
-			.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + rachelId +"/father"))
+			.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + rachelId +"/father"))
 			.and().that().body("links.getAt(1).title", equalTo("Father"))
 			.and().that().body("links.getAt(2).rel", equalTo("mother"))
-			.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + rachelId + "/mother"))
+			.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + rachelId + "/mother"))
 			.and().that().body("links.getAt(2).title", equalTo("Mother"))
 			.and().that().body("links.getAt(3).rel", equalTo("children"))
-			.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + rachelId +"/children"))
+			.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + rachelId +"/children"))
 			.and().that().body("links.getAt(3).title", equalTo("Children"))
 			
 		.when().log().everything()
@@ -307,8 +307,8 @@ public class AddingAMotherIT extends FuncAbstract{
 
 			.then().expect()
 				.statusCode(200).and().response()
-				.header("Location", containsString(APP_URL + "/" + isaacId))
-			.when().put("/family/people/" + isaacId + "/mother/" + rachelId);
+				.header("Location", containsString(appUrl() + "/" + isaacId))
+			.when().put(appUrl() + "/"   + isaacId + "/mother/" + rachelId);
 				
 		// Ensure that Rachel has been updated properly with Isaac as a child.
 		String addMotherResponseBodyForIsaac = addMotherResponse.body().asString(); 
@@ -331,32 +331,32 @@ public class AddingAMotherIT extends FuncAbstract{
 			
 			.and().that().body("mother.links.size()", equalTo(4))
 			.and().that().body("mother.links.getAt(0).rel", equalTo("self"))
-			.and().that().body("mother.links.getAt(0).href", equalTo(APP_URL + "/" + rachelId))
+			.and().that().body("mother.links.getAt(0).href", equalTo(appUrl() + "/" + rachelId))
 			.and().that().body("mother.links.getAt(0).title", equalTo("Rachel Margaret Wallace"))
 			.and().that().body("mother.links.getAt(1).rel", equalTo("father"))
-			.and().that().body("mother.links.getAt(1).href", equalTo(APP_URL + "/" + rachelId +"/father"))
+			.and().that().body("mother.links.getAt(1).href", equalTo(appUrl() + "/" + rachelId +"/father"))
 			.and().that().body("mother.links.getAt(1).title", equalTo("Father"))
 			.and().that().body("mother.links.getAt(2).rel", equalTo("mother"))
-			.and().that().body("mother.links.getAt(2).href", equalTo(APP_URL + "/" + rachelId + "/mother"))
+			.and().that().body("mother.links.getAt(2).href", equalTo(appUrl() + "/" + rachelId + "/mother"))
 			.and().that().body("mother.links.getAt(2).title", equalTo("Mother"))
 			.and().that().body("mother.links.getAt(3).rel", equalTo("children"))
-			.and().that().body("mother.links.getAt(3).href", equalTo(APP_URL + "/" + rachelId +"/children"))
+			.and().that().body("mother.links.getAt(3).href", equalTo(appUrl() + "/" + rachelId +"/children"))
 			.and().that().body("mother.links.getAt(3).title", equalTo("Children"))
 			
 			.and().that().body("children.size()", equalTo(0))
 	
 			.and().that().body("links.size()", equalTo(4))
 			.and().that().body("links.getAt(0).rel", equalTo("self"))
-			.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + isaacId))
+			.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + isaacId))
 			.and().that().body("links.getAt(0).title", equalTo("Isaac Williams"))
 			.and().that().body("links.getAt(1).rel", equalTo("father"))
-			.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + isaacId +"/father"))
+			.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + isaacId +"/father"))
 			.and().that().body("links.getAt(1).title", equalTo("Father"))
 			.and().that().body("links.getAt(2).rel", equalTo("mother"))
-			.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + rachelId))
+			.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + rachelId))
 			.and().that().body("links.getAt(2).title", equalTo("Rachel Margaret Wallace"))
 			.and().that().body("links.getAt(3).rel", equalTo("children"))
-			.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + isaacId +"/children"))
+			.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + isaacId +"/children"))
 			.and().that().body("links.getAt(3).title", equalTo("Children"))
 			
 		.when().log().everything()
@@ -385,9 +385,9 @@ public class AddingAMotherIT extends FuncAbstract{
     			.then().
     			expect()
     			.statusCode(200).and().response()
-				.header("Location", containsString(APP_URL + "/" + isaacId))
+				.header("Location", containsString(appUrl() + "/" + isaacId))
     			.when()
-    			.put("/family/people/" + isaacId + "/mother/" + rachelId);
+    			.put(appUrl() + "/"   + isaacId + "/mother/" + rachelId);
 			
 			// Ensure that Rachel has been updated properly with Isaac as a child.
 			String addMotherResponseBodyForIsaac = addMotherResponse.body().asString();
@@ -420,29 +420,29 @@ public class AddingAMotherIT extends FuncAbstract{
 					"[" +
 						"{" +
 							"\"rel\":\"self\"," +
-							"\"href\":\"http://localhost:8080/family/people/" + isaacId + "\"," +
+							"\"href\":\"" + appUrl() + "/" + isaacId + "\"," +
 							"\"title\":\"Issac Williams\"}," +
 						"{" +
 							"\"rel\":\"father\"," +
-							"\"href\":\"http://localhost:8080/family/people/" + isaacId + "/father\"," +
+							"\"href\":\"" + appUrl() + "/"  + isaacId + "/father\"," +
 							"\"title\":\"Father\"}," +
 						"{" +
 							"\"rel\":\"mother\"," +
-							"\"href\":\"http://localhost:8080/family/people/" + rachelId + "\"," +
+							"\"href\":\"" + appUrl() + "/" + rachelId + "\"," +
 							"\"title\":\"Rachel Margaret Wallace\"}," +
 						"{" +
 							"\"rel\":\"children\"," +
-							"\"href\":\"http://localhost:8080/family/people/" + isaacId + "/children\"," +
+							"\"href\":\"" + appUrl() + "/"  + isaacId + "/children\"," +
 							"\"title\":\"Children\"}" +
 					"]" +
 				"}" +
 			"]," +
 			"\"links\":" +
 			"[" +
-				"{\"rel\":\"self\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
-				"{\"rel\":\"father\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/father\",\"title\":\"Father\"}," +
-				"{\"rel\":\"mother\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/mother\",\"title\":\"Mother\"}," +
-				"{\"rel\":\"children\",\"href\":\"http://localhost:8080/family/people/" + rachelId + "/children\",\"title\":\"Children\"}" +
+				"{\"rel\":\"self\",\"href\":\"" + appUrl() + "/"  + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
+				"{\"rel\":\"father\",\"href\":\"" + appUrl() + "/" + rachelId + "/father\",\"title\":\"Father\"}," +
+				"{\"rel\":\"mother\",\"href\":\"" + appUrl() + "/"  + rachelId + "/mother\",\"title\":\"Mother\"}," +
+				"{\"rel\":\"children\",\"href\":\"" + appUrl() + "/"  + rachelId + "/children\",\"title\":\"Children\"}" +
 			"]" +
 		"}";
 
@@ -479,18 +479,18 @@ public class AddingAMotherIT extends FuncAbstract{
     			.then()
     			.expect()
     			.statusCode(200).and().response()
-				.header("Location", containsString(APP_URL + "/" + sonId))
+				.header("Location", containsString(appUrl() + "/" + sonId))
     			.when()
-    			.put("/family/people/" + sonId + "/mother/" + originalMotherId);
+    			.put(appUrl() + "/"   + sonId + "/mother/" + originalMotherId);
 			
 			Response replaceMotherResponse = 
 	    			given().header("Accept", "application/json")
 	    			.then()
 	    			.expect()
 	    			.statusCode(200).and().response()
-					.header("Location", containsString(APP_URL + "/" + sonId))
+					.header("Location", containsString(appUrl() + "/" + sonId))
 	    			.when()
-	    			.put("/family/people/" + sonId + "/mother/" + newMotherId);	
+	    			.put(appUrl() + "/"   + sonId + "/mother/" + newMotherId);	
 						
 			String addMotherResponseBodyForOriginalMother = addMotherResponse.body().asString();
 			System.out.println(addMotherResponseBodyForOriginalMother); 

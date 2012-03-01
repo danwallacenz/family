@@ -33,8 +33,8 @@ public class UpdatingAPersonIT extends FuncAbstract{
     	// create a test Person "dan2"
     	String personAsJson ="{ \"name\" : \"dan2\"}";    	
     	String newId = idOfPosted(personAsJson);
-    	
-    	// update him
+    	          
+//    	// update him
     	String newName = "dan3";
     	String updatedPersonAsJson 
     		= "{\"class\":\"family.domain.Person\",\"father\":null,\"id\":" 
@@ -45,7 +45,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			.then().expect()
 			.body("version", equalTo(1))
 			.log().all()
-			.when().put("/family/people/" + newId);
+			.when().put(appUrl() + "/"  + newId);
     }
 	
 	@Test
@@ -53,7 +53,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
     	// create a test Person "dan2"
     	String personAsJson ="{ \"name\" : \"dan2\"}";    	
     	String newId = idOfPosted(personAsJson);
-    	
+    	    
     	// update him
     	String newName = "dan3";
     	String updatedPersonAsJson 
@@ -65,7 +65,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 					.with().contentType(JSON)
 			.then().expect()
 					.and().response().header("Location", containsString(APP_URL + "/" + newId))
-			.when().put("/family/people/" + newId);
+			.when().put(appUrl() + "/" + newId);
 
     }
 	
@@ -88,7 +88,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 				.then().expect()
 				.body("id", equalTo(new Integer(newId)))
 				.log().all()
-				.when().put("/family/people/" + newId);
+				.when().put(appUrl() + "/"  + newId);
 
     }
 	
@@ -109,7 +109,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 
 		given().header("Accept", "application/json").body(updatedPersonAsJson)
 				.with().contentType(JSON).then().expect().statusCode(200)
-				.when().put("/family/people/" + newId);
+				.when().put(appUrl() + "/"  + newId);
 
 	}
 
@@ -130,7 +130,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			.then().expect()
 			.body("name", equalTo(newName))
 			.log().all()
-			.when().put("/family/people/" + newId);
+			.when().put(appUrl() + "/"  + newId);
     }
    
     @Test
@@ -150,7 +150,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			.then().expect()
 			.body("sex", equalTo("MALE"))
 			.log().all()
-			.when().put("/family/people/" + newId);
+			.when().put(appUrl() + "/"  + newId);
     }
     
 	@Test
@@ -171,7 +171,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		.then().expect()
 				.statusCode(400)
 		.log().all()
-		.when().put("/family/people/" + newId);
+		.when().put(appUrl() + "/"  + newId);
 	}
 	
 	@Test
@@ -198,7 +198,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		.body("exception.code",equalTo(HttpStatus.BAD_REQUEST.value()))
 		.body("exception.message",containsString("2057 must be in the past"))
 			.log().all()
-		.when().put("/family/people/" + newId);
+		.when().put(appUrl() + "/"  + newId);
 		 
 		System.out.println(expectedErrorResponse.asString());
 	}
@@ -220,7 +220,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		.then().expect()
 				.statusCode(400)
 		.log().all()
-		.when().put("/family/people/" + newId);
+		.when().put(appUrl() + "/"  + newId);
 
 	}
     
@@ -238,7 +238,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 					.body("{ \"name\" : \"johnny\"}").then().expect()
 					.statusCode(201).and().response()
 					.header("Location", containsString(APP_URL)).when()
-					.post("/family/people");
+					.post(appUrl());
 		} finally {
 			RestAssured.reset();
 		}
@@ -303,7 +303,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
     public void ensureThatASimpleSaveAndReadAreCorrect() throws Exception {
     	String personAsJson ="{ \"name\" : \"jonathan\"}";
     	String newId = idOfPosted(personAsJson);
-    	expect().log().all().body("name", equalTo("jonathan")).given().header("Accept", "application/json").when().get("/family/people/" + newId);     
+    	expect().log().all().body("name", equalTo("jonathan")).given().header("Accept", "application/json").when().get(appUrl() + "/" + newId);     
     }
     
 	/**
@@ -327,8 +327,8 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			given().header("Accept", "application/json")					
 					.body(updatedPersonAsJson).then().expect()
 					.statusCode(200)
-					.and().response().header("Location", containsString("/family/people/" + newId))
-					.when().put("/family/people/" + newId);
+					.and().response().header("Location", equalTo(appUrl()+ "/" + newId))
+					.when().put(appUrl() + "/"  + newId);
 		} finally {
 			RestAssured.reset();
 		}
@@ -336,7 +336,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		// verify name and version have changed
 		try {	
 			expect().log().all().body("name", equalTo(newName))
-			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
+			.given().header("Accept", "application/json").when().get(appUrl() + "/" + newId); 
 		} finally {
 			RestAssured.reset();
 		}
@@ -365,8 +365,8 @@ public class UpdatingAPersonIT extends FuncAbstract{
 					//.body("{\"id\" : \"" + newId +"\", \"name\" : \"dan3\",}").then().expect()
 					.body(updatedPersonAsJson).then().expect()
 					.statusCode(200)
-					.and().response().header("Location", containsString("/family/people/" + newId))
-					.when().put("/family/people/" + newId);
+					.and().response().header("Location", containsString(appUrl() + "/" + newId))
+					.when().put(appUrl() + "/"  + newId);
 		} finally {
 			RestAssured.reset();
 		}
@@ -374,7 +374,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		try {
 			// verify name and version have changed
 			expect().log().all().body("name", equalTo("dan3")).and().that().body("version", equalTo(++version))
-			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
+			.given().header("Accept", "application/json").when().get(appUrl() + "/" + newId); 
 		} finally {
 			RestAssured.reset();
 		}
@@ -392,8 +392,8 @@ public class UpdatingAPersonIT extends FuncAbstract{
 					//.body("{\"id\" : \"" + newId +"\", \"name\" : \"dan3\",}").then().expect()
 					.body(reUpdatedPersonAsJson).then().expect()
 					.statusCode(200)
-					.and().response().header("Location", containsString("/family/people/" + newId))
-					.when().put("/family/people/" + newId);
+					.and().response().header("Location", containsString(appUrl() + "/" + newId))
+					.when().put(appUrl() + "/"  + newId);
 		} finally {
 			RestAssured.reset();
 		}
@@ -401,7 +401,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		try {
 			// verify name and version have changed
 			expect().log().all().body("name", equalTo("dan4")).and().that().body("version", equalTo(++version))
-			.given().header("Accept", "application/json").when().get("/family/people/" + newId); 
+			.given().header("Accept", "application/json").when().get(appUrl() + "/" + newId); 
 		} finally {
 			RestAssured.reset();
 		}
@@ -435,8 +435,8 @@ public class UpdatingAPersonIT extends FuncAbstract{
 					.body(personUpdatedToJson).then().expect()
 					.statusCode(200)
 					.and().response().header(
-							"Location", containsString("/family/people/" + newId))
-					.when().put("/family/people/" + newId);
+							"Location", containsString(appUrl() + "/" + newId))
+					.when().put(appUrl() + "/"  + newId);
 		} finally {
 			RestAssured.reset();
 		}
@@ -447,7 +447,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			.that().body("name", equalTo(newName))
 			.and().that().body("version", equalTo(++version))
 			.given().header("Accept", "application/json")
-			.when().get("/family/people/" + newId); 
+			.when().get(appUrl() + "/" + newId); 
 		} finally {
 			RestAssured.reset();
 		}
@@ -470,9 +470,10 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			.then().expect()
 				.body("father", equalTo("null"))
 				.log().all()
-			.when().put("/family/people/" + newId);
+			.when().put(appUrl() + "/"  + newId);
 	}
 	
+	@Test
 	public void shouldReturnThatPersonsMotherIsNullAsJsonInTheResponseBody() {
 
     	// create a test Person "dan2"
@@ -489,7 +490,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		.then().expect()
 			.body("mother", equalTo("null"))
 			.log().all()
-		.when().put("/family/people/" + newId);	
+		.when().put(appUrl() + "/"  + newId);	
 		}
 	
 	@Test
@@ -509,7 +510,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		.then().expect()
 			.body("children.size()", equalTo(0))
 			.log().all()
-		.when().put("/family/people/" + newId);	
+		.when().put(appUrl() + "/"  + newId);	
 	}
 	
 	@Test
@@ -529,7 +530,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 		.then().expect()
 			.that().body("links.size()", equalTo(4))
 			.log().all()
-		.when().put("/family/people/" + newId);	
+		.when().put(appUrl() + "/"  + newId);	
 	}
 	
 	@Test
@@ -551,7 +552,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			.and().that().body("links.getAt(0).href.length()", greaterThan(APP_URL.length() + 1))
 			.and().that().body("links.getAt(0).title", equalTo("dan3"))
 			.log().all()
-			.when().put("/family/people/" + newId);	
+			.when().put(appUrl() + "/"  + newId);	
 	}
 	
 	@Test
@@ -575,7 +576,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			.and().that().body("links.getAt(2).href.length()", greaterThan(APP_URL.length() + "/mother".length()))
 			.and().that().body("links.getAt(2).title", equalTo("Mother"))
 			.log().all()
-			.when().put("/family/people/" + newId);	
+			.when().put(appUrl() + "/"  + newId);	
 	}
 	
 	@Test
@@ -599,7 +600,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			.and().that().body("links.getAt(1).href.length()", greaterThan(APP_URL.length() + "/father".length()))
 			.and().that().body("links.getAt(1).title", equalTo("Father"))
 			.log().all()
-		.when().put("/family/people/" + newId);	
+		.when().put(appUrl() + "/"  + newId);	
 	}
 	
 	@Test
@@ -623,6 +624,15 @@ public class UpdatingAPersonIT extends FuncAbstract{
 			.and().that().body("links.getAt(1).href.length()", greaterThan(APP_URL.length() + "/father".length()))
 			.and().that().body("links.getAt(1).title", equalTo("Father"))
 			.log().all()
-		.when().put("/family/people/" + newId);	
+		.when().put(appUrl() + "/"  + newId);	
 	}
+	
+	//@Before
+//	public void init(){
+//		RestAssured.baseURI = "http://family.danwallacenz.cloudfoundry.me";
+//		RestAssured.port = 80;
+//		//RestAssured.basePath = "/resource";
+//		//RestAssured.authentication = basic("username", "password");
+//		//RestAssured.rootPath = "x.y.z";
+//	}
 }

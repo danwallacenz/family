@@ -30,8 +30,8 @@ public class GettingAPersonIT extends FuncAbstract{
     	// This behaviour is tested in AddingAFatherIT
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/father/" + fatherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/father/" + fatherId);
 		
 		// Get the father without an Id
 			Response fathersGetResponse = 
@@ -53,19 +53,19 @@ public class GettingAPersonIT extends FuncAbstract{
 
 					.and().that().body("links.size()", equalTo(4))
 					.and().that().body("links.getAt(0).rel", equalTo("self"))
-					.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + fatherId))
+					.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + fatherId))
 					.and().that().body("links.getAt(0).title", equalTo("Daniel Roy Wallace"))
 					.and().that().body("links.getAt(1).rel", equalTo("father"))
-					.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + fatherId +"/father"))
+					.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + fatherId +"/father"))
 					.and().that().body("links.getAt(1).title", equalTo("Father"))
 					.and().that().body("links.getAt(2).rel", equalTo("mother"))
-					.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + fatherId +"/mother"))
+					.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + fatherId +"/mother"))
 					.and().that().body("links.getAt(2).title", equalTo("Mother"))
 					.and().that().body("links.getAt(3).rel", equalTo("children"))
-					.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + fatherId +"/children"))
+					.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + fatherId +"/children"))
 					.and().that().body("links.getAt(3).title", equalTo("Children"))
 				.when().log().everything()
-				.when().get("/family/people/" + sonId + "/father");
+				.when().get(appUrl() + "/" + sonId + "/father");
 	}
 
 	/**
@@ -85,8 +85,8 @@ public class GettingAPersonIT extends FuncAbstract{
     	// This behaviour is tested in AddingAMotherIT
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/mother/" + motherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/mother/" + motherId);
 		
 		// Get the mother without an Id
 	   	// Get the removed mother from the server	
@@ -109,19 +109,19 @@ public class GettingAPersonIT extends FuncAbstract{
 
 					.and().that().body("links.size()", equalTo(4))
 					.and().that().body("links.getAt(0).rel", equalTo("self"))
-					.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + motherId))
+					.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + motherId))
 					.and().that().body("links.getAt(0).title", equalTo("Roberta Lillian Wilks"))
 					.and().that().body("links.getAt(1).rel", equalTo("father"))
-					.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + motherId +"/father"))
+					.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + motherId +"/father"))
 					.and().that().body("links.getAt(1).title", equalTo("Father"))
 					.and().that().body("links.getAt(2).rel", equalTo("mother"))
-					.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + motherId +"/mother"))
+					.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + motherId +"/mother"))
 					.and().that().body("links.getAt(2).title", equalTo("Mother"))
 					.and().that().body("links.getAt(3).rel", equalTo("children"))
-					.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + motherId +"/children"))
+					.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + motherId +"/children"))
 					.and().that().body("links.getAt(3).title", equalTo("Children"))
 				.when().log().everything()
-				.when().get("/family/people/" + sonId + "/mother");
+				.when().get(appUrl() + "/" + sonId + "/mother");
 	}
 	
 	/**
@@ -141,8 +141,8 @@ public class GettingAPersonIT extends FuncAbstract{
     	// This behaviour is tested in AddingAMotherIT
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/mother/" + motherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/mother/" + motherId);
 		
 		// Get the children.	
 			Response childrenGetResponse = 
@@ -155,7 +155,7 @@ public class GettingAPersonIT extends FuncAbstract{
 					.and().that().body("getAt(0).id", equalTo(new Integer(sonId)))
 
 				.when().log().everything()
-				.when().get("/family/people/" + motherId + "/children");
+				.when().get(appUrl() + "/" + motherId + "/children");
 			
 			System.out.println(childrenGetResponse.asString());
 			

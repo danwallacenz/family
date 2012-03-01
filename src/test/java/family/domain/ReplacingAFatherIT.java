@@ -39,8 +39,8 @@ public class ReplacingAFatherIT extends FuncAbstract{
 
     		given().header("Accept", "application/json")
     		.then().expect().that().statusCode(200)
-    			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-    			.when().put("/family/people/" + sonId + "/father/" + originalFatherId);
+    			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+    			.when().put(appUrl() + "/"   + sonId + "/father/" + originalFatherId);
 			
     	// Then Replace her with new father	
 			Response replaceFatherResponse = 
@@ -50,7 +50,7 @@ public class ReplacingAFatherIT extends FuncAbstract{
 				.then().expect()
 					.that().statusCode(200)
 					.and().that().response().contentType(JSON)
-					.and().that().header("Location", containsString(APP_URL + "/" + sonId))
+					.and().that().header("Location", containsString(appUrl() + "/" + sonId))
 					.and().that().body("id", equalTo(new Integer(sonId)))
 					.and().that().body("name", equalTo("Johnny Wallace-Wilks"))
 					.and().that().body("sex", equalTo("MALE"))
@@ -63,26 +63,26 @@ public class ReplacingAFatherIT extends FuncAbstract{
 					.and().that().body("children.size()", equalTo(0))
 					.and().that().body("links.size()", equalTo(4))
 					.and().that().body("links.getAt(0).rel", equalTo("self"))
-					.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + sonId))
+					.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + sonId))
 					.and().that().body("links.getAt(0).title", equalTo("Johnny Wallace-Wilks"))
 					.and().that().body("links.getAt(1).rel", equalTo("father"))
-					.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + replacementFatherId))
+					.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + replacementFatherId))
 					.and().that().body("links.getAt(1).title", equalTo("Grant Thomas Wallace"))
 					.and().that().body("links.getAt(2).rel", equalTo("mother"))
-					.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + sonId +"/mother"))
+					.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + sonId +"/mother"))
 					.and().that().body("links.getAt(2).title", equalTo("Mother"))
 					.and().that().body("links.getAt(3).rel", equalTo("children"))
-					.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + sonId +"/children"))
+					.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + sonId +"/children"))
 					.and().that().body("links.getAt(3).title", equalTo("Children"))
 					.and().that().body("affectedParties.size()", equalTo(2))
 					.and().that().body("affectedParties.getAt(0).id", equalTo(new Integer(replacementFatherId)))
 					.and().that().body("affectedParties.getAt(0).name", equalTo("Grant Thomas Wallace"))
-					.and().that().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + replacementFatherId))
+					.and().that().body("affectedParties.getAt(0).href", equalTo(appUrl() + "/" + replacementFatherId))
 					.and().that().body("affectedParties.getAt(1).id", equalTo(new Integer(originalFatherId)))
 					.and().that().body("affectedParties.getAt(1).name", equalTo("Daniel Wallace"))
-					.and().that().body("affectedParties.getAt(1).href", equalTo(APP_URL + "/" + originalFatherId))
+					.and().that().body("affectedParties.getAt(1).href", equalTo(appUrl() + "/" + originalFatherId))
 				.when().log().everything()
-    			.when().put("/family/people/" + sonId + "/father/" + replacementFatherId);
+    			.when().put(appUrl() + "/"   + sonId + "/father/" + replacementFatherId);
     }
     
     @Test
@@ -104,14 +104,14 @@ public class ReplacingAFatherIT extends FuncAbstract{
 
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/father/" + originalFatherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/father/" + originalFatherId);
 			
 		// Then Replace her with new father
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/father/" + replacementFatherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/father/" + replacementFatherId);
 		
     	// Get the replacement father from the server	
 		Response replacementFathersGetResponse = 
@@ -142,33 +142,33 @@ public class ReplacingAFatherIT extends FuncAbstract{
 				.and().that().body("children.getAt(0).father", equalTo(new Integer(replacementFatherId)))
 				.and().that().body("children.getAt(0).links.size()", equalTo(4))
 				.and().that().body("children.getAt(0).links.getAt(0).rel", equalTo("self"))
-				.and().that().body("children.getAt(0).links.getAt(0).href", equalTo(APP_URL + "/" + sonId))
+				.and().that().body("children.getAt(0).links.getAt(0).href", equalTo(appUrl() + "/" + sonId))
 				.and().that().body("children.getAt(0).links.getAt(0).title", equalTo("Johnny Wallace-Wilks"))
 				.and().that().body("children.getAt(0).links.getAt(1).rel", equalTo("father"))
-				.and().that().body("children.getAt(0).links.getAt(1).href", equalTo(APP_URL + "/" + replacementFatherId))
+				.and().that().body("children.getAt(0).links.getAt(1).href", equalTo(appUrl() + "/" + replacementFatherId))
 				.and().that().body("children.getAt(0).links.getAt(1).title", equalTo("Grant Thomas Wallace"))
 				.and().that().body("children.getAt(0).links.getAt(2).rel", equalTo("mother"))
-				.and().that().body("children.getAt(0).links.getAt(2).href", equalTo(APP_URL + "/" + sonId +"/mother"))
+				.and().that().body("children.getAt(0).links.getAt(2).href", equalTo(appUrl() + "/" + sonId +"/mother"))
 				.and().that().body("children.getAt(0).links.getAt(2).title", equalTo("Mother"))
 				.and().that().body("children.getAt(0).links.getAt(3).rel", equalTo("children"))
-				.and().that().body("children.getAt(0).links.getAt(3).href", equalTo(APP_URL + "/" + sonId +"/children"))
+				.and().that().body("children.getAt(0).links.getAt(3).href", equalTo(appUrl() + "/" + sonId +"/children"))
 				.and().that().body("children.getAt(0).links.getAt(3).title", equalTo("Children"))
 
 				.and().that().body("links.size()", equalTo(4))
 				.and().that().body("links.getAt(0).rel", equalTo("self"))
-				.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + replacementFatherId))
+				.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + replacementFatherId))
 				.and().that().body("links.getAt(0).title", equalTo("Grant Thomas Wallace"))
 				.and().that().body("links.getAt(1).rel", equalTo("father"))
-				.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + replacementFatherId +"/father"))
+				.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + replacementFatherId +"/father"))
 				.and().that().body("links.getAt(1).title", equalTo("Father"))
 				.and().that().body("links.getAt(2).rel", equalTo("mother"))
-				.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + replacementFatherId +"/mother"))
+				.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + replacementFatherId +"/mother"))
 				.and().that().body("links.getAt(2).title", equalTo("Mother"))
 				.and().that().body("links.getAt(3).rel", equalTo("children"))
-				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + replacementFatherId +"/children"))
+				.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + replacementFatherId +"/children"))
 				.and().that().body("links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.when().get("/family/people/" + replacementFatherId);
+			.when().get(appUrl() + "/" + replacementFatherId);
 		
 		System.out.println(
 				replacementFathersGetResponse.getBody().jsonPath().get("children.getAt(0).father").getClass());
@@ -195,14 +195,14 @@ public class ReplacingAFatherIT extends FuncAbstract{
 
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/father/" + originalFatherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/father/" + originalFatherId);
 			
 		// Then Replace her with new father
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/father/" + replacementFatherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/father/" + replacementFatherId);
 		
     	// Get the original father from the server	
 		Response originalFathersGetResponse = 
@@ -223,19 +223,19 @@ public class ReplacingAFatherIT extends FuncAbstract{
 
 				.and().that().body("links.size()", equalTo(4))
 				.and().that().body("links.getAt(0).rel", equalTo("self"))
-				.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + originalFatherId))
+				.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + originalFatherId))
 				.and().that().body("links.getAt(0).title", equalTo("Daniel Wallace"))
 				.and().that().body("links.getAt(1).rel", equalTo("father"))
-				.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + originalFatherId +"/father"))
+				.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + originalFatherId +"/father"))
 				.and().that().body("links.getAt(1).title", equalTo("Father"))
 				.and().that().body("links.getAt(2).rel", equalTo("mother"))
-				.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + originalFatherId +"/mother"))
+				.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + originalFatherId +"/mother"))
 				.and().that().body("links.getAt(2).title", equalTo("Mother"))
 				.and().that().body("links.getAt(3).rel", equalTo("children"))
-				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + originalFatherId +"/children"))
+				.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + originalFatherId +"/children"))
 				.and().that().body("links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.when().get("/family/people/" + originalFatherId);
+			.when().get(appUrl() + "/" + originalFatherId);
     }
     
 
@@ -258,14 +258,14 @@ public class ReplacingAFatherIT extends FuncAbstract{
 
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/father/" + originalFatherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/father/" + originalFatherId);
 			
 		// Then Replace her with new father
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + sonId))
-			.when().put("/family/people/" + sonId + "/father/" + replacementFatherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + sonId))
+			.when().put(appUrl() + "/"   + sonId + "/father/" + replacementFatherId);
 		
     	// Get the child from the server	
 		Response childsGetResponse = 
@@ -287,16 +287,16 @@ public class ReplacingAFatherIT extends FuncAbstract{
 				
 				.and().that().body("father.links.size()", equalTo(4))
 				.and().that().body("father.links.getAt(0).rel", equalTo("self"))
-				.and().that().body("father.links.getAt(0).href", equalTo(APP_URL + "/" + replacementFatherId))
+				.and().that().body("father.links.getAt(0).href", equalTo(appUrl() + "/" + replacementFatherId))
 				.and().that().body("father.links.getAt(0).title", equalTo("Grant Thomas Wallace"))
 				.and().that().body("father.links.getAt(1).rel", equalTo("father"))
-				.and().that().body("father.links.getAt(1).href", equalTo(APP_URL + "/" + replacementFatherId +"/father"))
+				.and().that().body("father.links.getAt(1).href", equalTo(appUrl() + "/" + replacementFatherId +"/father"))
 				.and().that().body("father.links.getAt(1).title", equalTo("Father"))
 				.and().that().body("father.links.getAt(2).rel", equalTo("mother"))
-				.and().that().body("father.links.getAt(2).href", equalTo(APP_URL + "/" + replacementFatherId + "/mother"))
+				.and().that().body("father.links.getAt(2).href", equalTo(appUrl() + "/" + replacementFatherId + "/mother"))
 				.and().that().body("father.links.getAt(2).title", equalTo("Mother"))
 				.and().that().body("father.links.getAt(3).rel", equalTo("children"))
-				.and().that().body("father.links.getAt(3).href", equalTo(APP_URL + "/" + replacementFatherId +"/children"))
+				.and().that().body("father.links.getAt(3).href", equalTo(appUrl() + "/" + replacementFatherId +"/children"))
 				.and().that().body("father.links.getAt(3).title", equalTo("Children"))
 				
 				
@@ -306,19 +306,19 @@ public class ReplacingAFatherIT extends FuncAbstract{
 
 				.and().that().body("links.size()", equalTo(4))
 				.and().that().body("links.getAt(0).rel", equalTo("self"))
-				.and().that().body("links.getAt(0).href", equalTo(APP_URL + "/" + sonId))
+				.and().that().body("links.getAt(0).href", equalTo(appUrl() + "/" + sonId))
 				.and().that().body("links.getAt(0).title", equalTo("Johnny Wallace-Wilks"))
 				.and().that().body("links.getAt(1).rel", equalTo("father"))
-				.and().that().body("links.getAt(1).href", equalTo(APP_URL + "/" + replacementFatherId))
+				.and().that().body("links.getAt(1).href", equalTo(appUrl() + "/" + replacementFatherId))
 				.and().that().body("links.getAt(1).title", equalTo("Grant Thomas Wallace"))
 				.and().that().body("links.getAt(2).rel", equalTo("mother"))
-				.and().that().body("links.getAt(2).href", equalTo(APP_URL + "/" + sonId +"/mother"))
+				.and().that().body("links.getAt(2).href", equalTo(appUrl() + "/" + sonId +"/mother"))
 				.and().that().body("links.getAt(2).title", equalTo("Mother"))
 				.and().that().body("links.getAt(3).rel", equalTo("children"))
-				.and().that().body("links.getAt(3).href", equalTo(APP_URL + "/" + sonId +"/children"))
+				.and().that().body("links.getAt(3).href", equalTo(appUrl() + "/" + sonId +"/children"))
 				.and().that().body("links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
-			.when().get("/family/people/" + sonId);
+			.when().get(appUrl() + "/" + sonId);
 		
 		System.out.println(
 				childsGetResponse.getBody().jsonPath().get("father").getClass());

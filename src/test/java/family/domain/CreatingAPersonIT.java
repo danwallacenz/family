@@ -90,7 +90,7 @@ public class CreatingAPersonIT extends FuncAbstract {
 		.and().that().body("sex", equalTo("MALE"))
 		.and().that().body("version", equalTo(0))
 		.given().header("Accept", "application/json")
-		.when().get("/family/people/" + newId); 
+		.when().get(appUrl() + "/" + newId); 
 	}
 	
 	@Test
@@ -110,7 +110,7 @@ public class CreatingAPersonIT extends FuncAbstract {
 		.and().that().body("version", equalTo(0))
 		.and().that().body("dob", equalTo("27/06/1957"))
 		.given().header("Accept", "application/json")
-		.when().get("/family/people/" + newId); 
+		.when().get(appUrl() + "/" + newId); 
 	}
 	
 	@Test
@@ -130,7 +130,7 @@ public class CreatingAPersonIT extends FuncAbstract {
 		.and().that().body("version", equalTo(0))
 		.and().that().body("dod", equalTo("27/06/1957"))
 		.given().header("Accept", "application/json")
-		.when().get("/family/people/" + newId); 
+		.when().get(appUrl() + "/" + newId); 
 	}
 	
 	@Test
@@ -174,7 +174,7 @@ public class CreatingAPersonIT extends FuncAbstract {
 		.and().that().body("version", equalTo(0))
 		.and().that().body("placeOfBirth", equalTo("Te Awamutu, New Zealand"))
 		.given().header("Accept", "application/json")
-		.when().get("/family/people/" + newId); 
+		.when().get(appUrl() + "/" + newId); 
 	}
 	
 	@Test
@@ -193,7 +193,7 @@ public class CreatingAPersonIT extends FuncAbstract {
 		.and().that().body("version", equalTo(0))
 		.and().that().body("placeOfDeath", equalTo("Unknown"))
 		.given().header("Accept", "application/json")
-		.when().get("/family/people/" + newId); 
+		.when().get(appUrl() + "/" + newId); 
 	}
 
 	@Test

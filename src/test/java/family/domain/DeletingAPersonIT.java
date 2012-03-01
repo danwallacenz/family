@@ -33,7 +33,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		// Delete nobody
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(404)
-			.when().delete("/family/people/" + 999999999 );
+			.when().delete(appUrl() + "/" + 999999999 );
 	}
 
 	@Test
@@ -46,18 +46,18 @@ public class DeletingAPersonIT extends FuncAbstract{
     	// Ensure that she has been saved
 		expect().log().all()
 		.body("name", equalTo("Roberta Wilks"))
-		.given().header("Accept", "application/json").when().get("/family/people/" + newId);
+		.given().header("Accept", "application/json").when().get(appUrl() + "/" + newId);
 
 		// Delete her
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.when().delete("/family/people/" + newId );
+			.when().delete(appUrl() + "/" + newId );
 		
 		// Confirm she's gone
 		// TODO fail("TODO check json status in the response body");
 		given().header("Accept", "application/json").and().contentType(JSON)
 		.then().expect().statusCode(HttpStatus.NOT_FOUND.value())
-		.when().get("/family/people/" + newId);
+		.when().get(appUrl() + "/" + newId);
 	}
 	
 	@Test
@@ -77,14 +77,14 @@ public class DeletingAPersonIT extends FuncAbstract{
 		given().header("Accept", "application/json")
 		.then().expect().that()
 			.statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + daughterId))
+			.and().response().header("Location", equalTo(appUrl() + "/" + daughterId))
 			.and().body("version", equalTo(1))
 			.and().body("father.version", equalTo(1))
 			.and().body("affectedParties.size()", equalTo(1))
 			.and().body("affectedParties.getAt(0).id", equalTo(new Integer(fatherId)))
 			.and().body("affectedParties.getAt(0).name", equalTo("Clyde Wilks"))
-			.and().body("affectedParties.getAt(0).href", equalTo(APP_URL +"/" + fatherId))
-		.when().put("/family/people/" + daughterId + "/father/" + fatherId);
+			.and().body("affectedParties.getAt(0).href", equalTo(appUrl() +"/" + fatherId))
+		.when().put(appUrl() + "/"   + daughterId + "/father/" + fatherId);
     	
     	
     	// Extract URLs from the body
@@ -109,14 +109,14 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().that().body("children.size()", equalTo(1))
 		.and().that().body(	"children.getAt(0).id", equalTo(new Integer(daughterId)))
 		.and().that().body("children.getAt(0).name", equalTo("Roberta Wilks"))
-//		.given().header("Accept", "application/json").when().get("/family/people/" + fatherId);
+//		.given().header("Accept", "application/json").when().get(appUrl() + "/" + fatherId);
 		.given().header("Accept", "application/json").when().get(fathersHref);
 		
 		// Delete the daughter
 		Response deletionReponse = given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
 		.and().that().body("affectedParties.getAt(0).href", equalTo(fathersHref))
-		.when().delete("/family/people/" + daughterId);
+		.when().delete(appUrl() + "/" + daughterId);
 			
 		String deletionBody = deletionReponse.body().asString();
 		System.out.println("***deletionBody=\n" + deletionBody);
@@ -125,7 +125,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		// Confirm she's deleted
 		given().header("Accept", "application/json").and().contentType(JSON)
 		.then().expect().statusCode(HttpStatus.NOT_FOUND.value())
-		.when().get("/family/people/" + daughterId);
+		.when().get(appUrl() + "/" + daughterId);
 		
 		// Confirm she's gone from the father's children
 		given().header("Accept", "application/json")
@@ -133,7 +133,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.statusCode(HttpStatus.OK.value())
 		.and().body("children.size()", equalTo(0))
 		.and().body("version", equalTo(2))
-		.when().get("/family/people/" + fatherId);
+		.when().get(appUrl() + "/" + fatherId);
 	}
 	
 	@Test
@@ -150,13 +150,13 @@ public class DeletingAPersonIT extends FuncAbstract{
     	// Establish a mother/daughter relationship
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + daughterId))
+			.and().response().header("Location", equalTo(appUrl() + "/" + daughterId))
 			.and().body("version", equalTo(1))
 			.and().body("affectedParties.size()", equalTo(1))
 			.and().body("affectedParties.getAt(0).id", equalTo(new Integer(motherId)))
 			.and().body("affectedParties.getAt(0).name", equalTo("Jan Wilks"))
-			.and().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + motherId))
-			.when().put("/family/people/" + daughterId + "/mother/" + motherId);
+			.and().body("affectedParties.getAt(0).href", equalTo(appUrl() + "/" + motherId))
+			.when().put(appUrl() + "/"   + daughterId + "/mother/" + motherId);
     	
     	// Ensure that the mother is set on the child
 		expect().that()
@@ -165,7 +165,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().that().body("mother.id", equalTo(new Integer(motherId)))
 		.and().that().body("mother.name", equalTo("Jan Wilks"))
 		.and().that().body("version", equalTo(1))
-		.given().header("Accept", "application/json").when().get("/family/people/" + daughterId);
+		.given().header("Accept", "application/json").when().get(appUrl() + "/" + daughterId);
 
 		// Ensure that the daughter is a child of the mother
 		expect().that()
@@ -175,7 +175,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().that().body("children.size()", equalTo(1))
 		.and().that().body(	"children.getAt(0).id", equalTo(new Integer(daughterId)))
 		.and().that().body("children.getAt(0).name", equalTo("Roberta Wilks"))
-		.given().header("Accept", "application/json").when().get("/family/people/" + motherId);
+		.given().header("Accept", "application/json").when().get(appUrl() + "/" + motherId);
 		
 		// Delete the daughter confirming that the mother is an affected party
 		given().header("Accept", "application/json")
@@ -183,13 +183,13 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().body("affectedParties.size()", equalTo(1))
 		.and().body("affectedParties.getAt(0).id", equalTo(new Integer(motherId)))
 		.and().body("affectedParties.getAt(0).name", equalTo("Jan Wilks"))
-		.and().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + motherId))
-		.when().delete("/family/people/" + daughterId );
+		.and().body("affectedParties.getAt(0).href", equalTo(appUrl() + "/" + motherId))
+		.when().delete(appUrl() + "/" + daughterId );
 			
 		// Confirm she's deleted
 		given().header("Accept", "application/json").and().contentType(JSON)
 		.then().expect().statusCode(HttpStatus.NOT_FOUND.value())
-		.when().get("/family/people/" + daughterId);
+		.when().get(appUrl() + "/" + daughterId);
 		
 		// Confirm she's gone from the mother's children
 		given().header("Accept", "application/json")
@@ -197,7 +197,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.statusCode(HttpStatus.OK.value())
 		.and().body("children.size()", equalTo(0))
 		.and().body("version", equalTo(2))
-		.when().get("/family/people/" + motherId);
+		.when().get(appUrl() + "/" + motherId);
 	}
 	
 	@Test
@@ -214,8 +214,8 @@ public class DeletingAPersonIT extends FuncAbstract{
     	// Establish a father/daughter relationship
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + daughterId))
-			.when().put("/family/people/" + daughterId + "/father/" + fatherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + daughterId))
+			.when().put(appUrl() + "/"   + daughterId + "/father/" + fatherId);
     	
     	// Ensure that the father is set on the child
 		expect().that()
@@ -224,7 +224,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().that().body("version", equalTo(1))
 		.and().that().body("father.id", equalTo(new Integer(fatherId)))
 		.and().that().body("father.name", equalTo("Clyde Wilks"))
-		.given().header("Accept", "application/json").when().get("/family/people/" + daughterId);
+		.given().header("Accept", "application/json").when().get(appUrl() + "/" + daughterId);
 
 		// Ensure that the daughter is a child of the father
 		expect().that()
@@ -234,7 +234,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().that().body("children.size()", equalTo(1))
 		.and().that().body(	"children.getAt(0).id", equalTo(new Integer(daughterId)))
 		.and().that().body("children.getAt(0).name", equalTo("Roberta Wilks"))
-		.given().header("Accept", "application/json").when().get("/family/people/" + fatherId);
+		.given().header("Accept", "application/json").when().get(appUrl() + "/" + fatherId);
 		
 		// Delete the father
 		given().header("Accept", "application/json")
@@ -243,13 +243,13 @@ public class DeletingAPersonIT extends FuncAbstract{
 			.and().body("affectedParties.size()", equalTo(1))
 			.and().body("affectedParties.getAt(0).id", equalTo(new Integer(daughterId)))
 			.and().body("affectedParties.getAt(0).name", equalTo("Roberta Wilks"))
-			.and().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + daughterId))
-		.when().delete("/family/people/" + fatherId );
+			.and().body("affectedParties.getAt(0).href", equalTo(appUrl() + "/" + daughterId))
+		.when().delete(appUrl() + "/" + fatherId );
 			
 		// Confirm he's deleted
 		given().header("Accept", "application/json").and().contentType(JSON)
 		.then().expect().statusCode(HttpStatus.NOT_FOUND.value())
-		.when().get("/family/people/" + fatherId);
+		.when().get(appUrl() + "/" + fatherId);
 		
 		// Confirm he's not the daughter's father any more
 		given().header("Accept", "application/json").and().contentType(JSON)
@@ -258,7 +258,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 			.statusCode(HttpStatus.OK.value())
 			.and().that().body("version", equalTo(2))
 			.and().expect().that().body("father", equalTo("null"))
-		.when().get("/family/people/" + daughterId);
+		.when().get(appUrl() + "/" + daughterId);
 	}
 	
 	@Test
@@ -275,8 +275,8 @@ public class DeletingAPersonIT extends FuncAbstract{
     	// Establish a mother/daughter relationship
 		given().header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
-			.and().response().header("Location", equalTo(APP_URL + "/" + daughterId))
-			.when().put("/family/people/" + daughterId + "/mother/" + motherId);
+			.and().response().header("Location", equalTo(appUrl() + "/" + daughterId))
+			.when().put(appUrl() + "/"   + daughterId + "/mother/" + motherId);
     	
     	// Ensure that the mother is set on the child
 		expect().that()
@@ -285,7 +285,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().that().body("mother.id", equalTo(new Integer(motherId)))
 		.and().that().body("mother.name", equalTo("Jan Wilks"))
 		.and().that().body("version", equalTo(1))
-		.given().header("Accept", "application/json").when().get("/family/people/" + daughterId);
+		.given().header("Accept", "application/json").when().get(appUrl() + "/" + daughterId);
 
 		// Ensure that the daughter is a child of the mother
 		expect().that()
@@ -295,7 +295,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().that().body("version", equalTo(1))
 		.and().that().body(	"children.getAt(0).id", equalTo(new Integer(daughterId)))
 		.and().that().body("children.getAt(0).name", equalTo("Roberta Wilks"))
-		.given().header("Accept", "application/json").when().get("/family/people/" + motherId);
+		.given().header("Accept", "application/json").when().get(appUrl() + "/" + motherId);
 		
 		// Delete the mother
 		given().header("Accept", "application/json")
@@ -303,13 +303,13 @@ public class DeletingAPersonIT extends FuncAbstract{
 			.and().body("affectedParties.size()", equalTo(1))
 			.and().body("affectedParties.getAt(0).id", equalTo(new Integer(daughterId)))
 			.and().body("affectedParties.getAt(0).name", equalTo("Roberta Wilks"))
-			.and().body("affectedParties.getAt(0).href", equalTo(APP_URL + "/" + daughterId))
-			.when().delete("/family/people/" + motherId );
+			.and().body("affectedParties.getAt(0).href", equalTo(appUrl() + "/" + daughterId))
+			.when().delete(appUrl() + "/" + motherId );
 			
 		// Confirm she's deleted
 		given().header("Accept", "application/json").and().contentType(JSON)
 		.then().expect().statusCode(HttpStatus.NOT_FOUND.value())
-		.when().get("/family/people/" + motherId);
+		.when().get(appUrl() + "/" + motherId);
 		
 		// Confirm she's not the daughter's mother any more
 		given().header("Accept", "application/json").and().contentType(JSON)
@@ -317,6 +317,6 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.expect().that().statusCode(HttpStatus.OK.value())
 		.and().expect().that().body("mother", equalTo("null"))
 		.and().that().body("version", equalTo(2))
-		.when().get("/family/people/" + daughterId);
+		.when().get(appUrl() + "/" + daughterId);
 	}
 }
