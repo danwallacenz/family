@@ -124,7 +124,6 @@ public class PersonTransformer extends AbstractTransformer {
         getContext().writeCloseArray();
 	}
 
-	// TODO add dob, dod placeOfBirth and placeOfDeath
 	private void writeMother(Person person) {
 	    getContext().writeName("mother");
 	    Person mother = person.getMother();
@@ -141,6 +140,23 @@ public class PersonTransformer extends AbstractTransformer {
 	    	getContext().writeName("sex");
 	    	getContext().transform(mother.getSex());
 	    	getContext().writeComma();
+	    	
+		    getContext().writeName("dob");
+		    getContext().transform(mother.getDob() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(mother.getDob()));
+		    getContext().writeComma();
+		  
+		    getContext().writeName("dod");
+		    getContext().transform(mother.getDod() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(mother.getDod()));
+		    getContext().writeComma();
+		    
+		    getContext().writeName("placeOfBirth");
+		    getContext().transform(mother.getPlaceOfBirth());
+		    getContext().writeComma();
+		    
+		    getContext().writeName("placeOfDeath");
+		    getContext().transform(mother.getPlaceOfDeath());
+		    getContext().writeComma();
+	    	
 	    	getContext().writeName("version");
 	    	getContext().transform(mother.getVersion());
 	    	getContext().writeComma();
@@ -149,7 +165,6 @@ public class PersonTransformer extends AbstractTransformer {
 	    }
 	}
 
-	// TODO add dob, dod placeOfBirth and placeOfDeath
 	private void writeFather(Person person) {
 	    getContext().writeName("father");
 	    Person father = person.getFather();
@@ -166,6 +181,24 @@ public class PersonTransformer extends AbstractTransformer {
 	    	getContext().writeName("sex");
 	    	getContext().transform(father.getSex());
 	    	getContext().writeComma();
+	    	
+		    getContext().writeName("dob");
+		    getContext().transform(father.getDob() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(father.getDob()));
+		    getContext().writeComma();
+		  
+		    getContext().writeName("dod");
+		    getContext().transform(father.getDod() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(father.getDod()));
+		    getContext().writeComma();
+		    
+		    getContext().writeName("placeOfBirth");
+		    getContext().transform(father.getPlaceOfBirth());
+		    getContext().writeComma();
+		    
+		    getContext().writeName("placeOfDeath");
+		    getContext().transform(father.getPlaceOfDeath());
+		    getContext().writeComma();
+
+	    	
 	    	getContext().writeName("version");
 	    	getContext().transform(father.getVersion());
 	    	getContext().writeComma();

@@ -23,7 +23,7 @@ public abstract class FuncAbstract {
      * Switch this on to target the local micro CloudFoundry then
      *  clean and build this project.
      */
-	protected boolean useMicroCloudFoundry = false;
+	protected boolean useMicroCloudFoundry = true;
 	
 	protected boolean useCloudFoundryDotCom = false;
 	

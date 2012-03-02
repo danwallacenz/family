@@ -9,6 +9,9 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
+
+import net.sf.json.JSONNull;
+
 import org.junit.Test;
 
 import com.jayway.restassured.RestAssured;
@@ -40,6 +43,10 @@ public class AddingAFatherIT extends FuncAbstract{
 				.and().that().body("father.id", equalTo(new Integer(brendonId)))
 				.and().that().body("father.name", equalTo("Brendon Williams"))
 				.and().that().body("father.sex", equalTo("MALE"))
+				.and().that().body("father.dob", equalTo("unknown"))
+				.and().that().body("father.dod", equalTo("unknown"))
+				.and().that().body("father.placeOfBirth", is(JSONNull.class))
+				.and().that().body("father.placeOfDeath", is(JSONNull.class))
 				.and().that().body("father.version", equalTo(1))
 				.and().that().body("father.links.size()", equalTo(4))
 				.and().that().body("father.links.getAt(0).rel", equalTo("self"))
@@ -62,7 +69,11 @@ public class AddingAFatherIT extends FuncAbstract{
 	@Test
 	public void shouldReturnThatPersonsRepresentationCorrectlyInTheBodyJson(){
 
-    	String brendonJSON = "{ \"name\" : \"Brendon Williams\",\"sex\":\"MALE\"}";
+    	String brendonJSON = "{ \"name\" : \"Brendon Williams\",\"sex\":\"MALE\","
+		 + "\"placeOfBirth\" : \"Te Awamutu, New Zealand\","
+		 + "\"placeOfDeath\" : \"Wanganui, New Zealand\","
+		 + "\"dob\":\"02/14/1965\",\"dod\":\"06/08/2006\"}";
+    	 
     	// Save Brendon
     	String brendonId = idOfPosted(brendonJSON);
     	
@@ -86,6 +97,10 @@ public class AddingAFatherIT extends FuncAbstract{
 				.and().that().body("father.id", equalTo(new Integer(brendonId)))
 				.and().that().body("father.name", equalTo("Brendon Williams"))
 				.and().that().body("father.sex", equalTo("MALE"))
+				.and().that().body("father.dob", equalTo("14/02/1965"))
+				.and().that().body("father.dod", equalTo("08/06/2006"))
+				.and().that().body("father.placeOfBirth", equalTo("Te Awamutu, New Zealand"))
+				.and().that().body("father.placeOfDeath", equalTo("Wanganui, New Zealand"))
 				.and().that().body("father.version", equalTo(1))
 				.and().that().body("mother", equalTo("null"))
 				.and().that().body("children.size()", equalTo(0))

@@ -5,10 +5,14 @@ import static com.jayway.restassured.path.json.JsonPath.from;
 import static groovyx.net.http.ContentType.JSON;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 
 import java.util.List;
+
+import net.sf.json.JSONNull;
+
 import org.junit.Test;
 
 import com.jayway.restassured.RestAssured;
@@ -40,6 +44,10 @@ public class AddingAMotherIT extends FuncAbstract{
 				.and().that().body("mother.id", equalTo(new Integer(rachelId)))
 				.and().that().body("mother.name", equalTo("Rachel Margaret Wallace"))
 				.and().that().body("mother.sex", equalTo("FEMALE"))
+				.and().that().body("mother.dob", equalTo("unknown"))
+				.and().that().body("mother.dod", equalTo("unknown"))
+				.and().that().body("mother.placeOfBirth", is(JSONNull.class))
+				.and().that().body("mother.placeOfDeath", is(JSONNull.class))
 				.and().that().body("mother.version", equalTo(1))
 				.and().that().body("mother.links.size()", equalTo(4))
 				.and().that().body("mother.links.getAt(0).rel", equalTo("self"))
@@ -57,12 +65,20 @@ public class AddingAMotherIT extends FuncAbstract{
 				.and().that().body("mother.links.getAt(3).title", equalTo("Children"))
 			.when().log().everything()
 			.put(appUrl() + "/"   + isaacId + "/mother/" + rachelId);
+		
+		Object o  
+			= from(addMotherResponse.getBody().asString()).get("mother.placeOfBirth");
+		System.out.println(o.getClass().getName());
+		//addMotherResponse.body("mother.placeOfBirth");
 	}
 		
 	@Test
 	public void shouldReturnThatPersonsRepresentationCorrectlyInTheBodyJson(){
 
-    	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\",\"sex\":\"FEMALE\"}";
+    	String rachelJSON = "{ \"name\" : \"Rachel Margaret Wallace\",\"sex\":\"FEMALE\"," 
+    			 + "\"placeOfBirth\" : \"Nelson, New Zealand\","
+    			 + "\"placeOfDeath\" : \"Wanganui, New Zealand\","
+    			 + "\"dob\":\"02/14/1928\",\"dod\":\"06/08/1996\"}";
     	// Save Rachel
     	String rachelId = idOfPosted(rachelJSON);
     	
@@ -86,6 +102,10 @@ public class AddingAMotherIT extends FuncAbstract{
 				.and().that().body("mother.id", equalTo(new Integer(rachelId)))
 				.and().that().body("mother.name", equalTo("Rachel Margaret Wallace"))
 				.and().that().body("mother.sex", equalTo("FEMALE"))
+				.and().that().body("mother.dob", equalTo("14/02/1928"))
+				.and().that().body("mother.dod", equalTo("08/06/1996"))
+				.and().that().body("mother.placeOfBirth", equalTo("Nelson, New Zealand"))
+				.and().that().body("mother.placeOfDeath", equalTo("Wanganui, New Zealand"))
 				.and().that().body("mother.version", equalTo(1))
 				.and().that().body("father", equalTo("null"))
 				.and().that().body("children.size()", equalTo(0))
