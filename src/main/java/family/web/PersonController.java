@@ -502,7 +502,7 @@ public class PersonController {
         // TODO no need to save these here, just call the new 
         // List<Person> person.getAffectedParties() method mentioned below.
         Set<Person> oldChildren = person.getChildren();
-        Set<Person> nonPersistentChildren = new HashSet();
+        Set<Person> nonPersistentChildren = new HashSet<Person>();
         for (Person child : oldChildren) {
         	nonPersistentChildren.add(child);
 		}
@@ -568,6 +568,11 @@ public class PersonController {
 		return location;
 	}
 	
+	/**
+	 * TODO return Array of name,id,sex,dob,dod,placeOfBirth,placeOfDeath,and URL.
+	 * @param name
+	 * @return
+	 */
     @RequestMapping(params = "find=ByNameLike", headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<java.lang.String> jsonFindPeopleByNameLike(@RequestParam("name") java.lang.String name) {

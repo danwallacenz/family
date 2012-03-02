@@ -334,6 +334,7 @@ public class PersonTestIT extends FuncAbstract{
 							"\"id\":" + rachelId + "," +
 							"\"name\":\"Rachel Margaret Wallace\"," +
 							"\"sex\":\"FEMALE\"," +
+							"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
 							"\"version\":1," +
 							"\"links\":" +
 							"[" +
@@ -417,6 +418,7 @@ public class PersonTestIT extends FuncAbstract{
 					"\"version\":1," +
 					"\"name\":\"Issac Williams\"," +
 					"\"sex\":\"MALE\"," +
+					"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
 					"\"father\":\"null\"," +
 					"\"mother\":" + rachelId + "," +
 					"\"links\":" +

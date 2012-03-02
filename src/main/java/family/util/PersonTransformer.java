@@ -206,7 +206,6 @@ public class PersonTransformer extends AbstractTransformer {
 	    }
 	}
 
-	// TODO add dob, dod placeOfBirth and placeOfDeath
 	private void writeChildren(Person person) {
 	    // Write out the children
 	    getContext().writeName("children");	    
