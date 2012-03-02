@@ -197,8 +197,7 @@ public class PersonTransformer extends AbstractTransformer {
 		    getContext().writeName("placeOfDeath");
 		    getContext().transform(father.getPlaceOfDeath());
 		    getContext().writeComma();
-
-	    	
+    	
 	    	getContext().writeName("version");
 	    	getContext().transform(father.getVersion());
 	    	getContext().writeComma();
@@ -233,6 +232,23 @@ public class PersonTransformer extends AbstractTransformer {
     	    getContext().writeName("sex");
     	    getContext().transform(child.getSex());
     	    getContext().writeComma();
+	    	
+		    getContext().writeName("dob");
+		    getContext().transform(child.getDob() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(child.getDob()));
+		    getContext().writeComma();
+		  
+		    getContext().writeName("dod");
+		    getContext().transform(child.getDod() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(child.getDod()));
+		    getContext().writeComma();
+		    
+		    getContext().writeName("placeOfBirth");
+		    getContext().transform(child.getPlaceOfBirth());
+		    getContext().writeComma();
+		    
+		    getContext().writeName("placeOfDeath");
+		    getContext().transform(child.getPlaceOfDeath());
+		    getContext().writeComma();
+    	    
     	    getContext().writeName("father");
     	    Person father = child.getFather();
     	    if(father == null){

@@ -157,7 +157,10 @@ public class AddingAFatherIT extends FuncAbstract{
     	// Save Brendon
     	String brendonId = idOfPosted(brendonJSON);
     	
-    	String isaacJSON = "{ \"name\": \"Isaac Williams\",\"sex\": \"MALE\"}";
+    	String isaacJSON = "{ \"name\": \"Isaac Williams\",\"sex\": \"MALE\","
+		 + "\"placeOfBirth\" : \"Te Awamutu, New Zealand\","
+		 + "\"placeOfDeath\" : \"Wanganui, New Zealand\","
+		 + "\"dob\":\"02/14/1965\",\"dod\":\"06/08/2006\"}";
     	// Save Isaac
     	String isaacId = idOfPosted(isaacJSON); 
     	
@@ -193,6 +196,10 @@ public class AddingAFatherIT extends FuncAbstract{
 			.and().that().body("children.getAt(0).version", equalTo(1))
 			.and().that().body("children.getAt(0).name", equalTo("Isaac Williams"))
 			.and().that().body("children.getAt(0).sex", equalTo("MALE"))
+			.and().that().body("children.getAt(0).dob", equalTo("14/02/1965"))
+			.and().that().body("children.getAt(0).dod", equalTo("08/06/2006"))
+			.and().that().body("children.getAt(0).placeOfBirth", equalTo("Te Awamutu, New Zealand"))
+			.and().that().body("children.getAt(0).placeOfDeath", equalTo("Wanganui, New Zealand"))
 			.and().that().body("children.getAt(0).father", equalTo(new Integer(brendonId)))
 			//.and().that().body("children.getAt(0).father", equalTo("null")) // TODO bug here
 			
