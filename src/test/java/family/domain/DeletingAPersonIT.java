@@ -319,4 +319,48 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().that().body("version", equalTo(2))
 		.when().get(appUrl() + "/" + daughterId);
 	}
+	
+	@Test
+	public void shouldReturnAffectedParties(){
+
+    	String personJson = "{ \"name\" : \"Roberta Wilks\",\"sex\":\"FEMALE\"}";
+    	// Create a Person
+    	String personId = idOfPosted(personJson);
+
+    	String motherJson = "{ \"name\" : \"Jan Wilks\",\"sex\":\"FEMALE\"}";
+    	// Create a Mother
+    	String motherId = idOfPosted(motherJson);
+
+    	// Establish a person/mother relationship
+		given().header("Accept", "application/json")
+		.then().expect().that().statusCode(200)
+		.when().put(appUrl() + "/"   + personId + "/mother/" + motherId);
+		
+    	String childJson = "{ \"name\" : \"Johnny Wallace-Wilks\",\"sex\":\"MALE\"}";
+    	// Create a Child
+    	String childId = idOfPosted(childJson);
+    	
+    	// Establish a child/person relationship
+		given().header("Accept", "application/json")
+		.then().expect().that().statusCode(200)
+		.when().put(appUrl() + "/"   + childId + "/mother/" + personId);
+    	
+		// Delete the mother
+		given().header("Accept", "application/json").log().all()
+		.then().expect().that()
+			
+			.statusCode(200)
+			
+			.and().body("affectedParties.size()", equalTo(2))
+			.and().body("affectedParties.getAt(0).id", equalTo(new Integer(motherId)))
+			.and().body("affectedParties.getAt(0).name", equalTo("Jan Wilks"))
+			.and().body("affectedParties.getAt(0).href", equalTo(appUrl() + "/" + motherId))
+			.and().body("affectedParties.getAt(1).id", equalTo(new Integer(childId)))
+			.and().body("affectedParties.getAt(1).name", equalTo("Johnny Wallace-Wilks"))
+			.and().body("affectedParties.getAt(1).href", equalTo(appUrl() + "/" + childId))
+			.when().log().all()
+			
+			.delete(appUrl() + "/" + personId );
+		
+	}
 }

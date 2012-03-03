@@ -151,4 +151,17 @@ public class Person {
             this.setMother(null);
         }
     }
+
+	public void removeAsParentFromChildren() {
+        if(this.getChildren() != null){
+        	for (Person child : this.getChildren()) {
+				if(child.getMother() != null && child.getMother().equals(this)){
+					child.removeMother();
+				}
+				if(child.getFather() != null && child.getFather().equals(this)){
+					child.removeFather();
+				}
+			}
+        }
+	}
 }

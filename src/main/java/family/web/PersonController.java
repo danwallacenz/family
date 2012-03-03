@@ -1,6 +1,8 @@
 package family.web;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +31,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriTemplate;
 
 import family.domain.Person;
+import family.util.AffectedPartiesTransformer;
 import family.util.PersonTransformer;
+import family.util.SearchResultsTransformer;
 import flexjson.JSONSerializer;
 
 @RooWebJson(jsonObject = Person.class)
@@ -487,80 +491,78 @@ public class PersonController {
         return new ResponseEntity<String>(updatedPersonToJson, headers, HttpStatus.OK);
     }
 
-    
+    /**
+     * 
+     * @param id
+     * @param httpRequest
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<java.lang.String> deleteFromJson(@PathVariable("id") java.lang.Long id, HttpServletRequest httpRequest) {
-        Person person = Person.findPerson(id);
-        HttpHeaders headers = new HttpHeaders();
+        
+    	Person person = Person.findPerson(id);
+        
+    	HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
+        
         if (person == null) {
-        	//TODO return a json exception object in the body
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
         
-        // save the relations for returning in the response
-        // TODO no need to save these here, just call the new 
-        // List<Person> person.getAffectedParties() method mentioned below.
-        Set<Person> oldChildren = person.getChildren();
-        Set<Person> nonPersistentChildren = new HashSet<Person>();
-        for (Person child : oldChildren) {
-        	nonPersistentChildren.add(child);
-		}
-        Person oldMother = person.getMother();
-        Person oldFather = person.getFather();
+        // Save the affected parties for returning in the response.
+        List<Person> affectedParties = affectedParties("whenDeleting", person);
         
+        // Remove all immediate relationships.
         person.removeMother();
         person.removeFather();
-        // TODO refactor this into a new method on Person
-        // Remove person as mother or father
-        if(person.getChildren() != null){
-        	for (Person child : person.getChildren()) {
-				if(child.getMother() != null && child.getMother().equals(person)){
-					child.removeMother();
-				}
-				if(child.getFather() != null && child.getFather().equals(person)){
-					child.removeFather();
-				}
-			}
-        }
+        person.removeAsParentFromChildren();
         person.remove();
         
-        // TODO Make this a method on person (List<Person> person.getAffectedParties())
-        // and invoke before calling removeMother(), etc.
-		List<Person> affectedParties = new ArrayList<Person>();
-		if(oldMother != null){
-			affectedParties.add(oldMother);
-		}
-		if(oldFather != null){
-			affectedParties.add(oldFather);
-		}
-		for (Person child : nonPersistentChildren) {
-			affectedParties.add(child);
-		}
-		
         // TODO tidy this 
         StringBuffer requestUrl = httpRequest.getRequestURL();       
 		String baseURL = requestUrl.delete(requestUrl.lastIndexOf("/"), requestUrl.length()).toString();
-        log.debug("baseURL=" + baseURL +
-        		" json='" +
-        		 person.toJson(baseURL, affectedParties) + "'");
-        // TODO don't return the deleted person in the response body, just the affected parties.
-        /*
-         * This should be something like:
+
+		// TODO and this...
         JSONSerializer serializer = new JSONSerializer();
-    	serializer.transform(new AffectedPartiesTransformer(appUrl), List<Person>.class);
-		String json =  serializer.serialize( affectedParties );
-         */
-        return new ResponseEntity<String>(person.toJson(baseURL, affectedParties), headers, HttpStatus.OK);        
+        serializer.transform(new AffectedPartiesTransformer(baseURL,affectedParties),List.class);
+        String affectedPartiesJSON =  serializer.serialize( affectedParties );
+        
+        return new ResponseEntity<String>(affectedPartiesJSON, headers, HttpStatus.OK);        
     }
     
     /**
-     * 
+     * TODO write a unit test.
+     * Obtain affected relatives for returning in the response.
+     * @param actionType
+     * @param person
+     * @return
+     */
+	protected List<Person> affectedParties(String actionType, Person person) {
+
+		List<Person> affectedParties = new ArrayList<Person>();
+
+		if (actionType.equals("whenDeleting")) {
+			Set<Person> orphans = new HashSet<Person>();
+			orphans.addAll(person.getChildren());
+
+			if (person.getMother() != null) {
+				affectedParties.add(person.getMother());
+			}
+			if (person.getFather() != null) {
+				affectedParties.add(person.getFather());
+			}
+			affectedParties.addAll(orphans);
+		}
+		return affectedParties;
+	}
+
+	/**
+     * TODO write a unit test.
      * @param httpServletRequest
      * @param childId
      * @return
      */
-	private String getLocationForChildResource(
+	protected String getLocationForChildResource(
 			HttpServletRequest httpServletRequest, Object childId) {
 		StringBuffer url = httpServletRequest.getRequestURL();
 		UriTemplate template = new UriTemplate(url.append("/{childId}").toString());
@@ -575,9 +577,28 @@ public class PersonController {
 	 */
     @RequestMapping(params = "find=ByNameLike", headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<java.lang.String> jsonFindPeopleByNameLike(@RequestParam("name") java.lang.String name) {
+    public ResponseEntity<java.lang.String> jsonFindPeopleByNameLike(
+    		@RequestParam("name") java.lang.String name,
+    		HttpServletRequest httpServletRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByNameLike(name).getResultList()), headers, HttpStatus.OK);
+        List<Person> results = Person.findPeopleByNameLike(name).getResultList();
+        
+        Collections.sort(results, new Comparator<Person>(){
+			public int compare(Person o1, Person o2) {
+				return (o1.getName().compareToIgnoreCase(o2.getName()));
+			}       	
+        });
+        
+        // TODO tidy this 
+        StringBuffer requestUrl = httpServletRequest.getRequestURL();       
+		String baseURL = requestUrl.delete(requestUrl.lastIndexOf("/"), requestUrl.length()).toString();
+        
+        JSONSerializer serializer = new JSONSerializer();
+        serializer.transform(new SearchResultsTransformer(baseURL, results),List.class);
+        String affectedPartiesJSON =  serializer.serialize( results );
+        
+//        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByNameLike(name).getResultList()), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(affectedPartiesJSON, headers, HttpStatus.OK);
     }
 }
