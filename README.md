@@ -245,6 +245,8 @@ Return status: 200 OK.
   			] 
 	}     
   
+### Using cURL
+  
 #### Create a Person
 	
 		->curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d 
@@ -301,7 +303,6 @@ Return status: 200 OK.
 		   ]
 		}
 
-		{"id":3,"name":"Daniel Roy Wallace","version":0,"sex":"MALE","dob":"27/06/1957","dod":"unknown","placeOfBirth":"Te Awamutu, New Zealand","placeOfDeath":null,"father":"null","mother":"null","children":[],"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/3","title":"Daniel Roy Wallace"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/3/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/3/mother","title":"Mother"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/3/children","title":"Children"}]}
 
 #### Read Him Back
 
@@ -314,12 +315,55 @@ Return status: 200 OK.
 		Keep-Alive: timeout=20
 		Content-Length: 630
 
+		{
+		   "id":3,
+		   "name":"Daniel Roy Wallace",
+		   "version":0,
+		   "sex":"MALE",
+		   "dob":"27/06/1957",
+		   "dod":"unknown",
+		   "placeOfBirth":"Te Awamutu, New Zealand",
+		   "placeOfDeath":null,
+		   "father":"null",
+		   "mother":"null",
+		   "children":[
+		
+		   ],
+		   "links":[
+		      {
+		         "rel":"self",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/3",
+		         "title":"Daniel Roy Wallace"
+		      },
+		      {
+		         "rel":"father",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/3/father",
+		         "title":"Father"
+		      },
+		      {
+		         "rel":"mother",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/3/mother",
+		         "title":"Mother"
+		      },
+		      {
+		         "rel":"children",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/3/children",
+		         "title":"Children"
+		      }
+		   ]
+		}
+
 		{"id":3,"name":"Daniel Roy Wallace","version":0,"sex":"MALE","dob":"27/06/1957","dod":"unknown","placeOfBirth":"Te Awamutu, New Zealand","placeOfDeath":null,"father":"null","mother":"null","children":[],"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/3","title":"Daniel Roy Wallace"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/3/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/3/mother","title":"Mother"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/3/children","title":"Children"}]}
 		
 
 #### Create his Mother	
 
-		->curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{"name": "Joan Margaret Carter", "sex" : "FEMALE", "dob": "02/14/1928", "placeOfBirth" : "Nelson, New Zealand"}' http://family.danwallacenz.cloudfoundry.me/people
+		->curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{
+		   "name":"Joan Margaret Carter",
+		   "sex":"FEMALE",
+		   "dob":"02/14/1928",
+		   "placeOfBirth":"Nelson, New Zealand"
+		}' http://family.danwallacenz.cloudfoundry.me/people
 		HTTP/1.1 201 Created
 		Server: nginx
 		Date: Sat, 03 Mar 2012 23:10:38 GMT
@@ -328,6 +372,44 @@ Return status: 200 OK.
 		Keep-Alive: timeout=20
 		Location: http://family.danwallacenz.cloudfoundry.me/people/6
 		Content-Length: 632
+
+		{
+		   "id":6,
+		   "name":"Joan Margaret Carter",
+		   "version":0,
+		   "sex":"FEMALE",
+		   "dob":"14/02/1928",
+		   "dod":"unknown",
+		   "placeOfBirth":"Nelson, New Zealand",
+		   "placeOfDeath":null,
+		   "father":"null",
+		   "mother":"null",
+		   "children":[
+		
+		   ],
+		   "links":[
+		      {
+		         "rel":"self",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/6",
+		         "title":"Joan Margaret Carter"
+		      },
+		      {
+		         "rel":"father",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/6/father",
+		         "title":"Father"
+		      },
+		      {
+		         "rel":"mother",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/6/mother",
+		         "title":"Mother"
+		      },
+		      {
+		         "rel":"children",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/6/children",
+		         "title":"Children"
+		      }
+		   ]
+		}
 
 		{"id":6,"name":"Joan Margaret Carter","version":0,"sex":"FEMALE","dob":"14/02/1928","dod":"unknown","placeOfBirth":"Nelson, New Zealand","placeOfDeath":null,"father":"null","mother":"null","children":[],"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/6","title":"Joan Margaret Carter"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/6/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/6/mother","title":"Mother"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/6/children","title":"Children"}]}
 
@@ -343,6 +425,360 @@ Return status: 200 OK.
 	Location: http://family.danwallacenz.cloudfoundry.me/people/5
 	Content-Length: 1337
 
+		{
+		   "id":6,
+		   "name":"Joan Margaret Carter",
+		   "version":0,
+		   "sex":"FEMALE",
+		   "dob":"14/02/1928",
+		   "dod":"unknown",
+		   "placeOfBirth":"Nelson, New Zealand",
+		   "placeOfDeath":null,
+		   "father":"null",
+		   "mother":"null",
+		   "children":[
+		
+		   ],
+		   "links":[
+		      {
+		         "rel":"self",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/6",
+		         "title":"Joan Margaret Carter"
+		      },
+		      {
+		         "rel":"father",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/6/father",
+		         "title":"Father"
+		      },
+		      {
+		         "rel":"mother",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/6/mother",
+		         "title":"Mother"
+		      },
+		      {
+		         "rel":"children",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/6/children",
+		         "title":"Children"
+		      }
+		   ]
+		}
+
 	{"id":5,"name":"Daniel Roy Wallace","version":1,"sex":"MALE","dob":"27/06/1957","dod":"unknown","placeOfBirth":"Te Awamutu, New Zealand","placeOfDeath":null,"father":"null","mother":{"id":6,"name":"Joan Margaret Carter","sex":"FEMALE","dob":"14/02/1928","dod":"unknown","placeOfBirth":"Nelson, New Zealand","placeOfDeath":null,"version":1,"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/6","title":"Joan Margaret Carter"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/6/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/6/mother","title":"Mother"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/6/children","title":"Children"}]},"children":[],"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/5","title":"Daniel Roy Wallace"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/5/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/6","title":"Joan Margaret Carter"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/5/children","title":"Children"}],"affectedParties":[{"id":6,"name":"Joan Margaret Carter","href":"http://family.danwallacenz.cloudfoundry.me/people/6"}]}
 	
-    
+*** Searching
+
+->curl -i -H "Content-Type: application/json" -H "Accept: application/json" -d '' "http://family.danwallacenz.cloudfoundry.me/people?name=Daniel&find=ByNameLike"
+HTTP/1.1 200 OK
+Server: nginx
+Date: Sat, 03 Mar 2012 22:49:20 GMT
+Content-Type: application/json;charset=utf-8
+Connection: keep-alive
+Keep-Alive: timeout=20
+Content-Length: 5380
+
+		{
+		   "searchResults":[
+		      {
+		         "id":35,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/35"
+		      },
+		      {
+		         "id":36,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/36"
+		      },
+		      {
+		         "id":37,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/37"
+		      },
+		      {
+		         "id":38,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/38"
+		      },
+		      {
+		         "id":39,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"27/06/1957",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/39"
+		      },
+		      {
+		         "id":40,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"27/06/1957",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/40"
+		      },
+		      {
+		         "id":41,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":"Te Awamutu, New Zealand",
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/41"
+		      },
+		      {
+		         "id":42,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":"Unknown",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/42"
+		      },
+		      {
+		         "id":43,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/43"
+		      },
+		      {
+		         "id":44,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/44"
+		      },
+		      {
+		         "id":45,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/45"
+		      },
+		      {
+		         "id":46,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/46"
+		      },
+		      {
+		         "id":47,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/47"
+		      },
+		      {
+		         "id":48,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/48"
+		      },
+		      {
+		         "id":49,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/49"
+		      },
+		      {
+		         "id":50,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/50"
+		      },
+		      {
+		         "id":51,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/51"
+		      },
+		      {
+		         "id":52,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/52"
+		      },
+		      {
+		         "id":53,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/53"
+		      },
+		      {
+		         "id":54,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/54"
+		      },
+		      {
+		         "id":90,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"27/06/1957",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/90"
+		      },
+		      {
+		         "id":116,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"FEMALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/116"
+		      },
+		      {
+		         "id":26,
+		         "name":"Daniel Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/26"
+		      },
+		      {
+		         "id":122,
+		         "name":"Daniel Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/122"
+		      },
+		      {
+		         "id":125,
+		         "name":"Daniel Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/125"
+		      },
+		      {
+		         "id":128,
+		         "name":"Daniel Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/128"
+		      },
+		      {
+		         "id":131,
+		         "name":"Daniel Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/131"
+		      },
+		      {
+		         "id":140,
+		         "name":"Daniel Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/140"
+		      },
+		      {
+		         "id":142,
+		         "name":"Daniel Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/142"
+		      },
+		      {
+		         "id":144,
+		         "name":"Daniel Wallace",
+		         "sex":"MALE",
+		         "dob":"unknown",
+		         "dod":"unknown",
+		         "placeOfBirth":null,
+		         "placeOfDeath":null,
+		         "href":"http://family.danwallacenz.cloudfoundry.me/144"
+		      }
+		   ]
+		}
+
+{"searchResults":[{"id":35,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/35"},{"id":36,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/36"},{"id":37,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/37"},{"id":38,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/38"},{"id":39,"name":"Daniel Roy Wallace","sex":"MALE","dob":"27/06/1957","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/39"},{"id":40,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"27/06/1957","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/40"},{"id":41,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":"Te Awamutu, New Zealand","placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/41"},{"id":42,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":"Unknown","href":"http://family.danwallacenz.cloudfoundry.me/42"},{"id":43,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/43"},{"id":44,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/44"},{"id":45,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/45"},{"id":46,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/46"},{"id":47,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/47"},{"id":48,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/48"},{"id":49,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/49"},{"id":50,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/50"},{"id":51,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/51"},{"id":52,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/52"},{"id":53,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/53"},{"id":54,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/54"},{"id":90,"name":"Daniel Roy Wallace","sex":"MALE","dob":"unknown","dod":"27/06/1957","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/90"},{"id":116,"name":"Daniel Roy Wallace","sex":"FEMALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/116"},{"id":26,"name":"Daniel Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/26"},{"id":122,"name":"Daniel Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/122"},{"id":125,"name":"Daniel Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/125"},{"id":128,"name":"Daniel Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/128"},{"id":131,"name":"Daniel Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/131"},{"id":140,"name":"Daniel Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/140"},{"id":142,"name":"Daniel Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/142"},{"id":144,"name":"Daniel Wallace","sex":"MALE","dob":"unknown","dod":"unknown","placeOfBirth":null,"placeOfDeath":null,"href":"http://family.danwallacenz.cloudfoundry.me/144"}]}
