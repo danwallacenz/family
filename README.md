@@ -247,7 +247,13 @@ Return status: 200 OK.
   
 #### Create a Person
 	
-		->curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{"name": "Daniel Roy Wallace", "sex" : "MALE", "dob": "06/27/1957", "placeOfBirth" : "Te Awamutu, New Zealand"}' http://family.danwallacenz.cloudfoundry.me/people
+		->curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d 
+		'{"name":"Daniel Roy Wallace",
+   		"sex":"MALE",
+   		"dob":"06/27/1957",
+   		"placeOfBirth":"Te Awamutu, New Zealand"
+		}'
+	 	http://family.danwallacenz.cloudfoundry.me/people
 		HTTP/1.1 201 Created
 		Server: nginx
 		Date: Sat, 03 Mar 2012 22:58:43 GMT
@@ -256,6 +262,44 @@ Return status: 200 OK.
 		Keep-Alive: timeout=20
 		Location: http://family.danwallacenz.cloudfoundry.me/people/3
 		Content-Length: 630
+
+		{
+		   "id":3,
+		   "name":"Daniel Roy Wallace",
+		   "version":0,
+		   "sex":"MALE",
+		   "dob":"27/06/1957",
+		   "dod":"unknown",
+		   "placeOfBirth":"Te Awamutu, New Zealand",
+		   "placeOfDeath":null,
+		   "father":"null",
+		   "mother":"null",
+		   "children":[
+		
+		   ],
+		   "links":[
+		      {
+		         "rel":"self",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/3",
+		         "title":"Daniel Roy Wallace"
+		      },
+		      {
+		         "rel":"father",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/3/father",
+		         "title":"Father"
+		      },
+		      {
+		         "rel":"mother",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/3/mother",
+		         "title":"Mother"
+		      },
+		      {
+		         "rel":"children",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/3/children",
+		         "title":"Children"
+		      }
+		   ]
+		}
 
 		{"id":3,"name":"Daniel Roy Wallace","version":0,"sex":"MALE","dob":"27/06/1957","dod":"unknown","placeOfBirth":"Te Awamutu, New Zealand","placeOfDeath":null,"father":"null","mother":"null","children":[],"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/3","title":"Daniel Roy Wallace"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/3/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/3/mother","title":"Mother"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/3/children","title":"Children"}]}
 
