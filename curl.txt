@@ -1,0 +1,58 @@
+
+// Find Person id = 1
+// curl -i -H "Accept: application/json" http://localhost:8080/family/people/5
+
+// Find all people
+// curl -i -H "Accept: application/json" http://localhost:8080/family/people
+
+
+
+curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '[{"name": "Dan Wallace", "sex" : "MALE", "dob"; "06/27/1957"}]' http://localhost:8080/family/people
+curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '[{"name": "Dan Wallace", "sex" : "MALE", "dob"; "06/27/1957"}]' http://api.danwallacenz.cloudfoundry.me/family/people
+
+
+
+// Create new Person doesn't work on Windows. Use RESTClient 2.3.3
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '[{"name": "Jonathan"}]' http://localhost:8080/family/people/jsonArray
+// curl -i -X POST -H Content-Type:application/json -H Accept:application/json -d '[{"name":"dan"}]' http://localhost:8080/family/people/jsonArray
+// curl -i -g -X POST -H Content-Type:application/json -H Accept:application/json -d '{"name":"dan"}' http://localhost:8080/family/people
+// curl -XPOST -H "Content-type: application/json" http://localhost:8080/family/people -d "{\"name\" : \"xxx\" }"
+
+//===================================================================
+// Create a new Person
+curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{"name": "Daniel Roy Wallace", "sex" : "MALE", "dob": "06/27/1957", "placeOfBirth" : "Te Awamutu, New Zealand"}' http://family.danwallacenz.cloudfoundry.me/people
+
+// Create his mother
+curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{"name": "Joan Margaret Carter", "sex" : "FEMALE", "dob": "02/14/1928", "placeOfBirth" : "Nelson, New Zealand"}' http://family.danwallacenz.cloudfoundry.me/people
+
+// Link mother and son (n.b., Ids will vary) 
+curl -i -X PUT -H "Content-Type: application/json" -H "Accept: application/json" -d '' http://family.danwallacenz.cloudfoundry.me/people/5/mother/6
+
+// Get Person (n.b., Ids will vary)
+curl -i -H "Accept: application/json" http://family.danwallacenz.cloudfoundry.me/people/9
+
+// find by name like
+curl -i -H "Accept: application/json"  "http://family.danwallacenz.cloudfoundry.me/people?name=Wallace&find=ByNameLike"
+
+//====================================================================
+
+// Delete Person
+// curl -i -X DELETE -H "Accept: application/json" http://localhost:8080/family/people/1
+
+// find by name like
+// curl -i -H "Accept: application/json" http://localhost:8080/family/people?name=dan&find=ByNameLike
+
+// set mother
+// curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/mother/2
+
+// set father
+// curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/father/3
+
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '[{name: "Cheesy Crust"},{name: "Thick Crust"}]' http://localhost:8080/pizzashop/bases/jsonArray
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '[{name: "Fresh Tomato"},{name: "Prawns"},{name: "Mozarella"},{name: "Bogus"}]' http://localhost:8080/pizzashop/toppings/jsonArray
+// curl -i -X DELETE -H "Accept: application/json" http://localhost:8080/pizzashop/toppings/7
+// curl -i -X PUT -H "Content-Type: application/json" -H "Accept: application/json" -d '{id:6,name:"Mozzarella",version:1}' http://localhost:8080/pizzashop/toppings
+// curl -i -H "Accept: application/json" http://localhost:8080/pizzashop/toppings
+// curl -i -H "Accept: application/json" http://localhost:8080/pizzashop/toppings/6
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{name:"Napolitana",price:7.5,base:{id:1},toppings:[{name: "Anchovy fillets"},{name: "Mozzarella"}]}' http://localhost:8080/pizzashop/pizzas
+// curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '{name:"Stefan",total:7.5,address:"Sydney, AU",deliveryDate:1314595427866,id:{shopCountry:"AU",shopCity:"Sydney",shopName:"Pizza Pan 1"},pizzas:[{id:8,version:1}]}' http://localhost:8080/pizzashop/pizzaorders
