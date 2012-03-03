@@ -444,6 +444,92 @@ Return status: 200 OK.
 		
 		{"id":146,"name":"Daniel Roy Wallace","version":1,"sex":"MALE","dob":"27/06/1957","dod":"unknown","placeOfBirth":"Te Awamutu, New Zealand","placeOfDeath":null,"father":"null","mother":{"id":148,"name":"Joan Margaret Carter","sex":"FEMALE","dob":"14/02/1928","dod":"unknown","placeOfBirth":"Nelson, New Zealand","placeOfDeath":null,"version":1,"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/148","title":"Joan Margaret Carter"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/148/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/148/mother","title":"Mother"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/148/children","title":"Children"}]},"children":[],"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/146","title":"Daniel Roy Wallace"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/146/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/148","title":"Joan Margaret Carter"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/146/children","title":"Children"}],"affectedParties":[{"id":148,"name":"Joan Margaret Carter","href":"http://family.danwallacenz.cloudfoundry.me/people/148"}]}
 
+#### The mother has a child now
+
+		->curl -i -H "Accept: application/json" http://family.danwallacenz.cloudfoundry.me/people/148
+		HTTP/1.1 200 OK
+		Server: nginx
+		Date: Sat, 03 Mar 2012 23:51:01 GMT
+		Content-Type: application/json;charset=utf-8
+		Connection: keep-alive
+		Keep-Alive: timeout=20
+		Content-Length: 1272
+		
+		{
+		   "id":148,
+		   "name":"Joan Margaret Carter",
+		   "version":1,
+		   "sex":"FEMALE",
+		   "dob":"14/02/1928",
+		   "dod":"unknown",
+		   "placeOfBirth":"Nelson, New Zealand",
+		   "placeOfDeath":null,
+		   "father":"null",
+		   "mother":"null",
+		   "children":[
+		      {
+		         "id":146,
+		         "version":1,
+		         "name":"Daniel Roy Wallace",
+		         "sex":"MALE",
+		         "dob":"27/06/1957",
+		         "dod":"unknown",
+		         "placeOfBirth":"Te Awamutu, New Zealand",
+		         "placeOfDeath":null,
+		         "father":"null",
+		         "mother":148,
+		         "links":[
+		            {
+		               "rel":"self",
+		               "href":"http://family.danwallacenz.cloudfoundry.me/people/146",
+		               "title":"Daniel Roy Wallace"
+		            },
+		            {
+		               "rel":"father",
+		               "href":"http://family.danwallacenz.cloudfoundry.me/people/146/father",
+		               "title":"Father"
+		            },
+		            {
+		               "rel":"mother",
+		               "href":"http://family.danwallacenz.cloudfoundry.me/people/148",
+		               "title":"Joan Margaret Carter"
+		            },
+		            {
+		               "rel":"children",
+		               "href":"http://family.danwallacenz.cloudfoundry.me/people/146/children",
+		               "title":"Children"
+		            }
+		         ]
+		      }
+		   ],
+		   "links":[
+		      {
+		         "rel":"self",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/148",
+		         "title":"Joan Margaret Carter"
+		      },
+		      {
+		         "rel":"father",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/148/father",
+		         "title":"Father"
+		      },
+		      {
+		         "rel":"mother",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/148/mother",
+		         "title":"Mother"
+		      },
+		      {
+		         "rel":"children",
+		         "href":"http://family.danwallacenz.cloudfoundry.me/people/148/children",
+		         "title":"Children"
+		      }
+		   ]
+		}
+		
+		{"id":148,"name":"Joan Margaret Carter","version":1,"sex":"FEMALE","dob":"14/02/1928","dod":"unknown","placeOfBirth":"Nelson, New Zealand","placeOfDeath":null,"father":"null","mother":"null","children":[{"id":146,"version":1,"name":"Daniel Roy Wallace","sex":"MALE","dob":"27/06/1957","dod":"unknown","placeOfBirth":"Te Awamutu, New Zealand","placeOfDeath":null,"father":"null","mother":148,"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/146","title":"Daniel Roy Wallace"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/146/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/148","title":"Joan Margaret Carter"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/146/children","title":"Children"}]}],"links":[{"rel":"self","href":"http://family.danwallacenz.cloudfoundry.me/people/148","title":"Joan Margaret Carter"},{"rel":"father","href":"http://family.danwallacenz.cloudfoundry.me/people/148/father","title":"Father"},{"rel":"mother","href":"http://family.danwallacenz.cloudfoundry.me/people/148/mother","title":"Mother"},{"rel":"children","href":"http://family.danwallacenz.cloudfoundry.me/people/148/children","title":"Children"}]}
+
+
+
 #### Searching
 		->curl -i -H "Accept: application/json"  "http://family.danwallacenz.cloudfoundry.me/people?name=an&find=ByNameLike"
 		HTTP/1.1 200 OK
