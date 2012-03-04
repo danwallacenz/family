@@ -23,13 +23,13 @@ It is designed to be used as a service upon which different experimental Javascr
 		Content-Type: application/json;charset=UTF-8
 		Connection: keep-alive
 		Keep-Alive: timeout=20
-		__Location: http://family.danwallacenz.cloudfoundry.me/people/146__
+		Location: http://family.danwallacenz.cloudfoundry.me/people/146
 		Content-Length: 640
 		
 		{
 		   "id":146,
 		   "name":"Daniel Roy Wallace",
-		   __"version":0,__
+		   "version":0,
 		   "sex":"MALE",
 		   "dob":"27/06/1957",
 		   "dod":"unknown",
@@ -41,11 +41,11 @@ It is designed to be used as a service upon which different experimental Javascr
 		
 		   ],
 		   "links":[
-		      __{
+		      {
 		         "rel":"self",
 		         "href":"http://family.danwallacenz.cloudfoundry.me/people/146",
 		         "title":"Daniel Roy Wallace"
-		      }__,
+		      },
 		      {
 		         "rel":"father",
 		         "href":"http://family.danwallacenz.cloudfoundry.me/people/146/father",
@@ -63,7 +63,42 @@ It is designed to be used as a service upon which different experimental Javascr
 		      }
 		   ]
 		}
-		
+
+##### Notes:
+	
+1.__"id":146,__		
+"name":"Daniel Roy Wallace",
+__"version":0,__
+"sex":"MALE",
+
+
+2.Keep-Alive: timeout=20
+__Location: http://family.danwallacenz.cloudfoundry.me/people/146__
+Content-Length: 640
+
+3.__"links"__:[
+  {
+ __"rel":"self",__
+ __"href":"http://family.danwallacenz.cloudfoundry.me/people/146",__
+ __"title":"Daniel Roy Wallace"__
+  },
+  {
+ "rel":__"father"__,
+ "href":"http://family.danwallacenz.cloudfoundry.me/people/146/father",
+ "title":"Father"
+  },
+  {
+ "rel":__"mother"__,
+ "href":"http://family.danwallacenz.cloudfoundry.me/people/146/mother",
+ "title":"Mother"
+  },
+  {
+ "rel":__"children"__,
+ "href":"http://family.danwallacenz.cloudfoundry.me/people/146/children",
+ "title":"Children"
+  }
+]
+
 
 #### Create his mother
 		->curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" 
@@ -133,14 +168,14 @@ It is designed to be used as a service upon which different experimental Javascr
 		{
 		   "id":146,
 		   "name":"Daniel Roy Wallace",
-		   __"version":1,__
+		   "version":1,
 		   "sex":"MALE",
 		   "dob":"27/06/1957",
 		   "dod":"unknown",
 		   "placeOfBirth":"Te Awamutu, New Zealand",
 		   "placeOfDeath":null,
 		   "father":"null",
-		   __"mother":{
+		   "mother":{
 		      "id":148,
 		      "name":"Joan Margaret Carter",
 		      "sex":"FEMALE",
@@ -171,7 +206,7 @@ It is designed to be used as a service upon which different experimental Javascr
 		            "title":"Children"
 		         }
 		      ]
-		   },__
+		   },
 		   "children":[
 		
 		   ],
@@ -186,26 +221,62 @@ It is designed to be used as a service upon which different experimental Javascr
 		         "href":"http://family.danwallacenz.cloudfoundry.me/people/146/father",
 		         "title":"Father"
 		      },
-		      __{
+		      {
 		         "rel":"mother",
 		         "href":"http://family.danwallacenz.cloudfoundry.me/people/148",
 		         "title":"Joan Margaret Carter"
-		      },__
+		      },
 		      {
 		         "rel":"children",
 		         "href":"http://family.danwallacenz.cloudfoundry.me/people/146/children",
 		         "title":"Children"
 		      }
 		   ],
-		   __"affectedParties":[
+		   "affectedParties":[
 		      {
 		         "id":148,
 		         "name":"Joan Margaret Carter",
 		         "href":"http://family.danwallacenz.cloudfoundry.me/people/148"
 		      }
-		   ]__
+		   ]
 		}
 		
+##### Notes:
+
+1."__affectedParties__":[
+  {
+   "id":148,
+   "name":"Joan Margaret Carter",
+   "href":"http://family.danwallacenz.cloudfoundry.me/people/148"
+  }
+]
+
+2."links":[
+      {
+...
+      },
+      {
+         "rel":"mother",
+         __"href":"http://family.danwallacenz.cloudfoundry.me/people/148",
+         "title":"Joan Margaret Carter"__
+      },
+...
+   ],
+
+3.
+...
+ "placeOfDeath":null,
+ "father":"null",
+ __"mother":{
+   "id":148,
+   "name":"Joan Margaret Carter",
+   "sex":"FEMALE",
+   "dob":"14/02/1928",
+   "dod":"unknown",
+   "placeOfBirth":"Nelson, New Zealand",
+   "placeOfDeath":null,
+   "version":1,__
+...
 
 #### The mother has a child now
 
@@ -229,7 +300,7 @@ It is designed to be used as a service upon which different experimental Javascr
 		   "placeOfDeath":null,
 		   "father":"null",
 		   "mother":"null",
-		   __"children":[
+		   "children":[
 		      {
 		         "id":146,
 		         "version":1,
@@ -264,7 +335,7 @@ It is designed to be used as a service upon which different experimental Javascr
 		            }
 		         ]
 		      }
-		   ],__
+		   ],
 		   "links":[
 		      {
 		         "rel":"self",
@@ -289,6 +360,18 @@ It is designed to be used as a service upon which different experimental Javascr
 		   ]
 		}
 		
+##### Notes:
+1.
+..
+ "mother":"null",
+ __"children":[
+ {
+   "id":146,
+   "version":1,
+   "name":"Daniel Roy Wallace",
+   "sex":"MALE",
+   "dob":"27/06/1957",__
+...
 
 #### Searching
 		->curl -i -H "Accept: application/json"  "http://family.danwallacenz.cloudfoundry.me/people?name=__an__&find=ByNameLike"
