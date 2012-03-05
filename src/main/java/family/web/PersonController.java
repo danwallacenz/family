@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -292,8 +293,28 @@ public class PersonController {
     public ResponseEntity<java.lang.String> showJson(@PathVariable("id") java.lang.Long id,
     		HttpServletRequest httpServletRequest) {
         Person person = Person.findPerson(id);
+        
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
+        
+        /* Received stale data without this when deployed to remote host
+         * i.e., at http://familypeople.cloudfoundry.com.  */
+        
+        headers.add("Cache-Control", "no-cache");
+        
+        /* TODO 
+         * 1. 	Replace the no-cache header here with:
+         * 
+         * 		String eTag = new StringBuffer("\"")
+         * 			.append(person.getId()).append("v").append(person.getVersion())
+         * 			.append("\"").toString();
+         * 
+         *		headers.add("ETag", eTag);
+         * 
+         * 2. 	Requests should include header 'If-None-Match: "<id>v<version>"' 
+         * 	  	if available.
+         */        
+        
         if (person == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
@@ -521,7 +542,7 @@ public class PersonController {
         // TODO tidy this 
         StringBuffer requestUrl = httpRequest.getRequestURL();       
 		String baseURL = requestUrl.delete(requestUrl.lastIndexOf("/"), requestUrl.length()).toString();
-
+		
 		// TODO and this...
         JSONSerializer serializer = new JSONSerializer();
         serializer.transform(new AffectedPartiesTransformer(baseURL,affectedParties),List.class);

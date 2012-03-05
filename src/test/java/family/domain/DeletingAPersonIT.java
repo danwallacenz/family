@@ -68,7 +68,7 @@ public class DeletingAPersonIT extends FuncAbstract{
     	// Create a Person
     	String daughterId = idOfPosted(personJson);
 
-    	String fatherJson = "{ \"name\" : \"Clyde Wilks\",\"sex\":\"FEMALE\"}";
+    	String fatherJson = "{ \"name\" : \"Clyde Wilks\",\"sex\":\"MALE\"}";
     	// Create a father
     	String fatherId = idOfPosted(fatherJson);
 
@@ -110,30 +110,31 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.and().that().body(	"children.getAt(0).id", equalTo(new Integer(daughterId)))
 		.and().that().body("children.getAt(0).name", equalTo("Roberta Wilks"))
 //		.given().header("Accept", "application/json").when().get(appUrl() + "/" + fatherId);
-		.given().header("Accept", "application/json").when().get(fathersHref);
+		.given().log().all().header("Accept", "application/json").when().get(fathersHref);
 		
 		// Delete the daughter
-		Response deletionReponse = given().header("Accept", "application/json")
+		Response deletionReponse = given().log().all()
+		.header("Accept", "application/json")
 		.then().expect().that().statusCode(200)
 		.and().that().body("affectedParties.getAt(0).href", equalTo(fathersHref))
-		.when().delete(appUrl() + "/" + daughterId);
+		.when().log().all().delete(appUrl() + "/" + daughterId);
 			
 		String deletionBody = deletionReponse.body().asString();
 		System.out.println("***deletionBody=\n" + deletionBody);
 		
     	//fail("TODO check exception json in the body");
 		// Confirm she's deleted
-		given().header("Accept", "application/json").and().contentType(JSON)
+		given().log().all().header("Accept", "application/json").and().contentType(JSON)
 		.then().expect().statusCode(HttpStatus.NOT_FOUND.value())
-		.when().get(appUrl() + "/" + daughterId);
+		.when().log().all().get(appUrl() + "/" + daughterId);
 		
 		// Confirm she's gone from the father's children
-		given().header("Accept", "application/json")
+		given().log().all().header("Accept", "application/json")
 		.then().expect()
 		.statusCode(HttpStatus.OK.value())
 		.and().body("children.size()", equalTo(0))
 		.and().body("version", equalTo(2))
-		.when().get(appUrl() + "/" + fatherId);
+		.when().log().all().get(appUrl() + "/" + fatherId);
 	}
 	
 	@Test
@@ -247,18 +248,22 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.when().delete(appUrl() + "/" + fatherId );
 			
 		// Confirm he's deleted
-		given().header("Accept", "application/json").and().contentType(JSON)
+		given().log().all().header("Accept", "application/json")
+		.and().header("Cache-Control", "no-cache")
+		.and().contentType(JSON)
 		.then().expect().statusCode(HttpStatus.NOT_FOUND.value())
-		.when().get(appUrl() + "/" + fatherId);
+		.when().log().all().get(appUrl() + "/" + fatherId);
 		
-		// Confirm he's not the daughter's father any more
-		given().header("Accept", "application/json").and().contentType(JSON)
+		// Confirm she's not the daughter's father any more
+		given().log().all().header("Accept", "application/json")
+		.and().header("Cache-Control", "no-cache")
+		.and().contentType(JSON)
 		.then().log().all()
 		.expect().that()
 			.statusCode(HttpStatus.OK.value())
 			.and().that().body("version", equalTo(2))
 			.and().expect().that().body("father", equalTo("null"))
-		.when().get(appUrl() + "/" + daughterId);
+		.when().log().all().get(appUrl() + "/" + daughterId);
 	}
 	
 	@Test
