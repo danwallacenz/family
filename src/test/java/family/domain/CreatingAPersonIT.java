@@ -17,7 +17,8 @@ import java.io.PrintStream;
 import java.io.StringWriter;
 
 import org.apache.commons.io.output.WriterOutputStream;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
+//import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNot;
 import org.junit.After;

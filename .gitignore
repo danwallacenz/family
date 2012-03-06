@@ -1,8 +1,8 @@
 target/
 .settings/
 log.roo
-.classpath
-.project
+#.classpath
+#.project
 ajcore
 *.tmproj
 ajcore.*
