@@ -4,9 +4,9 @@ It is designed to be used as a service upon which different experimental Javascr
 # Family API
 
 --------------------------------------------------------------------------------------------------------------------
-     
-Code samples [here](http://familypeople.cloudfoundry.com/home.html/ "Samples") .
- 
+Code samples <a href="http://familypeople.cloudfoundry.com/home.html">here</a>
+Code samples [here](http://familypeople.cloudfoundry.com/home.html/ "Samples").
+
  --------------------------------------------------------------------------------------------------------------------
      
   
