@@ -23,6 +23,7 @@ import org.springframework.roo.addon.web.mvc.controller.finder.RooWebFinder;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.roo.addon.web.mvc.controller.scaffold.RooWebScaffold;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -622,4 +623,22 @@ public class PersonController {
 //        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByNameLike(name).getResultList()), headers, HttpStatus.OK);
         return new ResponseEntity<String>(affectedPartiesJSON, headers, HttpStatus.OK);
     }
+    
+//    @RequestMapping(params = "find=ByNameLike", method = RequestMethod.GET)
+//    public java.lang.String findPeopleByNameLike(@RequestParam("name") java.lang.String name, Model uiModel) {
+//        uiModel.addAttribute("people", Person.findPeopleByNameLike(name).getResultList());
+//        return "people/list";
+//    }
+    
+//    @RequestMapping(params = {"find=ByNameLike","name=Brendon"},  method = RequestMethod.GET, headers = "Accept=application/json")
+//    @ResponseBody
+//    public ResponseEntity<java.lang.String> jsonFindPeopleByNameLike2(
+//    		@RequestParam("find") java.lang.String find,
+//    		@RequestParam("name") java.lang.String name,
+//    		HttpServletRequest httpServletRequest) {
+//    	
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Content-Type", "application/json; charset=utf-8");
+//    	return new ResponseEntity<String>("{\"Hello\":\"world\"}", headers, HttpStatus.OK);
+//    }
 }

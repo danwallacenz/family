@@ -99,7 +99,7 @@ public class SearchingForPeopleByNameIT extends FuncAbstract {
     	
 		Response searchResponse = 
 				given()
-				.log().everything()
+				.log().everything()	
 				.param("find", "ByNameLike")
 				.param("name", familyName)
 				.header("Accept", "application/json")
