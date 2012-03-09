@@ -22,7 +22,7 @@ public class ReplacingAFatherIT extends FuncAbstract{
     
     @Test
     public void shouldRepresentCorrectlyTheChildOfTheReplacementFatherCorrectlyInTheResponseBody(){
-    	String originalFatherJson = "{ \"name\" : \"Daniel Wallace\",\"sex\":\"MALE\"}";
+    	String originalFatherJson = "{ \"name\" : \"Daniel Wallace\",\"sex\":\"MALE\",\"dod\":\"02/11/1990\"}";
     	// Save originalFather
     	String originalFatherId = idOfPosted(originalFatherJson);
     	
