@@ -4,6 +4,7 @@
 (function($) {
 
 	$.subscribe('/search/term', function(term) {
+
 //		$.getJSON(
 //			'http://localhost:8080/family/people/?find=ByNameLike&name=Brendon',
 //			function(resp) {
@@ -12,31 +13,18 @@
 //	    		$.publish('/search/results', [ resp ]);
 //	    	}
 //		);
-		//				//dataType: self.options.remoteDataType || 'text',
-		
-		// Initialize ajax.
-		$(document).ready(function() {
-			$.ajaxSetup({
-				//cache: false,
-				dataType: "json",
-				type: "GET",
-//				  accepts: {
-//					    script: "text/javascript, application/javascript"
-//					  },
-			});
-		});
+
 		
 		
 
 		var jqxhr = $.ajax({
 			  url: 'http://localhost:8080/family/people',
 			  data: "find=ByNameLike&name=" + term,
+			  //dataType: "json",
 
 			  success:
 				  function(resp, textStatus, jqXHR) {//data, textStatus, jqXHR	
-				  
 		    		console.log("resp"+resp);
-
 		    		if (!jqXHR.responseText){
 		    			return; 
 		    		}
@@ -44,7 +32,6 @@
 		    		
 		    	},
 		    	error:
-		    		
 		    		function(resp, textStatus, errorThrown){
 		    			console.log(resp.responseText);
 		    			console.log(textStatus);
@@ -90,7 +77,14 @@
 			$.publish('/search/term', [ term ]);
 		});
 	});
-
-
+	
+	// Initialize ajax.
+	$(document).ready(function() {
+		$.ajaxSetup({
+			//cache: false,
+			dataType: "json",
+			//type: "GET",
+		});
+	});
 	
 })(jQuery);
