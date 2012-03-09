@@ -2,6 +2,16 @@
 (function($) {
 
 	/*
+	 * Returns the correct url for ajax calls whether this is hosted on:
+	 * 1. My local TC Server.
+	 * 2. My local CloudFoundry instance.
+	 * 3. My CloudFoundry.com instance.
+	 */
+	var url = function url(){
+		return location.href.slice(0, location.href.indexOf("js")) + "people";
+	}
+	
+	/*
 	 * When notified that the input form has been submitted by clicking the 
 	 * search button, an ajax call is made which searches for people with names
 	 * like the search term.
@@ -10,7 +20,9 @@
 	 */
 	$.subscribe('/search/term', function(term) {
 		$.getJSON(
-			'http://localhost:8080/family/people',
+			url(),
+			//'http://localhost:8080/family/people',
+			//$("#host").val(),
 			{find: "ByNameLike", name: term},
 			function(resp, textStatus, jqXHR) {
 				console.log(jqXHR.responseText);
@@ -60,7 +72,6 @@
 		var searchResults = $.parseJSON(results).searchResults;
 		console.log(searchResults);
 		
-//		var tmpl = '<li><p><a href="{{url}}">{{title}}</a></p></li>',
 		var tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>',
 		
 		html = $.map(searchResults, function(searchResults) {
@@ -75,10 +86,6 @@
 	      }).join('');
 	  $('#results').html(html);
 	});
-
-	//	function getQuery(term) {
-	//	  return 'select title,url from search.news where query="' + term + '"';
-	//	}
 
 	/* 
 	 * When the input form is submitted by clicking the search button, this 

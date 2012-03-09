@@ -25,7 +25,7 @@ public abstract class FuncAbstract {
      */
 	protected boolean useMicroCloudFoundry = false;
 	
-	protected boolean useCloudFoundryDotCom = false;
+	protected boolean useCloudFoundryDotCom = true;
 	
 	protected String MICRO_CLOUD_FOUNDRY_URL = "http://family.danwallacenz.cloudfoundry.me";
 	protected String CLOUD_FOUNDRY_DOT_COM_URL = "http://familypeople.cloudfoundry.com";
