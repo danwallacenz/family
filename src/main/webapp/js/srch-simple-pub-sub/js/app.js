@@ -1,35 +1,32 @@
 
-
-
 (function($) {
 
 	$.subscribe('/search/term', function(term) {
-
-//		$.getJSON(
-//			'http://localhost:8080/family/people/?find=ByNameLike&name=Brendon',
-//			function(resp) {
-//	    		console.log(resp);
-//	    		if (!resp.length) { return; }
-//	    		$.publish('/search/results', [ resp ]);
-//	    	}
-//		);
-
+		$.getJSON(
+			'http://localhost:8080/family/people',
+			{find: "ByNameLike", name: term},
+			function(resp, textStatus, jqXHR) {
+				console.log(jqXHR.responseText);
+				if (!jqXHR.responseText) {
+					return; 
+				}
+				$.publish('/search/results', [ jqXHR.responseText ]);
+			}
+		);
 		
-		
-
+		// $.ajax version
+		/*
 		var jqxhr = $.ajax({
 			  url: 'http://localhost:8080/family/people',
 			  data: "find=ByNameLike&name=" + term,
 			  //dataType: "json",
-
 			  success:
 				  function(resp, textStatus, jqXHR) {//data, textStatus, jqXHR	
 		    		console.log("resp"+resp);
 		    		if (!jqXHR.responseText){
 		    			return; 
 		    		}
-		    		$.publish('/search/results', [ jqXHR.responseText ]);
-		    		
+		    		$.publish('/search/results', [ jqXHR.responseText ]);	
 		    	},
 		    	error:
 		    		function(resp, textStatus, errorThrown){
@@ -42,11 +39,10 @@
 		    		function(){
 		    			console.log("finished searching for '" + term + "'");
 		    	}
-			});
-		
-	});
+			});*/
+		});
+		 
 
-	// look ma, a new feature!
 	$.subscribe('/search/term', function(term) {
 	  $('#searches').append('<li>' + term + '</li>');
 	});

@@ -593,7 +593,7 @@ public class PersonController {
 	}
 	
 	/**
-	 * TODO return Array of name,id,sex,dob,dod,placeOfBirth,placeOfDeath,and URL.
+	 * Return a JSON object with 'searchResults' an array of name,id,sex,dob,dod,placeOfBirth,placeOfDeath,and URL.
 	 * @param name
 	 * @return
 	 */
@@ -602,43 +602,26 @@ public class PersonController {
     public ResponseEntity<java.lang.String> jsonFindPeopleByNameLike(
     		@RequestParam("name") java.lang.String name,
     		HttpServletRequest httpServletRequest) {
-        HttpHeaders headers = new HttpHeaders();
+        
+    	HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
+        
         List<Person> results = Person.findPeopleByNameLike(name).getResultList();
         
+        // Sort by name.
         Collections.sort(results, new Comparator<Person>(){
 			public int compare(Person o1, Person o2) {
 				return (o1.getName().compareToIgnoreCase(o2.getName()));
 			}       	
         });
         
-        // TODO tidy this 
+        // Convert results into JSON.
         StringBuffer requestUrl = httpServletRequest.getRequestURL();       
-		String baseURL = requestUrl.delete(requestUrl.lastIndexOf("/"), requestUrl.length()).toString();
-        
         JSONSerializer serializer = new JSONSerializer();
-        serializer.transform(new SearchResultsTransformer(baseURL, results),List.class);
+        serializer.transform(new SearchResultsTransformer(requestUrl.toString(), results),List.class);
         String affectedPartiesJSON =  serializer.serialize( results );
         
-//        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByNameLike(name).getResultList()), headers, HttpStatus.OK);
         return new ResponseEntity<String>(affectedPartiesJSON, headers, HttpStatus.OK);
     }
     
-//    @RequestMapping(params = "find=ByNameLike", method = RequestMethod.GET)
-//    public java.lang.String findPeopleByNameLike(@RequestParam("name") java.lang.String name, Model uiModel) {
-//        uiModel.addAttribute("people", Person.findPeopleByNameLike(name).getResultList());
-//        return "people/list";
-//    }
-    
-//    @RequestMapping(params = {"find=ByNameLike","name=Brendon"},  method = RequestMethod.GET, headers = "Accept=application/json")
-//    @ResponseBody
-//    public ResponseEntity<java.lang.String> jsonFindPeopleByNameLike2(
-//    		@RequestParam("find") java.lang.String find,
-//    		@RequestParam("name") java.lang.String name,
-//    		HttpServletRequest httpServletRequest) {
-//    	
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Content-Type", "application/json; charset=utf-8");
-//    	return new ResponseEntity<String>("{\"Hello\":\"world\"}", headers, HttpStatus.OK);
-//    }
 }
