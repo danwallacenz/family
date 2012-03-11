@@ -33,6 +33,7 @@
 				$.publish('/search/results', [ jqXHR.responseText ]);
 			}
 		);
+	});
 		
 	/*
 	 * Subscribe to the ajax call returning event (Topic:'/search/results') 
