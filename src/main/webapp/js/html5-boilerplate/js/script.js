@@ -24,8 +24,6 @@
 	$.subscribe('/search/term', function(term) {
 		$.getJSON(
 			url(),
-			//'http://localhost:8080/family/people',
-			//$("#host").val(),
 			{find: "ByNameLike", name: term},
 			function(resp, textStatus, jqXHR) {
 				console.log(jqXHR.responseText);
@@ -35,36 +33,6 @@
 				$.publish('/search/results', [ jqXHR.responseText ]);
 			}
 		);
-		
-		/*
-		 * $.ajax version
-		 */
-		/*
-		var jqxhr = $.ajax({
-			  url: 'http://localhost:8080/family/people',
-			  data: "find=ByNameLike&name=" + term,
-			  //dataType: "json",
-			  success:
-				  function(resp, textStatus, jqXHR) {//data, textStatus, jqXHR	
-		    		console.log("resp"+resp);
-		    		if (!jqXHR.responseText){
-		    			return; 
-		    		}
-		    		$.publish('/search/results', [ jqXHR.responseText ]);	
-		    	},
-		    	error:
-		    		function(resp, textStatus, errorThrown){
-		    			console.log(resp.responseText);
-		    			console.log(textStatus);
-		    			console.log(errorThrown);
-		    			alert("error:"+textStatus);
-		    	},
-		    	complete: 
-		    		function(){
-		    			console.log("finished searching for '" + term + "'");
-		    	}
-			});*/
-		});
 		
 	/*
 	 * Subscribe to the ajax call returning event (Topic:'/search/results') 
@@ -87,7 +55,17 @@
 	          .replace('{{placeOfDeath}}', searchResults.placeOfDeath)
 	          
 	      }).join('');
-	  $('#results').html(html);
+		$('#results').html(html);
+	  
+		// Publish '/results/select' when a link is clicked.
+		$('#results a').click(function(e) {
+			e.preventDefault();
+			log(e);
+			log(e.target);
+			// Publish
+			$.publish('/results/select', [ e.target ]);
+		});
+	  
 	});
 
 	/* 
@@ -106,6 +84,32 @@
 			$.publish('/search/term', [ term ]);
 		});
 	});
+	
+	/*------------------------------------------------------------------*/
+
+	/* Get person data from host when selected in the results list */
+	$.subscribe('/results/select', function(selected) {
+		log(selected);
+		
+		$.getJSON(
+				selected.href,
+				function(resp, textStatus, jqXHR) {
+					console.log(jqXHR.responseText);
+					if (!jqXHR.responseText) {
+						return; 
+					}
+					// Publish
+					$.publish('/person/loaded', [ jqXHR.responseText ]);
+				}
+			);
+	});
+	
+	// Display a person when JSON returned from server.
+	$.subscribe('/person/loaded', function(personJSON) {
+			$('#person').empty().append('<p><strong>' + personJSON + '</strong></p>');
+		});
+	
+	/*------------------------------------------------------------------*/
 	
 	/*
 	 * Display the search term in the previous search list when notified by the 
