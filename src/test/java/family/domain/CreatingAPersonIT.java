@@ -16,6 +16,8 @@ import static org.hamcrest.Matchers.*;
 import java.io.PrintStream;
 import java.io.StringWriter;
 
+import net.sf.json.JSONNull;
+
 import org.apache.commons.io.output.WriterOutputStream;
 import org.apache.commons.lang.StringUtils;
 //import org.apache.commons.lang3.StringUtils;
@@ -209,8 +211,8 @@ public class CreatingAPersonIT extends FuncAbstract {
 			.and().that().body("sex", equalTo("MALE"))
 			.and().that().body("id", greaterThan(0))
 			.and().that().body("version", equalTo(0))
-			.and().that().body("father", equalTo("null"))
-			.and().that().body("mother", equalTo("null"))
+			.and().that().body("father", is(JSONNull.class))
+			.and().that().body("mother", is(JSONNull.class))
 			.and().that().body("children.size()", equalTo(0))
 			.and().that().body("links.size()", equalTo(4))
 			.and().that().body("links.getAt(0).rel", equalTo("self"))
@@ -298,7 +300,7 @@ public class CreatingAPersonIT extends FuncAbstract {
 			.with().contentType(ContentType.JSON)
 			.log().all()
 		.then()
-		.expect().that().body("father", equalTo("null"))
+		.expect().that().body("father", is(JSONNull.class))
 	
 			.log().all()
 		.when().post(APP_URL);

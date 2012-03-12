@@ -43,16 +43,6 @@ privileged aspect PersonIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void PersonIntegrationTest.testFindAllPeople() {
-        Assert.assertNotNull("Data on demand for 'Person' failed to initialize correctly", dod.getRandomPerson());
-        long count = Person.countPeople();
-        Assert.assertTrue("Too expensive to perform a find all test for 'Person', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Person> result = Person.findAllPeople();
-        Assert.assertNotNull("Find all method for 'Person' illegally returned null", result);
-        Assert.assertTrue("Find all method for 'Person' failed to return any data", result.size() > 0);
-    }
-    
-    @Test
     public void PersonIntegrationTest.testFindPersonEntries() {
         Assert.assertNotNull("Data on demand for 'Person' failed to initialize correctly", dod.getRandomPerson());
         long count = Person.countPeople();

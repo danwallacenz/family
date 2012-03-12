@@ -7,8 +7,11 @@ import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import groovyx.net.http.ContentType;
+
+import net.sf.json.JSONNull;
 
 import org.hamcrest.core.IsNull;
 import org.junit.After;
@@ -468,7 +471,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 						.body(updatedPersonAsJson)
 						.with().contentType(JSON)
 			.then().expect()
-				.body("father", equalTo("null"))
+				.body("father", is(JSONNull.class))
 				.log().all()
 			.when().put(appUrl() + "/"  + newId);
 	}
@@ -488,7 +491,7 @@ public class UpdatingAPersonIT extends FuncAbstract{
 					.body(updatedPersonAsJson)
 					.with().contentType(JSON)
 		.then().expect()
-			.body("mother", equalTo("null"))
+			.body("mother", is(JSONNull.class))
 			.log().all()
 		.when().put(appUrl() + "/"  + newId);	
 		}

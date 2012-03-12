@@ -9,6 +9,8 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import net.sf.json.JSONNull;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -226,7 +228,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 					.and().that().body("mother.name", equalTo("Helen Baxter"))
 					.and().that().body("mother.sex", equalTo("FEMALE"))
 					.and().that().body("mother.version", equalTo(1))
-					.and().that().body("father", equalTo("null"))
+					.and().that().body("father", is(JSONNull.class))
 					.and().that().body("children.size()", equalTo(0))
 					.and().that().body("links.size()", equalTo(4))
 					.and().that().body("links.getAt(0).rel", equalTo("self"))
@@ -326,8 +328,8 @@ public class ReplacingAMotherIT extends FuncAbstract{
 				.and().that().body("sex", equalTo("FEMALE"))
 				.and().that().body("version", equalTo(1)) // 0 on creation, 1 on addition of child.
 				
-				.and().that().body("mother", equalTo("null"))
-				.and().that().body("father", equalTo("null"))
+				.and().that().body("mother", is(JSONNull.class))
+				.and().that().body("father", is(JSONNull.class))
 				 
 				.and().that().body("children.size()", equalTo(1))
 				.and().that().body("children.getAt(0).id", equalTo(new Integer(sonId)))
@@ -417,8 +419,8 @@ public class ReplacingAMotherIT extends FuncAbstract{
 				.and().that().body("name", equalTo("Roberta Wilks"))
 				.and().that().body("sex", equalTo("FEMALE"))
 				.and().that().body("version", equalTo(2)) // 0 on creation, 1 on addition of child, 2 on removal of child
-				.and().that().body("mother", equalTo("null"))
-				.and().that().body("father", equalTo("null"))
+				.and().that().body("mother", is(JSONNull.class))
+				.and().that().body("father", is(JSONNull.class))
 				.and().that().body("children.size()", equalTo(0))
 
 				.and().that().body("links.size()", equalTo(4))
@@ -557,7 +559,7 @@ public class ReplacingAMotherIT extends FuncAbstract{
 				.and().that().body("mother.links.getAt(3).title", equalTo("Children"))
 				
 				
-				.and().that().body("father", equalTo("null"))
+				.and().that().body("father", is(JSONNull.class))
 				 
 				.and().that().body("children.size()", equalTo(0))
 

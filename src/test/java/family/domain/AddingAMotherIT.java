@@ -107,7 +107,7 @@ public class AddingAMotherIT extends FuncAbstract{
 				.and().that().body("mother.placeOfBirth", equalTo("Nelson, New Zealand"))
 				.and().that().body("mother.placeOfDeath", equalTo("Wanganui, New Zealand"))
 				.and().that().body("mother.version", equalTo(1))
-				.and().that().body("father", equalTo("null"))
+				.and().that().body("father", is(JSONNull.class))
 				.and().that().body("children.size()", equalTo(0))
 				.and().that().body("links.size()", equalTo(4))
 				.and().that().body("links.getAt(0).rel", equalTo("self"))
@@ -266,8 +266,8 @@ public class AddingAMotherIT extends FuncAbstract{
 			.and().that().body("name", equalTo("Rachel Margaret Wallace"))
 			.and().that().body("version", equalTo(1))
 			.and().that().body("sex", equalTo("FEMALE"))
-			.and().that().body("father", equalTo("null"))
-			.and().that().body("mother", equalTo("null"))
+			.and().that().body("father", is(JSONNull.class))
+			.and().that().body("mother", is(JSONNull.class))
 			
 			.and().that().body("children.size()", equalTo(1))
 			.and().that().body("children.getAt(0).id", equalTo(new Integer(isaacId)))
@@ -275,7 +275,7 @@ public class AddingAMotherIT extends FuncAbstract{
 			.and().that().body("children.getAt(0).name", equalTo("Isaac Williams"))
 			.and().that().body("children.getAt(0).sex", equalTo("MALE"))
 			.and().that().body("children.getAt(0).mother", equalTo(new Integer(rachelId)))
-			//.and().that().body("children.getAt(0).father", equalTo("null")) // TODO bug here
+			.and().that().body("children.getAt(0).father", is(JSONNull.class)) // TODO bug here
 			
 			.and().that().body("children.getAt(0).links.size()", equalTo(4))
 			.and().that().body("children.getAt(0).links.getAt(0).rel", equalTo("self"))
@@ -343,7 +343,7 @@ public class AddingAMotherIT extends FuncAbstract{
 			.and().that().body("name", equalTo("Isaac Williams"))
 			.and().that().body("version", equalTo(1))
 			.and().that().body("sex", equalTo("MALE"))
-			.and().that().body("father", equalTo("null"))
+			.and().that().body("father", is(JSONNull.class))
 			.and().that().body("mother.id", equalTo(new Integer(rachelId)))
 			.and().that().body("mother.name", equalTo("Rachel Margaret Wallace")) 
 			.and().that().body("mother.sex", equalTo("FEMALE"))

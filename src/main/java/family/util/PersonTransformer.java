@@ -128,7 +128,7 @@ public class PersonTransformer extends AbstractTransformer {
 	    getContext().writeName("mother");
 	    Person mother = person.getMother();
 	    if(mother == null){
-	    	getContext().transform("null");
+	    	getContext().transform(null);
 	    }else{
 	    	getContext().writeOpenObject();
 	    	getContext().writeName("id");
@@ -169,7 +169,7 @@ public class PersonTransformer extends AbstractTransformer {
 	    getContext().writeName("father");
 	    Person father = person.getFather();
 	    if(father == null){
-	    	getContext().transform("null");
+	    	getContext().transform(null);
 	    }else{
 	    	getContext().writeOpenObject();
 	    	getContext().writeName("id");
@@ -250,15 +250,15 @@ public class PersonTransformer extends AbstractTransformer {
     	    
     	    getContext().writeName("father");
     	    Person father = child.getFather();
-    	    if(father == null){
-    	    	getContext().transform((String)"null");// BUG here
-    	    }else{
-    	    	getContext().transform(child.getFather().getId());	
-    	    }
-//    	    getContext().transform(child.getFather()==null?"null":child.getFather().getId());
+//    	    if(father == null){
+//    	    	getContext().transform(null);// BUG here
+//    	    }else{
+//    	    	getContext().transform(child.getFather().getId());	
+//    	    }
+    	    getContext().transform(child.getFather()==null?null:child.getFather().getId());
     	    getContext().writeComma();
     	    getContext().writeName("mother");
-    	    getContext().transform(child.getMother()==null?"null":child.getMother().getId());
+    	    getContext().transform(child.getMother()==null?null:child.getMother().getId());
     	    
     	    getContext().writeComma();
     	    writeLinks(child);

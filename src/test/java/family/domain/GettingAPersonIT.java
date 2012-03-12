@@ -9,6 +9,9 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
+
+import net.sf.json.JSONNull;
+
 import org.junit.Test;
 
 import com.jayway.restassured.RestAssured;
@@ -46,8 +49,8 @@ public class GettingAPersonIT extends FuncAbstract{
 					.and().that().body("sex", equalTo("FEMALE"))
 					.and().that().body("version", equalTo(1)) // 0 on creation, 1 on addition of child.
 					
-					.and().that().body("mother", equalTo("null"))
-					.and().that().body("father", equalTo("null"))
+					.and().that().body("mother", is(JSONNull.class))
+					.and().that().body("father", is(JSONNull.class))
 					 
 					.and().that().body("children.size()", equalTo(1)) // this is what we are testing
 
@@ -102,8 +105,8 @@ public class GettingAPersonIT extends FuncAbstract{
 					.and().that().body("sex", equalTo("FEMALE"))
 					.and().that().body("version", equalTo(1)) // 0 on creation, 1 on addition of child.
 					
-					.and().that().body("mother", equalTo("null"))
-					.and().that().body("father", equalTo("null"))
+					.and().that().body("mother", is(JSONNull.class))
+					.and().that().body("father", is(JSONNull.class))
 					 
 					.and().that().body("children.size()", equalTo(1)) // this is what we are testing
 

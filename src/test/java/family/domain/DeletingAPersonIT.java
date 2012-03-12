@@ -14,6 +14,8 @@ import java.util.List;
 
 import groovyx.net.http.ContentType;
 
+import net.sf.json.JSONNull;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -262,7 +264,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		.expect().that()
 			.statusCode(HttpStatus.OK.value())
 			.and().that().body("version", equalTo(2))
-			.and().expect().that().body("father", equalTo("null"))
+			.and().expect().that().body("father", is(JSONNull.class))
 		.when().log().all().get(appUrl() + "/" + daughterId);
 	}
 	
@@ -320,7 +322,7 @@ public class DeletingAPersonIT extends FuncAbstract{
 		given().header("Accept", "application/json").and().contentType(JSON)
 		.then().log().all()
 		.expect().that().statusCode(HttpStatus.OK.value())
-		.and().expect().that().body("mother", equalTo("null"))
+		.and().expect().that().body("mother", is(JSONNull.class))
 		.and().that().body("version", equalTo(2))
 		.when().get(appUrl() + "/" + daughterId);
 	}

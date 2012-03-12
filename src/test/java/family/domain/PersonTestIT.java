@@ -63,8 +63,8 @@ public class PersonTestIT extends FuncAbstract{
           		"\"version\":0," +
           		"\"sex\":\"MALE\"," +
           		"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
-          		"\"father\":\"null\"," +
-          		"\"mother\":\"null\"," +
+          		"\"father\":null," +
+          		"\"mother\":null," +
           		"\"children\":[]," +
           		"\"links\":" +
           			"[" +
@@ -328,7 +328,7 @@ public class PersonTestIT extends FuncAbstract{
 					",\"version\":1," +
 					"\"sex\":\"MALE\"," +
 					"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
-					"\"father\":\"null\"," +
+					"\"father\":null," +
 					"\"mother\":" +
 						"{" +
 							"\"id\":" + rachelId + "," +
@@ -409,8 +409,8 @@ public class PersonTestIT extends FuncAbstract{
 			"\"version\":1," +
 			"\"sex\":\"FEMALE\"," +
 			"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
-			"\"father\":\"null\"," +
-			"\"mother\":\"null\"," +
+			"\"father\":null," +
+			"\"mother\":null," +
 			"\"children\":" +
 			"[" +
 				"{" +
@@ -419,7 +419,7 @@ public class PersonTestIT extends FuncAbstract{
 					"\"name\":\"Issac Williams\"," +
 					"\"sex\":\"MALE\"," +
 					"\"dob\":\"unknown\",\"dod\":\"unknown\",\"placeOfBirth\":null,\"placeOfDeath\":null," +
-					"\"father\":\"null\"," +
+					"\"father\":null," +
 					"\"mother\":" + rachelId + "," +
 					"\"links\":" +
 					"[" +

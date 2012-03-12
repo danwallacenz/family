@@ -6,9 +6,12 @@ import static groovyx.net.http.ContentType.JSON;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 import java.util.List;
+
+import net.sf.json.JSONNull;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -62,8 +65,8 @@ public class RemovingAMotherIT extends FuncAbstract{
 					.and().that().body("name", equalTo("Johnny Wallace-Wilks"))
 					.and().that().body("sex", equalTo("MALE"))
 					.and().that().body("version", equalTo(2))
-					.and().that().body("father", equalTo("null"))
-					.and().that().body("mother", equalTo("null"))
+					.and().that().body("father", is(JSONNull.class))
+					.and().that().body("mother", is(JSONNull.class))
 					.and().that().body("children.size()", equalTo(0))
 					.and().that().body("links.size()", equalTo(4))
 					.and().that().body("links.getAt(0).rel", equalTo("self"))
@@ -128,8 +131,8 @@ public class RemovingAMotherIT extends FuncAbstract{
 				.and().that().body("sex", equalTo("MALE"))
 				.and().that().body("version", equalTo(2)) // 0 on creation, 1 on addition of child.
 				
-				.and().that().body("mother", equalTo("null"))
-				.and().that().body("father", equalTo("null"))
+				.and().that().body("mother", is(JSONNull.class))
+				.and().that().body("father", is(JSONNull.class))
 				 
 				.and().that().body("children.size()", equalTo(0)) // this is what we are testing
 
@@ -177,7 +180,7 @@ public class RemovingAMotherIT extends FuncAbstract{
 				.then().expect()
 				.that().statusCode(200)
 				.and().that().response().contentType(JSON)	
-				.and().that().body("mother", equalTo("null"))
+				.and().that().body("mother", is(JSONNull.class))
 				.and().that().body("affectedParties.size()", equalTo(1))
 				.and().that().body("affectedParties.getAt(0).id", equalTo(new Integer(originalMotherId)))
 				.when().log().everything()
@@ -197,9 +200,9 @@ public class RemovingAMotherIT extends FuncAbstract{
 				.and().that().body("sex", equalTo("MALE"))
 				.and().that().body("version", equalTo(2)) // 0 on creation, 1 on addition of mother, 2 on removal of mother.
 				
-				.and().that().body("father", equalTo("null")) // this is what we are testing
+				.and().that().body("father", is(JSONNull.class)) // this is what we are testing
 
-				.and().that().body("mother", equalTo("null"))
+				.and().that().body("mother", is(JSONNull.class))
 				 
 				.and().that().body("children.size()", equalTo(0))
 
