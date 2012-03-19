@@ -269,6 +269,14 @@ td { vertical-align: top; }
 		background: #CCCCCC;	
 	}
 	
+	#person-viewer div{
+		text-align:center;
+		font: 12px verdana,sans-serif;
+		margin:20px;
+		padding:10px;	
+		background: #AAAAAA;	
+	}
+	
 	#main-footer{
 		clear:both;
 		text-align:center;

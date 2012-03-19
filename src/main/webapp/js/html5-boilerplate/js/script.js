@@ -54,7 +54,7 @@
 			$.publish('/results/select', [ e.target ]);
 		}
 		
-		tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>',
+		tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
 		
 		html = $.map(searchResults, function(searchResults) {
 	        return tmpl
@@ -124,8 +124,22 @@
 	
 	// Display a person when JSON returned from server.
 	$.subscribe('/person/loaded', function(personJSON) {
-			$('#person').empty().append('<p><strong>' + personJSON + '</strong></p>');
-		});
+		var person = $.parseJSON(personJSON);
+//		var personTmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
+		var personTmpl = '<p><strong>{{name}}</strong>  born on {{dob}} at {{placeOfBirth}} died on {{dod}} at {{placeOfDeath}}</p>';
+
+		log("person.name = "  + person.name);
+		var personStr = personTmpl
+        .replace('{{name}}', person.name)
+        .replace('{{dob}}', person.dob)
+        .replace('{{placeOfBirth}}', person.placeOfBirth)
+        .replace('{{dod}}', person.dod)
+        .replace('{{placeOfDeath}}', person.placeOfDeath);
+		log("personTmpl=" + personStr);
+		
+        $('#person').empty().append(personStr);
+//		$('#person').empty().append('<p><strong>' + personJSON + '</strong></p>');
+	});
 	
 	/*------------------------------------------------------------------*/
 	
