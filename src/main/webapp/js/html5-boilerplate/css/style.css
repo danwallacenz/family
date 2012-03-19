@@ -217,11 +217,64 @@ td { vertical-align: top; }
 /* ==|== primary styles =====================================================
    Author:
    ========================================================================== */
+	body{
+		text-align:center;
+	}
 
+	#wrapper{
+		width:960px;
+		margin: 15px auto;
+		text-align:left
+	}
+	
+	#main-header{
+		background:FFFBB9;
+		border:1px solid #999999;
+		padding:20px;
+	}
 
+	h1{
+		font:bold 20px verdana,sans-serif;
+	}
+	h2{
+		font:bold 14px verdana,sans-serif;
+	}
+	h3{
+		font:bold 12px verdana,sans-serif;
+	}
 
+	#searcher{
+		float:left;
+		width:220px;
+		margin:20px 0px;
+		padding:20px;
+		background: #CCCCCC;
+	}
 
+	#results li{
+		font:bold 12px verdana,sans-serif;
+		list-style-type: none;
+	}
+	
+	#searches li{
+		font:bold 12px verdana,sans-serif;
+		list-style-type: none;
+	}
+	
 
+	#person-viewer{
+		float:left;
+		width:660px;
+		margin:20px;	
+		background: #CCCCCC;	
+	}
+	
+	#main-footer{
+		clear:both;
+		text-align:center;
+		padding:20px;
+		border-top:2px solid #999999;
+	}
 
 
 

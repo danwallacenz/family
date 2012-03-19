@@ -41,10 +41,20 @@
 	 */
 	$.subscribe('/search/results', function(results) {
 
-		var searchResults = $.parseJSON(results).searchResults;
+		var searchResults, clickHandler, tmpl, html;
+		
+		searchResults = $.parseJSON(results).searchResults;
 		console.log(searchResults);
 		
-		var tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>',
+		clickHandler = function(e) {
+			e.preventDefault();
+			log(e);
+			log(e.target);
+			// Publish
+			$.publish('/results/select', [ e.target ]);
+		}
+		
+		tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>',
 		
 		html = $.map(searchResults, function(searchResults) {
 	        return tmpl
@@ -53,19 +63,26 @@
 	          .replace('{{dob}}', searchResults.dob)
 	          .replace('{{placeOfBirth}}', searchResults.placeOfBirth)
 	          .replace('{{dod}}', searchResults.dod)
-	          .replace('{{placeOfDeath}}', searchResults.placeOfDeath)
-	          
+	          .replace('{{placeOfDeath}}', searchResults.placeOfDeath)         
 	      }).join('');
+		
+		// remove previous event listeners from #results a
+		$('#results a').unbind('click', clickHandler);
+		
+		// populate results ul
 		$('#results').html(html);
 	  
 		// Publish '/results/select' when a link is clicked.
-		$('#results a').click(function(e) {
-			e.preventDefault();
-			log(e);
-			log(e.target);
-			// Publish
-			$.publish('/results/select', [ e.target ]);
-		});
+		$('#results a').click(clickHandler);
+//		
+//		$('#results a').click(function(e) {
+//			e.preventDefault();
+//			log(e);
+//			log(e.target);
+//			// Publish
+//			$.publish('/results/select', [ e.target ]);
+//		}
+		//);
 	  
 	});
 
