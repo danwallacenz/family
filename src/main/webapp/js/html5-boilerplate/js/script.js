@@ -126,9 +126,9 @@
 		var person = $.parseJSON(personJSON);
 		var relationTmpl = '<p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p>';
 		var personTmpl = '<p><strong>{{name}}</strong>  born on {{dob}} at {{placeOfBirth}} died on {{dod}} at {{placeOfDeath}}</p>';
-		var motherStr = "Mother unknown";
-		var fatherStr = "Father unknown";
-		var childrenStr = "No children";
+		var motherStr = " unknown";
+		var fatherStr = " unknown";
+		var childrenStr = " none known";
 		
 		$('#person').unbind('click', clickHandler);
 		
@@ -173,7 +173,7 @@
 	        .replace('{{placeOfDeath}}', child.placeOfDeath);
 			}).join('');
 		
-        $('#person').empty().append(personStr).append(fatherStr).append(motherStr).append(childrenStr);
+        $('#person').empty().append(personStr).append('<h5>father</h5>').append(fatherStr).append('<h5>mother</h5>').append(motherStr).append('<h5>children</h5>').append(childrenStr);
 		// Publish '/results/select' when a link is clicked.
 		$('#person').click(clickHandler);
 	});

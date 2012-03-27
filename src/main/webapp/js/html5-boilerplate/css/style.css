@@ -248,7 +248,7 @@ td { vertical-align: top; }
 		width:220px;
 		margin:20px 0px;
 		padding:20px;
-		background: #CCCCCC;
+		//background: #CCCCCC;
 	}
 
 	#results li{
@@ -266,15 +266,16 @@ td { vertical-align: top; }
 		float:left;
 		width:660px;
 		margin:20px;	
-		background: #CCCCCC;	
+		//background: #EEEEEE;	
 	}
 	
 	#person-viewer div{
 		text-align:center;
+		//border:1px solid #999999;
 		font: 12px verdana,sans-serif;
 		margin:20px;
 		padding:10px;	
-		background: #AAAAAA;	
+		//background: #DDDDDD;	
 	}
 	
 	#main-footer{
