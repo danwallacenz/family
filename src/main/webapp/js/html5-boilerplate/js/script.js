@@ -137,7 +137,7 @@
 		
 		if(person.father !== null){
 			 fatherStr = relationTmpl
-			 .replace('{{url}}', person.father.links[0].href)
+			 .replace('{{url}}', href(person.father))
 	        .replace('{{name}}', person.father.name)
 	        .replace('{{dob}}', person.father.dob)
 	        .replace('{{placeOfBirth}}', person.father.placeOfBirth)
@@ -148,7 +148,7 @@
 		
 		if(person.mother !== null){
 			motherStr = relationTmpl
-			.replace('{{url}}', person.mother.links[0].href)
+			.replace('{{url}}', href(person.mother))
 	        .replace('{{name}}', person.mother.name)
 	        .replace('{{dob}}', person.mother.dob)
 	        .replace('{{placeOfBirth}}', person.mother.placeOfBirth)
@@ -156,10 +156,34 @@
 	        .replace('{{placeOfDeath}}', person.mother.placeOfDeath);
 			log("motherStr=" + motherStr);
 		}
+/*
+ * 		html = $.map(searchResults, function(searchResults) {
+	        return tmpl
+	          .replace('{{url}}', searchResults.href)
+	          .replace('{{name}}', searchResults.name)
+	          .replace('{{dob}}', searchResults.dob)
+	          .replace('{{placeOfBirth}}', searchResults.placeOfBirth)
+	          .replace('{{dod}}', searchResults.dod)
+	          .replace('{{placeOfDeath}}', searchResults.placeOfDeath)         
+	      }).join('');
+ */
+		childrenStr = $.map(person.children,  function(child) {
+			return relationTmpl
+			.replace('{{url}}', href(child))
+	        .replace('{{name}}', child.name)
+	        .replace('{{dob}}', child.dob)
+	        .replace('{{placeOfBirth}}', child.placeOfBirth)
+	        .replace('{{dod}}', child.dod)
+	        .replace('{{placeOfDeath}}', child.placeOfDeath);
+			}).join('');
 		
         $('#person').empty().append(personStr).append(fatherStr).append(motherStr).append(childrenStr);
 //		$('#person').empty().append('<p><strong>' + personJSON + '</strong></p>');
 	});
+	
+	var href = function href(person){
+		return person.links[0].href;
+	}
 	
 	/*------------------------------------------------------------------*/
 	
