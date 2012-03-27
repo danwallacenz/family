@@ -47,11 +47,15 @@
 		console.log(searchResults);
 		
 		clickHandler = function(e) {
-			e.preventDefault();
-			log(e);
-			log(e.target);
-			// Publish
-			$.publish('/results/select', [ e.target ]);
+			var target = e.target;
+			var tagName = target.tagName;
+			if(tagName === 'A'){
+				e.preventDefault();
+				log(e);
+				log(e.target);
+				// Publish
+				$.publish('/results/select', [ target ]);
+			}
 		}
 		
 		tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
@@ -67,23 +71,14 @@
 	      }).join('');
 		
 		// remove previous event listeners from #results a
-		$('#results a').unbind('click', clickHandler);
+		//$('#results a').unbind('click', clickHandler);
+		$('#results').unbind('click', clickHandler);
 		
 		// populate results ul
 		$('#results').html(html);
 	  
 		// Publish '/results/select' when a link is clicked.
-		$('#results a').click(clickHandler);
-//		
-//		$('#results a').click(function(e) {
-//			e.preventDefault();
-//			log(e);
-//			log(e.target);
-//			// Publish
-//			$.publish('/results/select', [ e.target ]);
-//		}
-		//);
-	  
+		$('#results').click(clickHandler);	  
 	});
 
 	/* 
@@ -125,19 +120,44 @@
 	// Display a person when JSON returned from server.
 	$.subscribe('/person/loaded', function(personJSON) {
 		var person = $.parseJSON(personJSON);
-//		var personTmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
+		var relationTmpl = '<p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p>';
 		var personTmpl = '<p><strong>{{name}}</strong>  born on {{dob}} at {{placeOfBirth}} died on {{dod}} at {{placeOfDeath}}</p>';
-
+		var motherStr = "Mother unknown";
+		var fatherStr = "Father unknown";
+		var childrenStr = "No children";
+		
 		log("person.name = "  + person.name);
 		var personStr = personTmpl
-        .replace('{{name}}', person.name)
-        .replace('{{dob}}', person.dob)
-        .replace('{{placeOfBirth}}', person.placeOfBirth)
-        .replace('{{dod}}', person.dod)
-        .replace('{{placeOfDeath}}', person.placeOfDeath);
-		log("personTmpl=" + personStr);
+	        .replace('{{name}}', person.name)
+	        .replace('{{dob}}', person.dob)
+	        .replace('{{placeOfBirth}}', person.placeOfBirth)
+	        .replace('{{dod}}', person.dod)
+	        .replace('{{placeOfDeath}}', person.placeOfDeath);
+			log("personStr=" + personStr);
 		
-        $('#person').empty().append(personStr);
+		if(person.father !== null){
+			 fatherStr = relationTmpl
+			 .replace('{{url}}', person.father.links[0].href)
+	        .replace('{{name}}', person.father.name)
+	        .replace('{{dob}}', person.father.dob)
+	        .replace('{{placeOfBirth}}', person.father.placeOfBirth)
+	        .replace('{{dod}}', person.father.dod)
+	        .replace('{{placeOfDeath}}', person.father.placeOfDeath);
+			log("fatherStr=" + fatherStr);
+		} 
+		
+		if(person.mother !== null){
+			motherStr = relationTmpl
+			.replace('{{url}}', person.mother.links[0].href)
+	        .replace('{{name}}', person.mother.name)
+	        .replace('{{dob}}', person.mother.dob)
+	        .replace('{{placeOfBirth}}', person.mother.placeOfBirth)
+	        .replace('{{dod}}', person.mother.dod)
+	        .replace('{{placeOfDeath}}', person.mother.placeOfDeath);
+			log("motherStr=" + motherStr);
+		}
+		
+        $('#person').empty().append(personStr).append(fatherStr).append(motherStr).append(childrenStr);
 //		$('#person').empty().append('<p><strong>' + personJSON + '</strong></p>');
 	});
 	
