@@ -14,6 +14,22 @@
 		return location.href.slice(0, location.href.indexOf("js")) + "people";
 	}
 	
+	var href = function href(person){
+		return person.links[0].href;
+	}
+	
+	var clickHandler = function(e) {
+		var target = e.target;
+		var tagName = target.tagName;
+		if(tagName === 'A'){
+			e.preventDefault();
+			log(e);
+			log(e.target);
+			// Publish
+			$.publish('/results/select', [ target ]);
+		}
+	}
+	
 	/*
 	 * When notified that the input form has been submitted by clicking the 
 	 * search button, an ajax call is made which searches for people with names
@@ -41,22 +57,10 @@
 	 */
 	$.subscribe('/search/results', function(results) {
 
-		var searchResults, clickHandler, tmpl, html;
+		var searchResults, tmpl, html;
 		
 		searchResults = $.parseJSON(results).searchResults;
 		console.log(searchResults);
-		
-		clickHandler = function(e) {
-			var target = e.target;
-			var tagName = target.tagName;
-			if(tagName === 'A'){
-				e.preventDefault();
-				log(e);
-				log(e.target);
-				// Publish
-				$.publish('/results/select', [ target ]);
-			}
-		}
 		
 		tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
 		
@@ -126,6 +130,8 @@
 		var fatherStr = "Father unknown";
 		var childrenStr = "No children";
 		
+		$('#person').unbind('click', clickHandler);
+		
 		log("person.name = "  + person.name);
 		var personStr = personTmpl
 	        .replace('{{name}}', person.name)
@@ -156,17 +162,7 @@
 	        .replace('{{placeOfDeath}}', person.mother.placeOfDeath);
 			log("motherStr=" + motherStr);
 		}
-/*
- * 		html = $.map(searchResults, function(searchResults) {
-	        return tmpl
-	          .replace('{{url}}', searchResults.href)
-	          .replace('{{name}}', searchResults.name)
-	          .replace('{{dob}}', searchResults.dob)
-	          .replace('{{placeOfBirth}}', searchResults.placeOfBirth)
-	          .replace('{{dod}}', searchResults.dod)
-	          .replace('{{placeOfDeath}}', searchResults.placeOfDeath)         
-	      }).join('');
- */
+
 		childrenStr = $.map(person.children,  function(child) {
 			return relationTmpl
 			.replace('{{url}}', href(child))
@@ -178,12 +174,9 @@
 			}).join('');
 		
         $('#person').empty().append(personStr).append(fatherStr).append(motherStr).append(childrenStr);
-//		$('#person').empty().append('<p><strong>' + personJSON + '</strong></p>');
+		// Publish '/results/select' when a link is clicked.
+		$('#person').click(clickHandler);
 	});
-	
-	var href = function href(person){
-		return person.links[0].href;
-	}
 	
 	/*------------------------------------------------------------------*/
 	
