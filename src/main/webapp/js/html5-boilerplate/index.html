@@ -42,7 +42,7 @@
 	  <header id="main-header">
 	  	<hgroup>
 		<h1>familypeople</h1>
-		<h2>a simple search with pub-sub</h2>
+		<h2><em></>a simple search with pub-sub</em></h2>
 		</hgroup>
 	  </header>
 	  
@@ -53,22 +53,23 @@
 				<input name="q" placeholder="search for people"/>
 				<input type="submit" value="Search" />	
 			</form>
-			<div id="searches"><header><h3>Previous searches</h3></header></div>
+			
+			<!--<div id="searches"><header><h3>Previous searches</h3></header></div>-->
+			
 			<div id="results"><!--<header><h3>Results</h3></header>--></div>
 			
 				<script id="templ-results" type="text/template">
-					<ul>
-						<% for (var i=0; i<foundPeople.length; i++) {%>
-							<% var person = foundPeople[i]; %>
-							<li>
+
+						<% _.each( foundPeople, function(person){ %>
 								<ul>
-									<li><a href="<%= person.href %> "><%= person.name %></a></li>
-									<li>born:<%= person.dob %></li>
-									<li>at:<%= person.placeOfBirth %></li>
+									<li><strong><a href="<%= person.href %> "><%= person.name %></a></strong></li>
+									<li><a href="<%= person.href %> "><% person.dob?print('born:' + person.dob):'' %></a></li>
+									<li><a href="<%= person.href %> "><% person.placeOfBirth?print('at:' + person.placeOfBirth):'' %></a></li>
+									<li><a href="<%= person.href %> "><% person.dod?print('died:' + person.dod):'' %></a></li>
+									<li><a href="<%= person.href %> "><% person.placeOfDeath?print('at:' + person.placeOfDeath):'' %></a></li>
 								</ul>
-							</li>
-						<%}%>
-					</ul>
+						<%});%>
+
 				</script>
 			
 		</section>

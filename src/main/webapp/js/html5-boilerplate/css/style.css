@@ -245,15 +245,38 @@ td { vertical-align: top; }
 
 	#searcher{
 		float:left;
-		width:220px;
-		margin:20px 0px;
+		width:210px;
+		margin:10px 0px;
 		padding:20px;
+		border:1px solid #999999;
 		//background: #CCCCCC;
 	}
-
-	#results li{
-		font:bold 12px verdana,sans-serif;
+	
+	#results {
+		float:left;
+		text-align:left;
+		font:12px verdana,sans-serif;
+		border:0px solid #CCCCCC;
+	}
+	
+	#results p{
+		/*float:left;
+		text-align:left;
+		font:12px verdana,sans-serif;
 		list-style-type: none;
+		border:1px solid #999999;*/
+	}
+	
+	#results ul{
+		margin:5px 0px 2px 0px;
+		padding:2px 1px 1px 1px;
+		border:0px solid #999999;
+	}
+	#results li{
+		margin:0px;
+		padding:0px;
+		list-style-type: none;
+		border:0px solid #999999;
 	}
 	
 	#searches li{

@@ -68,6 +68,7 @@
 		//$('#results a').unbind('click', clickHandler);
 		$('#results').unbind('click', clickHandler);
 		
+		// underscore template
 		var templMarkup = $('#templ-results').html();
 		var compiledTmpl = _.template(templMarkup, {"foundPeople" : searchResults});
 
