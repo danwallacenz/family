@@ -62,28 +62,57 @@
 		searchResults = $.parseJSON(results).searchResults;
 		console.log(searchResults);
 		
-		tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
-		
-		html = $.map(searchResults, function(searchResults) {
-	        return tmpl
-	          .replace('{{url}}', searchResults.href)
-	          .replace('{{name}}', searchResults.name)
-	          .replace('{{dob}}', searchResults.dob)
-	          .replace('{{placeOfBirth}}', searchResults.placeOfBirth)
-	          .replace('{{dod}}', searchResults.dod)
-	          .replace('{{placeOfDeath}}', searchResults.placeOfDeath)         
-	      }).join('');
+		//tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
 		
 		// remove previous event listeners from #results a
 		//$('#results a').unbind('click', clickHandler);
 		$('#results').unbind('click', clickHandler);
 		
+		var templMarkup = $('#templ-results').html();
+		var compiledTmpl = _.template(templMarkup, {"foundPeople" : searchResults});
+
 		// populate results ul
-		$('#results').html(html);
+		$('#results').html(compiledTmpl);
+//		$('#results').html(html);
 	  
+		
 		// Publish '/results/select' when a link is clicked.
 		$('#results').click(clickHandler);	  
 	});
+	
+	/*
+	 * Subscribe to the ajax call returning event (Topic:'/search/results') 
+	 * and display the search results after ajax call returns.
+	 */
+//	$.subscribe('/search/results', function(results) {
+//
+//		var searchResults, tmpl, html;
+//		
+//		searchResults = $.parseJSON(results).searchResults;
+//		console.log(searchResults);
+//		
+//		tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
+//		
+//		html = $.map(searchResults, function(searchResults) {
+//	        return tmpl
+//	          .replace('{{url}}', searchResults.href)
+//	          .replace('{{name}}', searchResults.name)
+//	          .replace('{{dob}}', searchResults.dob)
+//	          .replace('{{placeOfBirth}}', searchResults.placeOfBirth)
+//	          .replace('{{dod}}', searchResults.dod)
+//	          .replace('{{placeOfDeath}}', searchResults.placeOfDeath)         
+//	      }).join('');
+//		
+//		// remove previous event listeners from #results a
+//		//$('#results a').unbind('click', clickHandler);
+//		$('#results').unbind('click', clickHandler);
+//		
+//		// populate results ul
+//		$('#results').html(html);
+//	  
+//		// Publish '/results/select' when a link is clicked.
+//		$('#results').click(clickHandler);	  
+//	});
 
 	/* 
 	 * When the input form is submitted by clicking the search button, this 

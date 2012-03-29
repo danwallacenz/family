@@ -55,6 +55,22 @@
 			</form>
 			<div id="searches"><header><h3>Previous searches</h3></header></div>
 			<div id="results"><!--<header><h3>Results</h3></header>--></div>
+			
+				<script id="templ-results" type="text/template">
+					<ul>
+						<% for (var i=0; i<foundPeople.length; i++) {%>
+							<% var person = foundPeople[i]; %>
+							<li>
+								<ul>
+									<li><a href="<%= person.href %> "><%= person.name %></a></li>
+									<li>born:<%= person.dob %></li>
+									<li>at:<%= person.placeOfBirth %></li>
+								</ul>
+							</li>
+						<%}%>
+					</ul>
+				</script>
+			
 		</section>
 		
 		<section id="person-viewer">
@@ -77,6 +93,7 @@
   <!-- scripts concatenated and minified via build script -->
   <script src="js/plugins.js"></script>
   <script src="js/libs/pubsub.js"></script>
+  <script src="js/libs/underscore.js"></script>
   <script src="js/script.js"></script>
   <!-- end scripts -->
 
