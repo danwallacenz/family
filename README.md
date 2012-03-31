@@ -408,4 +408,36 @@ Content-Length: 640
 		      }
 		   ]
 		}
+		
+# VMC Tunnel		
+		
+481  vmc target
+  482  vmc target http://api.familypeople.cloudfoundry.com
+  483  vmc target http://familypeople.cloudfoundry.com
+  484  vmc target http://api.cloudfoundry.com
+  485  vmc apps
+  486  vmc help
+  487  vmc apps
+  488  vmc tunnel family-db
+  489  vmc tunnel family-db
+  490  vmc target
+  491  vmc apps
+  492  vmc tunnel
+  493  vmc tunnel
+  494  vmc tunnel
+  495  vmc target
+  496  vmc tunnel
+  497  vmc target http://api.cloudfoundry.com
+  498* vmc tunnel
+  499  vmc tunnel family-db
+  500  vmc target http://api.cloudfoundry.com
+  501  vmc apps
+  502  vmc help
+  503  vmc login
+  504  vmc apps
+  505  vmc tunnel family-db
+  506  vmc tunnel family-db
+  507  vmc login
+  508  history
+
 		  

@@ -36,7 +36,7 @@ public abstract class FuncAbstract {
     //================================================================================================
     // utility methods
     /**
-     * Give a JSON <code>String</code> representing a <code>Person</code> ("{ \"name\" : \"johnny\"}"), 
+     * Given a JSON <code>String</code> representing a <code>Person</code> ("{ \"name\" : \"johnny\"}"), 
      * will save it to the database, validate the HTTP response code and Location header, and return 
      * the id of the newly created <code>Person</code>.
      * @param json
@@ -54,7 +54,6 @@ public abstract class FuncAbstract {
     	String newId = location.substring(location.lastIndexOf("/") + 1);
     	return newId;
 	}
-    
     
 	protected Response responseOfPosted(String json) {
     	Response response = 

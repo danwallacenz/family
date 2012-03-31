@@ -75,7 +75,24 @@
 		</section>
 		
 		<section id="person-viewer">
-			<div id="person"></div>
+			<div id="person">
+			
+				<script id="templ-person" type="text/template">
+						<p><strong><%= person.name %></strong>  born on <%= person.dob %> at <%= person.placeOfBirth %> died on <%= person.dod %> at <%=person.placeOfDeath %></p>
+						
+						<% _.each(person.children, function(child){ %>
+								<ul>
+									<li><strong><a href="<%= child.href %> "><%= child.name %></a></strong></li>
+									<li><a href="<%= child.href %> "><% child.dob?print('born:' + child.dob):'' %></a></li>
+									<li><a href="<%= child.href %> "><% child.placeOfBirth?print('at:' + child.placeOfBirth):'' %></a></li>
+									<li><a href="<%= child.href %> "><% child.dod?print('died:' + child.dod):'' %></a></li>
+									<li><a href="<%= child.href %> "><% child.placeOfDeath?print('at:' + child.placeOfDeath):'' %></a></li>
+								</ul>
+						<%});%>
+
+				</script>
+				
+			</div>
 		</section>
 	  </div>
 	  
