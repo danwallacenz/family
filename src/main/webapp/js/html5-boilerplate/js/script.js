@@ -23,8 +23,6 @@
 		var tagName = target.tagName;
 		if(tagName === 'A'){
 			e.preventDefault();
-			log(e);
-			log(e.target);
 			// Publish
 			$.publish('/results/select', [ target ]);
 		}
@@ -61,11 +59,8 @@
 		
 		searchResults = $.parseJSON(results).searchResults;
 		console.log(searchResults);
-		
-		//tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
-		
+				
 		// remove previous event listeners from #results a
-		//$('#results a').unbind('click', clickHandler);
 		$('#results').unbind('click', clickHandler);
 		
 		// underscore template
@@ -74,47 +69,11 @@
 
 		// populate results ul
 		$('#results').html(compiledTmpl);
-//		$('#results').html(html);
-	  
 		
 		// Publish '/results/select' when a link is clicked.
 		$('#results').click(clickHandler);	  
 	});
 	
-	/*
-	 * Subscribe to the ajax call returning event (Topic:'/search/results') 
-	 * and display the search results after ajax call returns.
-	 */
-//	$.subscribe('/search/results', function(results) {
-//
-//		var searchResults, tmpl, html;
-//		
-//		searchResults = $.parseJSON(results).searchResults;
-//		console.log(searchResults);
-//		
-//		tmpl = '<li><p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p></li>';
-//		
-//		html = $.map(searchResults, function(searchResults) {
-//	        return tmpl
-//	          .replace('{{url}}', searchResults.href)
-//	          .replace('{{name}}', searchResults.name)
-//	          .replace('{{dob}}', searchResults.dob)
-//	          .replace('{{placeOfBirth}}', searchResults.placeOfBirth)
-//	          .replace('{{dod}}', searchResults.dod)
-//	          .replace('{{placeOfDeath}}', searchResults.placeOfDeath)         
-//	      }).join('');
-//		
-//		// remove previous event listeners from #results a
-//		//$('#results a').unbind('click', clickHandler);
-//		$('#results').unbind('click', clickHandler);
-//		
-//		// populate results ul
-//		$('#results').html(html);
-//	  
-//		// Publish '/results/select' when a link is clicked.
-//		$('#results').click(clickHandler);	  
-//	});
-
 	/* 
 	 * When the input form is submitted by clicking the search button, this 
 	 * event is published with the search term riding along.
@@ -150,60 +109,24 @@
 				}
 			);
 	});
+
 	
 	// Display a person when JSON returned from server.
 	$.subscribe('/person/loaded', function(personJSON) {
 		var person = $.parseJSON(personJSON);
-		var relationTmpl = '<p><a href="{{url}}">{{name}}, born on:{{dob}} at: {{placeOfBirth}}, died on:{{dod}}, at:{{placeOfDeath}}</a></p>';
-		var personTmpl = '<p><strong>{{name}}</strong>  born on {{dob}} at {{placeOfBirth}} died on {{dod}} at {{placeOfDeath}}</p>';
-		var motherStr = " unknown";
-		var fatherStr = " unknown";
-		var childrenStr = " none known";
 		
 		$('#person').unbind('click', clickHandler);
 		
 		log("person.name = "  + person.name);
-		var personStr = personTmpl
-	        .replace('{{name}}', person.name)
-	        .replace('{{dob}}', person.dob)
-	        .replace('{{placeOfBirth}}', person.placeOfBirth)
-	        .replace('{{dod}}', person.dod)
-	        .replace('{{placeOfDeath}}', person.placeOfDeath);
-			log("personStr=" + personStr);
 		
-		if(person.father !== null){
-			 fatherStr = relationTmpl
-			 .replace('{{url}}', href(person.father))
-	        .replace('{{name}}', person.father.name)
-	        .replace('{{dob}}', person.father.dob)
-	        .replace('{{placeOfBirth}}', person.father.placeOfBirth)
-	        .replace('{{dod}}', person.father.dod)
-	        .replace('{{placeOfDeath}}', person.father.placeOfDeath);
-			log("fatherStr=" + fatherStr);
-		} 
-		
-		if(person.mother !== null){
-			motherStr = relationTmpl
-			.replace('{{url}}', href(person.mother))
-	        .replace('{{name}}', person.mother.name)
-	        .replace('{{dob}}', person.mother.dob)
-	        .replace('{{placeOfBirth}}', person.mother.placeOfBirth)
-	        .replace('{{dod}}', person.mother.dod)
-	        .replace('{{placeOfDeath}}', person.mother.placeOfDeath);
-			log("motherStr=" + motherStr);
-		}
+		// underscore template
+		var templMarkup = $('#templ-person').html();
+		var compiledTmpl = _.template(templMarkup, {"person" : person});
 
-		childrenStr = $.map(person.children,  function(child) {
-			return relationTmpl
-			.replace('{{url}}', href(child))
-	        .replace('{{name}}', child.name)
-	        .replace('{{dob}}', child.dob)
-	        .replace('{{placeOfBirth}}', child.placeOfBirth)
-	        .replace('{{dod}}', child.dod)
-	        .replace('{{placeOfDeath}}', child.placeOfDeath);
-			}).join('');
-		
-        $('#person').empty().append(personStr).append('<h5>father</h5>').append(fatherStr).append('<h5>mother</h5>').append(motherStr).append('<h5>children</h5>').append(childrenStr);
+		// populate results ul
+		$('#person').html(compiledTmpl);
+		 
+
 		// Publish '/results/select' when a link is clicked.
 		$('#person').click(clickHandler);
 	});

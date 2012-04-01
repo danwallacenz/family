@@ -75,24 +75,37 @@
 		</section>
 		
 		<section id="person-viewer">
-			<div id="person">
+			<div id="person"></div>
 			
-				<script id="templ-person" type="text/template">
+			<script id="templ-person" type="text/template">
 						<p><strong><%= person.name %></strong>  born on <%= person.dob %> at <%= person.placeOfBirth %> died on <%= person.dod %> at <%=person.placeOfDeath %></p>
 						
-						<% _.each(person.children, function(child){ %>
-								<ul>
-									<li><strong><a href="<%= child.href %> "><%= child.name %></a></strong></li>
-									<li><a href="<%= child.href %> "><% child.dob?print('born:' + child.dob):'' %></a></li>
-									<li><a href="<%= child.href %> "><% child.placeOfBirth?print('at:' + child.placeOfBirth):'' %></a></li>
-									<li><a href="<%= child.href %> "><% child.dod?print('died:' + child.dod):'' %></a></li>
-									<li><a href="<%= child.href %> "><% child.placeOfDeath?print('at:' + child.placeOfDeath):'' %></a></li>
-								</ul>
-						<%});%>
+						<% if(person.father){ %>
+							<h5>father</h5>
+							<p><a href="<%= person.father.links[0].href %> "><%= person.father.name %> born on <%= person.father.dob %> at <%= person.father.placeOfBirth %> died on <%= person.father.dod %> at <%=person.father.placeOfDeath %></a></p>						
+						<%}%>
 
+						<% if(person.mother){ %>
+							<h5>mother</h5>
+							<p><a href="<%= person.mother.links[0].href %> "><%= person.mother.name %> born on <%= person.mother.dob %> at <%= person.mother.placeOfBirth %> died on <%= person.mother.dod %> at <%=person.mother.placeOfDeath %></a></p>						
+						<%}%>
+
+						<% if(person.children.length > 0) { %>
+							<h5>children</h5>
+							<% _.each(person.children, function(child){ %>
+
+								<p>
+									<a href="<%= child.links[0].href %> ">
+										<%= child.name %>
+										<% child.dob?print('born:' + child.dob):'' %>
+										<% child.placeOfBirth?print('at:' + child.placeOfBirth):'' %>
+										<% child.dod?print('died:' + child.dod):'' %></a>
+										<% child.placeOfDeath?print('at:' + child.placeOfDeath):'' %>
+									</a>
+								</p>
+							<%});%>
+						<%}%>
 				</script>
-				
-			</div>
 		</section>
 	  </div>
 	  
