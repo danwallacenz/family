@@ -49,6 +49,8 @@ public class PersonController {
     
     
     /**
+     * addMother
+     * 
      * curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/mother/2
      * @param id child id
      * @param motherId
@@ -146,6 +148,8 @@ public class PersonController {
     
     
     /**
+     * Add Father
+     * 
      * curl -i -X PUT -H "Accept: application/json" http://localhost:8080/family/people/1/father/3
      * @param id
      * @param motherId
@@ -242,8 +246,8 @@ public class PersonController {
     
     
     /**
-     * 
-     * Example comment
+     * WTF?
+     * findChildren
      * 
      * "This method accepts a JSON document sent via HTTP POST 
      * converts it into an Owner instance and persists that 
@@ -264,7 +268,7 @@ public class PersonController {
     }    
     
     /**
-     * I'm not sure that we need this. We can just get the person
+     * I'm not sure that we need this. We can just get the person.
      * @param parentId
      * @param httpServletRequest
      * @return
@@ -284,6 +288,8 @@ public class PersonController {
     }
     
     /**
+     * Display a Person.
+     * show Json
      * 
      * @param id
      * @param httpServletRequest
@@ -382,6 +388,7 @@ public class PersonController {
     }
     
     /**
+     * Create a Person.
      * 
      * @param json
      * @param httpServletRequest
@@ -460,6 +467,7 @@ public class PersonController {
 
     
 	/**
+     * Update a Person.
      * 
      * @param id
      * @param json
@@ -514,6 +522,7 @@ public class PersonController {
     }
 
     /**
+     * Delete a Person.
      * 
      * @param id
      * @param httpRequest
@@ -554,7 +563,9 @@ public class PersonController {
     
     /**
      * TODO write a unit test.
+     * 
      * Obtain affected relatives for returning in the response.
+     * 
      * @param actionType
      * @param person
      * @return
@@ -564,12 +575,14 @@ public class PersonController {
 		List<Person> affectedParties = new ArrayList<Person>();
 
 		if (actionType.equals("whenDeleting")) {
+			
 			Set<Person> orphans = new HashSet<Person>();
 			orphans.addAll(person.getChildren());
 
 			if (person.getMother() != null) {
 				affectedParties.add(person.getMother());
 			}
+			
 			if (person.getFather() != null) {
 				affectedParties.add(person.getFather());
 			}
@@ -593,6 +606,8 @@ public class PersonController {
 	}
 	
 	/**
+	 * Find People.
+	 * 
 	 * Return a JSON object with 'searchResults' an array of name,id,sex,dob,dod,placeOfBirth,placeOfDeath,and URL.
 	 * @param name
 	 * @return
@@ -608,7 +623,7 @@ public class PersonController {
         
         List<Person> results = Person.findPeopleByNameLike(name).getResultList();
         
-        // Sort by name.
+        // Sort by name. TODO sort by age.
         Collections.sort(results, new Comparator<Person>(){
 			public int compare(Person o1, Person o2) {
 				return (o1.getName().compareToIgnoreCase(o2.getName()));

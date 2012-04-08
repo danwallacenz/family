@@ -57,6 +57,7 @@
 
 		var searchResults, tmpl, html;
 		
+		// extract from ugly namespacing
 		searchResults = $.parseJSON(results).searchResults;
 		console.log(searchResults);
 				
