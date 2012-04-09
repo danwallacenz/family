@@ -96,25 +96,33 @@ CORE.create_module("searcher", function(sb) {
 
     return {
         init : function () {
+        	
         	var that = this;
+        	
         	sb.listen({
-        		'perform-search' : function (term) {
+        		'perform-search' : function (searchTerm) {
+        			
+        		var responseText,
+        			callback = function(resp, textStatus, jqXHR) {
+						
+						console.log(jqXHR.responseText);
+						
+						if (jqXHR.responseText) {
+							responseText = jqXHR.responseText; 
+							log("callback-this.responseText=" + responseText);
+		        			if(responseText){
+		   						sb.notify({
+		   		                    type : 'results-returned',
+		   		                    data : responseText 
+		   		                })
+		        			}
+						}
+					};
         			
         			// TODO sb this
-        			$.getJSON(
-        				that.url(),
-        				{find: "ByNameLike", name: term},
-        				function(resp, textStatus, jqXHR) {
-        					console.log(jqXHR.responseText);
-        					if (!jqXHR.responseText) {
-       							return; 
-       						}
-       						sb.notify({
-       		                    type : 'results-returned',
-       		                    data : jqXHR.responseText 
-       		                })
-       					}
-       				)
+        			sb.getJSON(that.url(), //sb.baseUrl(), TODO 
+        							{find: "ByNameLike", name: searchTerm},
+        							callback);
        			}
         	})
         },

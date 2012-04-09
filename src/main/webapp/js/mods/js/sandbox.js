@@ -56,7 +56,13 @@ var Sandbox =  {
 				if(json){
 					return core.json.parseJSON(json);
 				}
+			},
+			getJSON : function(url, searchConfig, callback){
+				if(url && searchConfig && callback){ // TODO more validation needed
+					core.ajax.getJSON(url, searchConfig, callback);
+				}
 			}
+					
         };
     }
 }

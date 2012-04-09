@@ -151,6 +151,16 @@ var CORE = (function () {
         		return $.parseJSON(json);
         	}
         },
+        ajax: {
+        	getJSON	: function(url, queryData, callback) {
+        		var jqxhr = $.getJSON(
+					url,
+					queryData,
+					callback
+				);
+        		log("jqxhr =" + jqxhr);
+			}
+        },
         is_arr : function (arr) {
             return jQuery.isArray(arr);         
         },
