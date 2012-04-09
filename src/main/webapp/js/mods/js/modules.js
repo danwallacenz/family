@@ -42,12 +42,10 @@ CORE.create_module("search-results", function(sb) {
 
     return {
         init : function () {
-            var resultsList 		= sb.find("ul")[0],
-            	resultsTemplate		= sb.find('#templ-results')[0],
-            	//templateMarkup 	= resultsTemplate.html(),
-            	templateMarkup		= resultsTemplate.innerHTML,
-            	compiledTmpl,
-            	searchResults;
+            var resultsList 	= sb.find("ul")[0],
+            	resultsTemplate	= sb.find('#templ-results')[0],
+            	searchResults,
+            	resultsListItems;
             	
             sb.listen({
                 'results-returned' : function (results) {
@@ -60,15 +58,11 @@ CORE.create_module("search-results", function(sb) {
             		
             		sb.removeEvent(resultsList, 'click', this.handleSelect);
             		
-            		// underscore template
-//            		var templMarkup = $('#templ-results').html();
-            		// TODO add sb template
-            		compiledTmpl = _.template(templateMarkup, {"foundPeople" : searchResults});
-
-            		// populate results ul
-            		resultsList.innerHTML = compiledTmpl;
+            		resultsListItems = sb.loadTemplate(resultsTemplate,
+            								{"foundPeople" : searchResults});
+            		resultsList.innerHTML = resultsListItems;
             		
-            		// Publish '/results/select' when a link is clicked.
+            		// Publish 'person-selected' when a link is clicked.
             		sb.addEvent(resultsList, 'click', this.handleSelect);
                 }
             });
@@ -91,7 +85,6 @@ CORE.create_module("search-results", function(sb) {
                     type : 'person-selected',
                     data : target
                 });
-//    			sb.notify('/results/select', [ target ]);
     		}
         },
     };

@@ -46,7 +46,12 @@ var Sandbox =  {
                     core.dom.apply_attrs(el, config);
                 }
                 return el;
-            }
+            },
+            loadTemplate : function(template, resultsObject ) {
+            	if (template && resultsObject){// TODO more validation to do here
+            		return core.template.loadTemplate(template, resultsObject);
+            	}
+			}
         };
     }
 }

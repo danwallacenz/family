@@ -137,6 +137,15 @@ var CORE = (function () {
                 jQuery(el).attr(attrs);             
             }
         },
+        template: {
+        	loadTemplate : function(template, resultsObject){
+        		var templateMarkup = template.innerHTML,
+            	compiledTmpl;
+        		
+        		compiledTmpl = _.template(templateMarkup, resultsObject);
+        		return compiledTmpl;
+        	}
+        },
         is_arr : function (arr) {
             return jQuery.isArray(arr);         
         },
