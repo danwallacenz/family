@@ -97,7 +97,7 @@ CORE.create_module("searcher", function(sb) {
     return {
         init : function () {
         	
-        	var that = this;
+        	//var that = this;
         	
         	sb.listen({
         		'perform-search' : function (searchTerm) {
@@ -105,24 +105,27 @@ CORE.create_module("searcher", function(sb) {
         		var responseText,
         			callback = function(resp, textStatus, jqXHR) {
 						
-						console.log(jqXHR.responseText);
+						log(jqXHR.responseText);
 						
 						if (jqXHR.responseText) {
 							responseText = jqXHR.responseText; 
-							log("callback-this.responseText=" + responseText);
-		        			if(responseText){
-		   						sb.notify({
-		   		                    type : 'results-returned',
-		   		                    data : responseText 
-		   		                })
-		        			}
+							//log("callback-this.responseText=" + responseText);
+		        			//if(responseText){
+	   						sb.notify({
+	   		                    type : 'results-returned',
+	   		                    data : responseText 
+	   		                })
+		        			//}
 						}
 					};
         			
-        			// TODO sb this
-        			sb.getJSON(that.url(), //sb.baseUrl(), TODO 
-        							{find: "ByNameLike", name: searchTerm},
-        							callback);
+        			
+//        			sb.getJSON(that.url(), //sb.baseUrl(), TODO 
+//        							{find: "ByNameLike", name: searchTerm},
+//        							callback);
+        			sb.getJSON(sb.baseUrl(), // Should sb call this? Don't think so!
+							{find: "ByNameLike", name: searchTerm},
+							callback);
        			}
         	})
         },
@@ -137,9 +140,9 @@ CORE.create_module("searcher", function(sb) {
     	 * 2. My local CloudFoundry instance.
     	 * 3. My CloudFoundry.com instance.
     	 */
-    	url : function(){
-    		return location.href.slice(0, location.href.indexOf("js")) + "people";
-    	}
+//    	url : function(){
+//    		return location.href.slice(0, location.href.indexOf("js")) + "people";
+//    	}
     };
 });
 

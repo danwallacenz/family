@@ -166,7 +166,17 @@ var CORE = (function () {
         },
         is_obj : function (obj) {
             return jQuery.isPlainObject(obj);         
-        }
+        },
+    	/*
+    	 * SHOULD THIS BE HERE?
+    	 * Returns the correct url for ajax calls whether this is hosted on:
+    	 * 1. My local TC Server.
+    	 * 2. My local CloudFoundry instance.
+    	 * 3. My CloudFoundry.com instance.
+    	 */
+    	baseUrl : function(){
+    		return location.href.slice(0, location.href.indexOf("js")) + "people";
+    	}
     };
 
 }());

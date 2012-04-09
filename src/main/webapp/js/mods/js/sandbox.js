@@ -61,6 +61,16 @@ var Sandbox =  {
 				if(url && searchConfig && callback){ // TODO more validation needed
 					core.ajax.getJSON(url, searchConfig, callback);
 				}
+			},
+	    	/*
+	    	 * SHOULD THIS BE HERE?
+	    	 * Returns the correct url for ajax calls whether this is hosted on:
+	    	 * 1. My local TC Server.
+	    	 * 2. My local CloudFoundry instance.
+	    	 * 3. My CloudFoundry.com instance.
+	    	 */
+			baseUrl : function() {
+				return core.baseUrl();
 			}
 					
         };
