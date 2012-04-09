@@ -28,7 +28,7 @@ public class AddingAMotherIT extends FuncAbstract{
     	// Save Rachel
     	String rachelId = idOfPosted(rachelJSON);
     	
-    	String isaacJSON = "{ \"name\": \"Issac Williams\",\"sex\": \"MALE\"}";
+    	String isaacJSON = "{ \"name\": \"Isaac Williams\",\"sex\": \"MALE\"}";
     	// Save Isaac
     	String isaacId = idOfPosted(isaacJSON); 
     	
@@ -164,7 +164,7 @@ public class AddingAMotherIT extends FuncAbstract{
     	// Save Rachel
     	String rachelId = idOfPosted(rachelJSON);
     	
-    	String isaacJSON = "{ \"name\": \"Issac Williams\",\"sex\": \"MALE\"}";
+    	String isaacJSON = "{ \"name\": \"Isaac Williams\",\"sex\": \"MALE\"}";
     	// Save Isaac
     	String isaacId = idOfPosted(isaacJSON); 
     	
@@ -187,7 +187,7 @@ public class AddingAMotherIT extends FuncAbstract{
 		String expectedIsaacJSON 
 			= "{" +
 					"\"id\":" + isaacId + "," +
-					"\"name\":\"Issac Williams\"" +
+					"\"name\":\"Isaac Williams\"" +
 					",\"version\":1," +
 					"\"sex\":\"MALE\"," +
 					"\"father\":\"null\"," +
@@ -208,7 +208,7 @@ public class AddingAMotherIT extends FuncAbstract{
 					"\"children\":[]," +
 					"\"links\":" +
 						"[" +
-							"{\"rel\":\"self\",\"href\":\"" + appUrl() + "/"  + isaacId + "\",\"title\":\"Issac Williams\"}," +
+							"{\"rel\":\"self\",\"href\":\"" + appUrl() + "/"  + isaacId + "\",\"title\":\"Isaac Williams\"}," +
 							"{\"rel\":\"father\",\"href\":\"" + appUrl() + "/"  + isaacId + "/father\",\"title\":\"Father\"}," +
 							"{\"rel\":\"mother\",\"href\":\"" + appUrl() + "/"  + rachelId + "\",\"title\":\"Rachel Margaret Wallace\"}," +
 							"{\"rel\":\"children\",\"href\":\"" + appUrl() + "/"  + isaacId + "/children\",\"title\":\"Children\"}" +
@@ -393,7 +393,7 @@ public class AddingAMotherIT extends FuncAbstract{
     	// Save Rachel
     	String rachelId = idOfPosted(rachelJSON);
     	
-    	String isaacJSON = "{ \"name\": \"Issac Williams\",\"sex\": \"MALE\"}";
+    	String isaacJSON = "{ \"name\": \"Isaac Williams\",\"sex\": \"MALE\"}";
     	// Save Isaac
     	String isaacId = idOfPosted(isaacJSON); 
     	
@@ -432,7 +432,7 @@ public class AddingAMotherIT extends FuncAbstract{
 				"{" +
 					"\"id\":" + isaacId + "," +
 					"\"version\":1," +
-					"\"name\":\"Issac Williams\"," +
+					"\"name\":\"Isaac Williams\"," +
 					"\"sex\":\"MALE\"," +
 					"\"father\":\"null\"," +
 					"\"mother\":" + rachelId + "," +
@@ -441,7 +441,7 @@ public class AddingAMotherIT extends FuncAbstract{
 						"{" +
 							"\"rel\":\"self\"," +
 							"\"href\":\"" + appUrl() + "/" + isaacId + "\"," +
-							"\"title\":\"Issac Williams\"}," +
+							"\"title\":\"Isaac Williams\"}," +
 						"{" +
 							"\"rel\":\"father\"," +
 							"\"href\":\"" + appUrl() + "/"  + isaacId + "/father\"," +
