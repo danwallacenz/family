@@ -5,7 +5,8 @@
  */
 
 CORE.create_module("search-box", function(sb) {
-    var input, button;
+    
+	var input, button;
 
     return {
     	
@@ -14,7 +15,6 @@ CORE.create_module("search-box", function(sb) {
             button = sb.find("#search_button")[0],
             
             sb.addEvent(button, "click", this.handleSearch);
-
         },
         
         destroy : function () {
@@ -50,10 +50,8 @@ CORE.create_module("search-results", function(sb) {
             sb.listen({
                 'results-returned' : function (results) {
                 	
-                	// TODO add sb.parseJSON
                 	// extract from ugly namespacing in json. TODO fix this
-                	searchResults = $.parseJSON(results).searchResults;
-                	//searchResults = sb.parseJSON(results).searchResults;
+                	searchResults = sb.parseJSON(results).searchResults;
             		console.log(searchResults);
             		
             		sb.removeEvent(resultsList, 'click', this.handleSelect);

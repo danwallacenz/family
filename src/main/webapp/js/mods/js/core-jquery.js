@@ -146,6 +146,11 @@ var CORE = (function () {
         		return compiledTmpl;
         	}
         },
+        json: {
+        	parseJSON : function(json){
+        		return $.parseJSON(json);
+        	}
+        },
         is_arr : function (arr) {
             return jQuery.isArray(arr);         
         },

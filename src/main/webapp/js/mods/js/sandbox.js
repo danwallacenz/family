@@ -51,6 +51,11 @@ var Sandbox =  {
             	if (template && resultsObject){// TODO more validation to do here
             		return core.template.loadTemplate(template, resultsObject);
             	}
+			},
+			parseJSON : function(json) {
+				if(json){
+					return core.json.parseJSON(json);
+				}
 			}
         };
     }
