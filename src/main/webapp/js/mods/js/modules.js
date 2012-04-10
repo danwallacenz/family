@@ -5,7 +5,7 @@
  */
 
 /*******************************************************************************
- * 
+ * JUST TEXT-ENTRY & A BUTTON.
  */
 CORE.create_module("search-box", function(sb) {
     
@@ -41,42 +41,56 @@ CORE.create_module("search-box", function(sb) {
 
 /*******************************************************************************
  * Listen for a 'perform-search' event. When that happens, send an ajax call to
- * the server. Fire a 'results-returned' event when the search results arrive.
+ * the server. Fire a 'results-returned' event when the search results arrive 
+ * successfully..
  */
 CORE.create_module("searcher", function(sb) {    
 
     return {
         init : function () {
-        	
-        	//var that = this;
-        	
         	sb.listen({
         		'perform-search' : function (searchTerm) {
-        			
-        		var responseText,
-        			callback = function(resp, textStatus, jqXHR) {
-						
-						log(jqXHR.responseText);
-						
-						if (jqXHR.responseText) {
-							responseText = jqXHR.responseText; 
-							//log("callback-this.responseText=" + responseText);
-		        			//if(responseText){
+        		
+        			var ajaxRequest, doneCallback, failCallback;
+        		
+        			// ON SUCCESS
+        			doneCallback = function(data, textStatus, jqXHR) {		
+						if (data) { 
 	   						sb.notify({
 	   		                    type : 'results-returned',
-	   		                    data : responseText 
+	   		                    data : data  
 	   		                })
-		        			//}
 						}
 					};
-        			
-        			
-//        			sb.getJSON(that.url(), //sb.baseUrl(), TODO 
-//        							{find: "ByNameLike", name: searchTerm},
-//        							callback);
-        			sb.getJSON(sb.baseUrl(), // Should sb call this? Don't think so!
-							{find: "ByNameLike", name: searchTerm},
-							callback);
+					
+					// ON FAILURE (how can I test this?)
+					failCallback = function(jqXHR, textStatus, errorThrown) {
+						log("ajax error:" + textStatus 
+							+ " status:" + jqXHR.status 
+							+ " errorThrown: " + errorThrown);
+   						sb.notify({
+   		                    		type : 	'error-ajax',
+   		                    		data : 	{"jqXHR" 		: jqXHR,
+   		                    				"textStatus"	: textStatus,
+   		                    				"errorThrown"	: errorThrown 
+   		                    			}
+   		                		})
+					};
+					
+					// SEND
+					ajaxRequest = sb.getJSON(sb.baseUrl(), // Should sb call baseUrl()? Don't think so!
+        									 { find: "ByNameLike",
+											   name: searchTerm },
+											doneCallback,
+        									failCallback);
+					
+        			// Experimental - shows how to attach a callback later
+					// on a Deferred object.
+        			ajaxRequest.done(function(data, textStatus, jqXHR){
+        				log("Experimental Deferred-start");
+        				log(data);
+        				log("Experimental Deferred-end");
+        			});
        			}
         	})
         },
@@ -115,7 +129,9 @@ CORE.create_module("search-results", function(sb) {
                 'results-returned' : function (results) {
                 	
                 	// extract from ugly namespacing in json. TODO fix this
-                	searchResults = sb.parseJSON(results).searchResults;
+                	//searchResults = sb.parseJSON(results).searchResults;
+                	searchResults = results.searchResults;
+                	
             		log(searchResults);
             		
             		sb.removeEvent(resultsList, 'click', this.handleSelect);

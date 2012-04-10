@@ -146,21 +146,21 @@ var CORE = (function () {
         		return compiledTmpl;
         	}
         },
+        
         json: {
         	parseJSON : function(json){
         		return $.parseJSON(json);
         	}
         },
+        
         ajax: {
-        	getJSON	: function(url, queryData, callback) {
-        		var jqxhr = $.getJSON(
-					url,
-					queryData,
-					callback
-				);
-        		log("jqxhr =" + jqxhr);
+        	getJSON	: function(url, queryData, successCallback, errorCallback) {
+        		return $.getJSON(url,queryData)
+							.done(successCallback)
+							.fail(errorCallback);
 			}
         },
+        
         is_arr : function (arr) {
             return jQuery.isArray(arr);         
         },
