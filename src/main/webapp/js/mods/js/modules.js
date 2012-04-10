@@ -4,6 +4,9 @@
  * 
  */
 
+/*******************************************************************************
+ * 
+ */
 CORE.create_module("search-box", function(sb) {
     
 	var input, button;
@@ -34,61 +37,9 @@ CORE.create_module("search-box", function(sb) {
     };
 });
 
-/*
- * Listen for a 'results-returned' event. When this happens, display the results.
- * Add a 'person-selected' event which fires whenever a single result is clicked.
- */
-CORE.create_module("search-results", function(sb) {
 
-    return {
-        init : function () {
-            var resultsList 	= sb.find("ul")[0],
-            	resultsTemplate	= sb.find('#templ-results')[0],
-            	searchResults,
-            	resultsListItems;
-            	
-            sb.listen({
-                'results-returned' : function (results) {
-                	
-                	// extract from ugly namespacing in json. TODO fix this
-                	searchResults = sb.parseJSON(results).searchResults;
-            		console.log(searchResults);
-            		
-            		sb.removeEvent(resultsList, 'click', this.handleSelect);
-            		
-            		resultsListItems = sb.loadTemplate(resultsTemplate,
-            								{"foundPeople" : searchResults});
-            		resultsList.innerHTML = resultsListItems;
-            		
-            		// Publish 'person-selected' when a link is clicked.
-            		sb.addEvent(resultsList, 'click', this.handleSelect);
-                }
-            });
 
-        },
-        
-        destroy : function () {
-            sb.removeEvent(resultsList, "click", this.handleSelect );
-            sb.ignore(['results-returned']);
-            compiledTmpl = null;
-        },
-        
-        handleSelect : function (e) {
-    		var target = e.target;
-    		var tagName = target.tagName;
-    		if(tagName === 'A'){
-    			e.preventDefault();
-    			// Publish
-                sb.notify({
-                    type : 'person-selected',
-                    data : target
-                });
-    		}
-        },
-    };
-});
-
-/*
+/*******************************************************************************
  * Listen for a 'perform-search' event. When that happens, send an ajax call to
  * the server. Fire a 'results-returned' event when the search results arrive.
  */
@@ -143,6 +94,61 @@ CORE.create_module("searcher", function(sb) {
 //    	url : function(){
 //    		return location.href.slice(0, location.href.indexOf("js")) + "people";
 //    	}
+    };
+});
+
+/*******************************************************************************
+ * DISPLAY SEARCH RESULTS
+ * Listen for a 'results-returned' event. When this happens, display the results.
+ * Add a 'person-selected' event which fires whenever a single result is clicked.
+ */
+CORE.create_module("search-results", function(sb) {
+
+    return {
+        init : function () {
+            var resultsList 	= sb.find("ul")[0],
+            	resultsTemplate	= sb.find('#templ-results')[0],
+            	searchResults,
+            	resultsListItems;
+            	
+            sb.listen({
+                'results-returned' : function (results) {
+                	
+                	// extract from ugly namespacing in json. TODO fix this
+                	searchResults = sb.parseJSON(results).searchResults;
+            		log(searchResults);
+            		
+            		sb.removeEvent(resultsList, 'click', this.handleSelect);
+            		
+            		resultsListItems = sb.loadTemplate(resultsTemplate,
+            								{"foundPeople" : searchResults});
+            		resultsList.innerHTML = resultsListItems;
+            		
+            		// Publish 'person-selected' when a link is clicked.
+            		sb.addEvent(resultsList, 'click', this.handleSelect);
+                }
+            });
+
+        },
+        
+        destroy : function () {
+            sb.removeEvent(resultsList, "click", this.handleSelect );
+            sb.ignore(['results-returned']);
+            compiledTmpl = null;
+        },
+        
+        handleSelect : function (e) {
+    		var target = e.target;
+    		var tagName = target.tagName;
+    		if(tagName === 'A'){
+    			e.preventDefault();
+    			// Publish
+                sb.notify({
+                    type : 'person-selected',
+                    data : target
+                });
+    		}
+        },
     };
 });
 
