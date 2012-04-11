@@ -153,11 +153,20 @@ var CORE = (function () {
         	}
         },
         
+        /*
+         * We send the query data for search. Just the url for loading a person.
+         */
         ajax: {
-        	getJSON	: function(url, queryData, successCallback, errorCallback) {
-        		return $.getJSON(url,queryData)
+        	getJSON	: function(url, successCallback, errorCallback,  queryData) {
+        		if(queryData){
+        			return $.getJSON(url,queryData)
 							.done(successCallback)
 							.fail(errorCallback);
+        		}else{
+        			return $.getJSON(url)
+					.done(successCallback)
+					.fail(errorCallback);
+        		}
 			}
         },
         
