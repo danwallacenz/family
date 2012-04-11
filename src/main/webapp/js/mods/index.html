@@ -54,7 +54,7 @@
 	        	<button id="search_button">Search</button>
 	        </div>
 			
-			<div id="search-results">
+			<div id="search-results-panel">
 				<script id="templ-results" type="text/template">					
 							<% _.each( foundPeople, function(person){ %>								
 									<li><strong><a href="<%= person.href %> "><%= person.name %></a></strong></li>
@@ -125,7 +125,14 @@
   <!--<script src="js/core-dojo.js"></script> -->
   <script src="js/core-jquery.js"></script>
   <script src="js/sandbox.js"></script>
-  <script src="js/modules.js"></script>
+   <script src="js/search-box/search-box.js"></script>
+  <script src="js/searcher/searcher.js"></script>
+  <script src="js/search-results-panel/search-results-panel.js"></script>
+  <script src="js/results-history-panel/results-history-panel.js"></script>
+  <script src="js/person-loader/person-loader.js"></script>
+  <script src="js/family-panel/family-panel.js"></script>
+  <script src="js/bootstrapper.js"></script>
+  <!--<script src="js/modules.js"></script>-->
   
   <!-- end scripts -->
 
