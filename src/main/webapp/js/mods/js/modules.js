@@ -96,7 +96,7 @@ CORE.create_module("searcher", function(sb) {
         },
         
         destroy : function () {
-            sb.ignore('perform-search');
+            sb.ignore(['perform-search']);
         },
         
     	/*
@@ -262,21 +262,8 @@ CORE.create_module("family-panel", function(sb) {
         		familyHTML = sb.loadTemplate(familyTemplate,
         				{"person" : person});
         		panel.innerHTML = familyHTML;
-
-        		//        		resultsListItems = sb.loadTemplate(resultsTemplate,
-//				{"foundPeople" : searchResults});
-//				resultsList.innerHTML = resultsListItems;
         		
-        		// underscore template
-        		//var templMarkup = $('#templ-person').html();
-        		//var compiledTmpl = _.template(templMarkup, {"person" : person});
-
-        		
-        		// populate results ul
-        		//$('#person').html(compiledTmpl);
-        		
-        		// Publish 'person-selected' when a link is clicked.
-        		
+        		// Publish 'person-selected' when a link is clicked.  		
         		sb.addEvent(panel, 'click', that.handleSelect);
         		
         	}
