@@ -1,14 +1,19 @@
+#*familypeople*
 
-**This implements a service which exposes a RESTful JSON interface which manipulates genealogical data.
-It is designed to be used as a service upon which different experimental clients can be evaluated.**
+--------------------------------------------------------------------------------------------------------------------
+
+**This is a service which manipulates genealogical data.**
+
+It exposes a RESTful JSON interface which is designed to be used as a service upon which different experimental clients can be evaluated.
 
 Some **sample apps** can be viewed <a href="http://familypeople.cloudfoundry.com/home-cloudfoundry.html">here</a>.
 
 I'm going to concentrate on Javascript, HTML5 and CSS3 clients; my friend Ovi is building an Android front-end.
 
-# Family API
-
 --------------------------------------------------------------------------------------------------------------------
+## Family API
+
+
 
 
   
