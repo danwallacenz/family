@@ -1,11 +1,16 @@
+
 **This implements a service which exposes a RESTful JSON interface which manipulates genealogical data.
-It is designed to be used as a service upon which different experimental Javascript clients can be evaluated.**
+It is designed to be used as a service upon which different experimental clients can be evaluated.**
+
+Some **sample apps** can be viewed <a href="http://familypeople.cloudfoundry.com/home-cloudfoundry.html">here</a>.
+
+I'm going to concentrate on Javascript, HTML5 and CSS3 clients; my friend Ovi is building an Android front-end.
 
 # Family API
 
 --------------------------------------------------------------------------------------------------------------------
-Code samples <a href="http://familypeople.cloudfoundry.com/home-cloudfoundry.html">here</a>
- --------------------------------------------------------------------------------------------------------------------
+
+
   
 ### Using curl
   
@@ -408,36 +413,45 @@ Content-Length: 640
 		      }
 		   ]
 		}
-		
-# VMC Tunnel		
-		
-481  vmc target
-  482  vmc target http://api.familypeople.cloudfoundry.com
-  483  vmc target http://familypeople.cloudfoundry.com
-  484  vmc target http://api.cloudfoundry.com
-  485  vmc apps
-  486  vmc help
-  487  vmc apps
-  488  vmc tunnel family-db
-  489  vmc tunnel family-db
-  490  vmc target
-  491  vmc apps
-  492  vmc tunnel
-  493  vmc tunnel
-  494  vmc tunnel
-  495  vmc target
-  496  vmc tunnel
-  497  vmc target http://api.cloudfoundry.com
-  498* vmc tunnel
-  499  vmc tunnel family-db
-  500  vmc target http://api.cloudfoundry.com
-  501  vmc apps
-  502  vmc help
-  503  vmc login
-  504  vmc apps
-  505  vmc tunnel family-db
-  506  vmc tunnel family-db
-  507  vmc login
-  508  history
+	
+# Some developer notes	
+  		
+### Accessing MySQL in CloudFoundry VMs
 
-		  
+1. vmc target http://api.familypeople.cloudfoundry.com
+2. vmc target http://api.danwallacenz.cloudfoundry.me
+
+		->vmc target http://api.danwallacenz.cloudfoundry.me
+		Successfully targeted to [http://api.danwallacenz.cloudfoundry.me]
+		
+		->vmc login
+		Attempting login to [http://api.danwallacenz.cloudfoundry.me]
+		Email: daniel.wallace.nz@gmail.com
+		Password: ********
+		Successfully logged into [http://api.danwallacenz.cloudfoundry.me]
+		
+		->vmc apps
+
+		+-------------+----+---------+----------------------------------------------+-------------+
+		| Application | #  | Health  | URLS                                         | Services    |
+		+-------------+----+---------+----------------------------------------------+-------------+
+		| caldecott   | 1  | RUNNING | caldecott-7ee9e.danwallacenz.cloudfoundry.me | mysql-c9b0f |
+		| family      | 1  | RUNNING | family.danwallacenz.cloudfoundry.me          | mysql-c9b0f |
+		+-------------+----+---------+----------------------------------------------+-------------+
+		
+		->vmc tunnel mysql-c9b0f
+		Password: ********
+		Getting tunnel connection info: OK
+
+		Service connection info: 
+  		username : uZItJ1E8jJsZh
+  		password : p905HD4CXuJ9L
+  		name     : db9f50d98499e466baa3240bca1099f67
+
+		Starting tunnel to mysql-c9b0f on port 10000.
+		1: none
+		2: mysqldump
+		3: mysql
+		
+		mysql>
+
