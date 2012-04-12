@@ -1,4 +1,5 @@
 
+
 #*familypeople*
 
 --------------------------------------------------------------------------------------------------------------------
@@ -260,7 +261,7 @@ Content-Length: 640
 		
 ##### Notes:
 
-1."__affectedParties__":[
+ 1."__affectedParties__":[
   {
    "id":148,
    "name":"Joan Margaret Carter",
@@ -268,7 +269,9 @@ Content-Length: 640
   }
 ]
 
-2."links":[
+   This person is now __STALE__ and should be refreshed at some stage.
+
+ 2."links":[
       {
 ...
       },
@@ -280,7 +283,9 @@ Content-Length: 640
 ...
    ],
 
-3.
+   Conforming to HATEOAS principles, the mother now appears in the __links__.
+
+ 3.
 ...
  "placeOfDeath":null,
  "father":"null",
@@ -294,6 +299,8 @@ Content-Length: 640
    "placeOfDeath":null,
    "version":1,__
 ...
+
+  The person's mother is also now present in the 'main' JSON. That's three times in one response!
 
 -------------------------------------------------------------------------
 #### The mother has a child now
@@ -390,6 +397,8 @@ Content-Length: 640
    "sex":"MALE",
    "dob":"27/06/1957",__
 ...
+
+   The child is present under __children__ (also with HATEOAS links). Notice that the __version__ has incremented.
 
 -------------------------------------------------------------------------
 #### Searching
