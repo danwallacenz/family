@@ -1,3 +1,4 @@
+
 #*familypeople*
 
 --------------------------------------------------------------------------------------------------------------------
@@ -77,17 +78,20 @@ I'm going to concentrate on Javascript, HTML5 and CSS3 clients; my friend Ovi is
 
 ##### Notes:
 	
-1.__"id":146,__		
+1. __"id":146,__		
 "name":"Daniel Roy Wallace",
 __"version":0,__
 "sex":"MALE",
 
+   ___id__ is assigned by JPA, __version__ is for optimistic locking._
 
-2.Keep-Alive: timeout=20
+2. Keep-Alive: timeout=20
 __Location: http://family.danwallacenz.cloudfoundry.me/people/146__
 Content-Length: 640
 
-3.__"links"__:[
+  _HTTP Header __Location__ contains the URL of the newly created Person._
+
+3. __"links"__:[
   {
  __"rel":"self",__
  __"href":"http://family.danwallacenz.cloudfoundry.me/people/146",__
@@ -110,7 +114,9 @@ Content-Length: 640
   }
 ]
 
+ ___"links"__  attempts to follow recommended RESTful HATEOAS principles._
 
+-------------------------------------------------------------------------
 #### Create his mother
 		->curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" 
 				-d '{"name": "Joan Margaret Carter", "sex" : "FEMALE", "dob": "02/14/1928", "placeOfBirth" : "Nelson, New Zealand"}' 
@@ -162,7 +168,7 @@ Content-Length: 640
 		   ]
 		}
 		
-
+-------------------------------------------------------------------------
 #### Link mother and son (n.b., Ids will vary)
 
 		->curl -i -X PUT -H "Content-Type: application/json" -H "Accept: application/json" 
@@ -289,6 +295,7 @@ Content-Length: 640
    "version":1,__
 ...
 
+-------------------------------------------------------------------------
 #### The mother has a child now
 
 		->curl -i -H "Accept: application/json" http://family.danwallacenz.cloudfoundry.me/people/148
@@ -384,6 +391,7 @@ Content-Length: 640
    "dob":"27/06/1957",__
 ...
 
+-------------------------------------------------------------------------
 #### Searching
 		->curl -i -H "Accept: application/json"  "http://family.danwallacenz.cloudfoundry.me/people?name=__an__&find=ByNameLike"
 		HTTP/1.1 200 OK
@@ -419,7 +427,8 @@ Content-Length: 640
 		   ]
 		}
 	
-# Some developer notes	
+-------------------------------------------------------------------------
+# Notes to myself	
   		
 ### Accessing MySQL in CloudFoundry VMs
 
@@ -459,4 +468,3 @@ Content-Length: 640
 		3: mysql
 		
 		mysql>
-
