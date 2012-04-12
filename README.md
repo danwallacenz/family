@@ -78,20 +78,20 @@ I'm going to concentrate on Javascript, HTML5 and CSS3 clients; my friend Ovi is
 
 ##### Notes:
 	
-1. __"id":146,__		
+ 1. __"id":146,__		
 "name":"Daniel Roy Wallace",
 __"version":0,__
 "sex":"MALE",
 
    ___id__ is assigned by JPA, __version__ is for optimistic locking._
 
-2. Keep-Alive: timeout=20
+ 2. Keep-Alive: timeout=20
 __Location: http://family.danwallacenz.cloudfoundry.me/people/146__
 Content-Length: 640
 
   _HTTP Header __Location__ contains the URL of the newly created Person._
 
-3. __"links"__:[
+ 3. __"links"__:[
   {
  __"rel":"self",__
  __"href":"http://family.danwallacenz.cloudfoundry.me/people/146",__
