@@ -58,11 +58,11 @@ public class PersonTransformer extends AbstractTransformer {
 	    getContext().writeComma();
 	    
 	    getContext().writeName("dob");
-	    getContext().transform(person.getDob() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(person.getDob()));
+	    getContext().transform(person.getDob() == null?null:new SimpleDateFormat("dd/MM/yyyy").format(person.getDob()));
 	    getContext().writeComma();
 	  
 	    getContext().writeName("dod");
-	    getContext().transform(person.getDod() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(person.getDod()));
+	    getContext().transform(person.getDod() == null?null:new SimpleDateFormat("dd/MM/yyyy").format(person.getDod()));
 	    getContext().writeComma();
 	    
 	    getContext().writeName("placeOfBirth");
@@ -142,11 +142,11 @@ public class PersonTransformer extends AbstractTransformer {
 	    	getContext().writeComma();
 	    	
 		    getContext().writeName("dob");
-		    getContext().transform(mother.getDob() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(mother.getDob()));
+		    getContext().transform(mother.getDob() == null?null:new SimpleDateFormat("dd/MM/yyyy").format(mother.getDob()));
 		    getContext().writeComma();
 		  
 		    getContext().writeName("dod");
-		    getContext().transform(mother.getDod() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(mother.getDod()));
+		    getContext().transform(mother.getDod() == null?null:new SimpleDateFormat("dd/MM/yyyy").format(mother.getDod()));
 		    getContext().writeComma();
 		    
 		    getContext().writeName("placeOfBirth");
@@ -183,11 +183,11 @@ public class PersonTransformer extends AbstractTransformer {
 	    	getContext().writeComma();
 	    	
 		    getContext().writeName("dob");
-		    getContext().transform(father.getDob() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(father.getDob()));
+		    getContext().transform(father.getDob() == null?null:new SimpleDateFormat("dd/MM/yyyy").format(father.getDob()));
 		    getContext().writeComma();
 		  
 		    getContext().writeName("dod");
-		    getContext().transform(father.getDod() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(father.getDod()));
+		    getContext().transform(father.getDod() == null?null:new SimpleDateFormat("dd/MM/yyyy").format(father.getDod()));
 		    getContext().writeComma();
 		    
 		    getContext().writeName("placeOfBirth");
@@ -233,11 +233,11 @@ public class PersonTransformer extends AbstractTransformer {
     	    getContext().writeComma();
 	    	
 		    getContext().writeName("dob");
-		    getContext().transform(child.getDob() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(child.getDob()));
+		    getContext().transform(child.getDob() == null?null:new SimpleDateFormat("dd/MM/yyyy").format(child.getDob()));
 		    getContext().writeComma();
 		  
 		    getContext().writeName("dod");
-		    getContext().transform(child.getDod() == null?"unknown":new SimpleDateFormat("dd/MM/yyyy").format(child.getDod()));
+		    getContext().transform(child.getDod() == null?null:new SimpleDateFormat("dd/MM/yyyy").format(child.getDod()));
 		    getContext().writeComma();
 		    
 		    getContext().writeName("placeOfBirth");

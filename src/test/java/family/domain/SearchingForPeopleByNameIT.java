@@ -115,8 +115,8 @@ public class SearchingForPeopleByNameIT extends FuncAbstract {
 					.and().that().body("searchResults.getAt(0).id", equalTo(new Integer(brendonId).intValue()))
 					.and().that().body("searchResults.getAt(0).name", equalTo("Brendon "+ familyName))
 					.and().that().body("searchResults.getAt(0).sex", equalTo("MALE"))
-					.and().that().body("searchResults.getAt(0).dob", equalTo("unknown"))
-					.and().that().body("searchResults.getAt(0).dod", equalTo("unknown"))
+					.and().that().body("searchResults.getAt(0).dob", is(JSONNull.class))
+					.and().that().body("searchResults.getAt(0).dod", is(JSONNull.class))
 					.and().that().body("searchResults.getAt(0).placeOfBirth", is(JSONNull.class))
 					.and().that().body("searchResults.getAt(0).placeOfDeath", is(JSONNull.class))
 					
@@ -124,8 +124,8 @@ public class SearchingForPeopleByNameIT extends FuncAbstract {
 					.and().that().body("searchResults.getAt(1).id", equalTo(new Integer(isaacId).intValue()))
 					.and().that().body("searchResults.getAt(1).name", equalTo("Isaac "+ familyName))
 					.and().that().body("searchResults.getAt(1).sex", equalTo("MALE"))
-					.and().that().body("searchResults.getAt(1).dob", equalTo("unknown"))
-					.and().that().body("searchResults.getAt(1).dod", equalTo("unknown"))
+					.and().that().body("searchResults.getAt(1).dob", is(JSONNull.class))
+					.and().that().body("searchResults.getAt(1).dod", is(JSONNull.class))
 					.and().that().body("searchResults.getAt(1).placeOfBirth", is(JSONNull.class))
 					.and().that().body("searchResults.getAt(1).placeOfDeath", is(JSONNull.class))
 
@@ -133,8 +133,8 @@ public class SearchingForPeopleByNameIT extends FuncAbstract {
 					.and().that().body("searchResults.getAt(2).id", equalTo(new Integer(rachelId).intValue()))
 					.and().that().body("searchResults.getAt(2).name", equalTo("Rachel Margaret "+ familyName))
 					.and().that().body("searchResults.getAt(2).sex", equalTo("FEMALE"))
-					.and().that().body("searchResults.getAt(2).dob", equalTo("unknown"))
-					.and().that().body("searchResults.getAt(2).dod", equalTo("unknown"))
+					.and().that().body("searchResults.getAt(2).dob", is(JSONNull.class))
+					.and().that().body("searchResults.getAt(2).dod", is(JSONNull.class))
 					.and().that().body("searchResults.getAt(2).placeOfBirth", is(JSONNull.class))
 					.and().that().body("searchResults.getAt(2).placeOfDeath", is(JSONNull.class))
 					

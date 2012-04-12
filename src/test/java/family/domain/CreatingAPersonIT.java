@@ -186,7 +186,7 @@ public class CreatingAPersonIT extends FuncAbstract {
 		// Create a Person in the database
 		String personAsJson = 
 				
-			"{ \"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\",\"placeOfDeath\" : \"Unknown\"}";
+			"{ \"name\" : \"Daniel Roy Wallace\",\"sex\" : \"MALE\",\"placeOfDeath\" : null}";
 
 		String newId = idOfPosted(personAsJson);
 		
@@ -194,7 +194,7 @@ public class CreatingAPersonIT extends FuncAbstract {
 		expect().log().all()
 		.that().body("name", equalTo("Daniel Roy Wallace"))
 		.and().that().body("version", equalTo(0))
-		.and().that().body("placeOfDeath", equalTo("Unknown"))
+		.and().that().body("placeOfDeath", is(JSONNull.class))
 		.given().header("Accept", "application/json")
 		.when().get(appUrl() + "/" + newId); 
 	}
