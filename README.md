@@ -83,13 +83,13 @@ I'm going to concentrate on Javascript, HTML5 and CSS3 clients; my friend Ovi is
 __"version":0,__
 "sex":"MALE",
 
-   ___id__ is assigned by JPA, __version__ is for optimistic locking._
+    ___id__ is assigned by JPA, __version__ is for optimistic locking._
 
  2. Keep-Alive: timeout=20
 __Location: http://family.danwallacenz.cloudfoundry.me/people/146__
 Content-Length: 640
 
-  _HTTP Header __Location__ contains the URL of the newly created Person._
+    _HTTP Header __Location__ contains the URL of the newly created Person._
 
  3. __"links"__:[
   {
@@ -114,7 +114,7 @@ Content-Length: 640
   }
 ]
 
- ___"links"__  attempts to follow recommended RESTful HATEOAS principles._
+    ___"links"__  attempts to follow recommended RESTful HATEOAS principles._
 
 -------------------------------------------------------------------------
 #### Create his mother
