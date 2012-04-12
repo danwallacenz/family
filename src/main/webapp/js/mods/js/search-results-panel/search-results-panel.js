@@ -7,7 +7,7 @@ CORE.create_module("search-results-panel", function(sb) {
 
     return {
         init : function () {
-            var resultsList 	= sb.find("ul")[0],
+            var resultsList 	= sb.find("#found-list")[0],
             	resultsTemplate	= sb.find('#templ-results')[0],
             	searchResults,
             	resultsListItems,

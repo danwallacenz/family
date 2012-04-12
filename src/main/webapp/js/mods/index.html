@@ -13,7 +13,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title></title>
-  <meta name="description" content="Simple pub-sub FamilyPeople with html5boilerplate">
+  <meta name="description" content="Simple pub-sub familypeople with modules">
 
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta name="viewport" content="width=device-width">
@@ -24,6 +24,7 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
   <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="js/family-panel/style.css">
 
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
@@ -42,7 +43,8 @@
 	  <header id="main-header">
 	  	<hgroup>
 		<h1>familypeople</h1>
-		<h2><em></>a simple search with modules</em></h2>
+		<h2><em>a simple search with modules, sandbox, core, and base</em></h2>
+		<h3><em>search-box, searcher, search-results-panel, results-history-panel, person-loader, family-panel.</em></h3>
 		</hgroup>
 	  </header>
 	  
@@ -56,51 +58,70 @@
 			
 			<div id="search-results-panel">
 				<script id="templ-results" type="text/template">					
-							<% _.each( foundPeople, function(person){ %>								
-									<li><strong><a href="<%= person.href %> "><%= person.name %></a></strong></li>
-									<li><a href="<%= person.href %> "><% person.dob?print('born:' + person.dob):'' %></a></li>
-									<li><a href="<%= person.href %> "><% person.placeOfBirth?print('at:' + person.placeOfBirth):'' %></a></li>
-									<li><a href="<%= person.href %> "><% person.dod?print('died:' + person.dod):'' %></a></li>
-									<li><a href="<%= person.href %> "><% person.placeOfDeath?print('at:' + person.placeOfDeath):'' %></a></li>								
+							<% _.each( foundPeople, function(person){ %>	
+									<div class="person">							
+										<p><strong><a href="<%= person.href %> "><%= person.name %></a></strong></p>
+										<p><a href="<%= person.href %> "><% person.dob?print('born:' + person.dob):'' %>
+											<% person.placeOfBirth?print('at:' + person.placeOfBirth):'' %></a></p>
+										<p><a href="<%= person.href %> "><% person.dod?print('died:' + person.dod):'' %>
+											<% person.placeOfDeath?print('at:' + person.placeOfDeath):'' %></a></p>
+									</div>								
 							<%});%>
 				</script>
 			
-				<ul><!-- results go here --></ul>
+				<div id="found-list"><!-- results go here --></div>
 			</div>
 			
 		</section>
 		
 		<section id="family-panel">
 			
-			<div id="person"></div>
+			<div id="person"><!-- family HTML goes here --></div>
 			
 			<script id="templ-person" type="text/template">
-						<p><strong><%= person.name %></strong>  born on <%= person.dob %> at <%= person.placeOfBirth %> died on <%= person.dod %> at <%=person.placeOfDeath %></p>
 						
+						<div class="person">
+							<p><strong><%= person.name %></strong></p>  
+							<p>born on <%= person.dob %> at <%= person.placeOfBirth %></p> 
+							<p>died on <%= person.dod %> at <%=person.placeOfDeath %></p>
+						</div>
+
 						<% if(person.father){ %>
-							<h5>father</h5>
-							<p><a href="<%= person.father.links[0].href %> "><%= person.father.name %> born on <%= person.father.dob %> at <%= person.father.placeOfBirth %> died on <%= person.father.dod %> at <%=person.father.placeOfDeath %></a></p>						
+							<div class="person">
+								<h5>father</h5>
+								<p><a href="<%= person.father.links[0].href %> "><%= person.father.name %></a></p>
+								<p><a href="<%= person.father.links[0].href %> ">born on <%= person.father.dob %> 
+									at <%= person.father.placeOfBirth %></a></p> 
+								<p><a href="<%= person.father.links[0].href %> ">died on <%= person.father.dod %> 
+									at <%=person.father.placeOfDeath %></a></p>
+							</div>						
 						<%}%>
 
 						<% if(person.mother){ %>
-							<h5>mother</h5>
-							<p><a href="<%= person.mother.links[0].href %> "><%= person.mother.name %> born on <%= person.mother.dob %> at <%= person.mother.placeOfBirth %> died on <%= person.mother.dod %> at <%=person.mother.placeOfDeath %></a></p>						
+							<div class="person">
+								<h5>mother</h5>
+								<p><a href="<%= person.mother.links[0].href %> "><%= person.mother.name %></a></p>
+								<p><a href="<%= person.mother.links[0].href %> ">born on <%= person.mother.dob %> 
+									at <%= person.mother.placeOfBirth %></a></p> 
+								<p><a href="<%= person.mother.links[0].href %> ">died on <%= person.mother.dod %> 
+									at <%=person.mother.placeOfDeath %></a></p>
+							</div>						
 						<%}%>
 
-						<% if(person.children.length > 0) { %>
-							<h5>children</h5>
-							<% _.each(person.children, function(child){ %>
-								<p>
-									<a href="<%= child.links[0].href %> ">
-										<%= child.name %>
-										<% child.dob?print('born:' + child.dob):'' %>
-										<% child.placeOfBirth?print('at:' + child.placeOfBirth):'' %>
-										<% child.dod?print('died:' + child.dod):'' %></a>
-										<% child.placeOfDeath?print('at:' + child.placeOfDeath):'' %>
-									</a>
-								</p>
-							<%});%>
-						<%}%>
+						<div class="children">
+							<% if(person.children.length > 0) { %>
+								<h5>children</h5>
+								<% _.each(person.children, function(child){ %>
+									<div class="person">
+										<p><a href="<%= child.links[0].href %> "><%= child.name %></a></p>		
+										<p><a href="<%= child.links[0].href %> "><% child.dob?print('born on ' + child.dob):'' %>
+											<% child.placeOfBirth?print('at ' + child.placeOfBirth):'' %></a></p>
+										<p><a href="<%= child.links[0].href %> "><% child.dod?print('died on ' + child.dod):'' %>
+											<% child.placeOfDeath?print('at ' + child.placeOfDeath):'' %></a></p>
+									</div>
+								<%});%>
+							<%}%>
+						</div>
 				</script>
 				
 		</section>

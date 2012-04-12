@@ -243,7 +243,7 @@ td { vertical-align: top; }
 		font:bold 12px verdana,sans-serif;
 	}
 
-	#searcher{
+	#search-results-panel{
 		float:left;
 		width:210px;
 		margin:10px 0px;
@@ -252,32 +252,32 @@ td { vertical-align: top; }
 		//background: #CCCCCC;
 	}
 	
-	#results {
+	#found-list {
 		float:left;
 		text-align:left;
 		font:12px verdana,sans-serif;
 		border:0px solid #CCCCCC;
 	}
 	
-	#results p{
-		/*float:left;
+/* 	#found-list p{
+		float:left;
 		text-align:left;
 		font:12px verdana,sans-serif;
 		list-style-type: none;
-		border:1px solid #999999;*/
-	}
+		border:1px solid #999999;
+	} */
 	
-	#results ul{
+	#found-list p{
 		margin:5px 0px 2px 0px;
 		padding:2px 1px 1px 1px;
 		border:0px solid #999999;
 	}
-	#results li{
+/* 	#results li{
 		margin:0px;
 		padding:0px;
 		list-style-type: none;
 		border:0px solid #999999;
-	}
+	} */
 	
 	#searches li{
 		font:bold 12px verdana,sans-serif;
@@ -285,12 +285,12 @@ td { vertical-align: top; }
 	}
 	
 
-	#person-viewer{
+/* 	#person-viewer{
 		float:left;
 		width:660px;
 		margin:20px;	
 		//background: #EEEEEE;	
-	}
+	} */
 	
 	#person-viewer div{
 		text-align:center;
