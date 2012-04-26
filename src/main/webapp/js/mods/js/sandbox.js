@@ -64,6 +64,9 @@ var Sandbox =  {
 					return core.ajax.getJSON(url, successCallback, errorCallback, searchConfig);
 				}
 			},
+			each : function(obj, iterator){
+				core.each(obj, iterator);
+			},
 	    	/*
 	    	 * SHOULD THIS BE HERE?
 	    	 * Returns the correct url for ajax calls whether this is hosted on:

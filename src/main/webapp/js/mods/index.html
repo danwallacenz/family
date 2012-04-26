@@ -24,8 +24,11 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
   <link rel="stylesheet" href="css/style.css">
-   <link rel="stylesheet" href="js/family-panel/style.css">
+  <link rel="stylesheet" href="js/search-box/style.css">
+  <link rel="stylesheet" href="js/search-results-panel/style.css">
+  <link rel="stylesheet" href="js/family-panel/style.css">
 
+  
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
   <!-- All JavaScript at the bottom, except this Modernizr build.
@@ -48,17 +51,19 @@
 		</hgroup>
 	  </header>
 	  
-	  <div role="main">
+	  <div role="main" id="main">
+	  
 		<section id="searcher">
 			
 			<div id="search-box">
-	        	<input id="search_input" type="text" name='q' />
+	        	<input id="search_input" type="search" name='q' />
 	        	<button id="search_button">Search</button>
 	        </div>
 			
 			<div id="search-results-panel">
-				<script id="templ-results" type="text/template">					
-							<% _.each( foundPeople, function(person){ %>	
+				<script id="templ-results" type="text/template">
+							<!-- TODO move _.each() to sb. Cannot do this. Must use CORE instead -->					
+							<% CORE.each( foundPeople, function(person){ %>	
 									<div class="person">							
 										<p><strong><a href="<%= person.href %> "><%= person.name %></a></strong></p>
 										<p><a href="<%= person.href %> "><% person.dob?print('born:' + person.dob):'' %>
@@ -69,23 +74,19 @@
 							<%});%>
 				</script>
 			
-				<div id="found-list"><!-- results go here --></div>
+				<div id="templ-results-socket"><!-- results go here --></div>
 			</div>
 			
 		</section>
 		
 		<section id="family-panel">
-			
-			<div id="person"><!-- family HTML goes here --></div>
-			
-			<script id="templ-person" type="text/template">
-						
+			<div id="templ-family-socket"><!-- family HTML goes here --></div>
+			<script id="templ-family" type="text/template">
 						<div class="person">
 							<p><strong><%= person.name %></strong></p>  
 							<p>born on <%= person.dob %> at <%= person.placeOfBirth %></p> 
 							<p>died on <%= person.dod %> at <%=person.placeOfDeath %></p>
 						</div>
-
 						<% if(person.father){ %>
 							<div class="person">
 								<h5>father</h5>
@@ -96,7 +97,6 @@
 									at <%=person.father.placeOfDeath %></a></p>
 							</div>						
 						<%}%>
-
 						<% if(person.mother){ %>
 							<div class="person">
 								<h5>mother</h5>
@@ -107,11 +107,12 @@
 									at <%=person.mother.placeOfDeath %></a></p>
 							</div>						
 						<%}%>
-
 						<div class="children">
 							<% if(person.children.length > 0) { %>
 								<h5>children</h5>
-								<% _.each(person.children, function(child){ %>
+								<!-- TODO move _.each() to sb. Cannot do this!
+								 HAVE TO USE CORE INSTEAD -->
+								<% CORE.each(person.children, function(child){ %>
 									<div class="person">
 										<p><a href="<%= child.links[0].href %> "><%= child.name %></a></p>		
 										<p><a href="<%= child.links[0].href %> "><% child.dob?print('born on ' + child.dob):'' %>

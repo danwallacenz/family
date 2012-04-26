@@ -185,7 +185,10 @@ var CORE = (function () {
     	 */
     	baseUrl : function(){
     		return location.href.slice(0, location.href.indexOf("js")) + "people";
-    	}
+    	},
+		each : function(obj, iterator){
+			_.each(obj, iterator);
+		}
     };
 
 }());

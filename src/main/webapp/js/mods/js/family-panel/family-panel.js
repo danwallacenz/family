@@ -8,8 +8,8 @@ CORE.create_module("family-panel", function(sb) {
 
     return {
         init : function () {
-        	var	panel 			= sb.find("#person")[0],
-        	 	familyTemplate	= sb.find('#templ-person')[0],
+        	var	panel 			= sb.find("#templ-family-socket")[0],
+        	 	familyTemplate	= sb.find('#templ-family')[0],
         	 	that = this,
         	 	familyHTML;
         	
@@ -33,7 +33,7 @@ CORE.create_module("family-panel", function(sb) {
         destroy : function () {
             sb.removeEvent(panel, "click", this.handleSelect );
             sb.ignore(['person-selected']);
-            compiledTmpl = null;
+            familyTemplate = panel = familyHTML = null;
         },
         
         handleSelect : function (e) {
