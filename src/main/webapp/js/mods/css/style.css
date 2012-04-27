@@ -217,110 +217,52 @@ td { vertical-align: top; }
 /* ==|== primary styles =====================================================
    Author: Dan Wallace
    ========================================================================== */
-	body{
+	body {
 		text-align:center;
 	}
 
-	#wrapper{
+	#wrapper {
 		width:960px;
 		margin: 15px auto;
-		text-align:left
+		text-align:left;
 		border:1px solid #999999;
 	}
 	
-	#main-header{
-		background:FFFBB9;
-		border:1px solid #999999;
+	#main-header {
+		background:#FFFBB9;
+		border:2px dashed #999999;
 		padding:20px;
+		text-align:left;
 	}
 
-	h1{
+	h1 {
 		font:bold 20px verdana,sans-serif;
 	}
-	h2{
+	h2 {
 		font:bold 14px verdana,sans-serif;
 	}
-	h3{
+	h3 {
 		font:bold 12px verdana,sans-serif;
 	}
 
- 	#main{
+ 	#main {
+ 		/* float:left; */
+ 		background:#FFFCCC;
 		border:1px dashed #999999;
-	 	text-align:left
+	 	text-align:left;
 	}
-
-/* 	#search-results-panel{
-		float:left;
-		width:210px;
-		margin:10px 0px;
-		padding:20px;
-		border:1px solid #999999;
-		//background: #CCCCCC;
-	} */
 	
-/* 	#found-list {
-		float:left;
-		text-align:left;
-		font:12px verdana,sans-serif;
-		border:0px solid #CCCCCC;
-	} */
-	
-/* 	#found-list p{
-		float:left;
-		text-align:left;
-		font:12px verdana,sans-serif;
-		list-style-type: none;
-		border:1px solid #999999;
-	} */
-	
-/* 	#found-list p{
-		margin:5px 0px 2px 0px;
-		padding:2px 1px 1px 1px;
-		border:0px solid #999999;
-	} */
-/* 	#results li{
-		margin:0px;
-		padding:0px;
-		list-style-type: none;
-		border:0px solid #999999;
-	} */
-	
-	#searches li{
+/* 	#searches li {
 		font:bold 12px verdana,sans-serif;
 		list-style-type: none;
-	}
-	
-
-/* 	#person-viewer{
-		float:left;
-		width:660px;
-		margin:20px;	
-		//background: #EEEEEE;	
 	} */
 	
-/* 	#person-viewer div{
-		text-align:center;
-		//border:1px solid #999999;
-		font: 12px verdana,sans-serif;
-		margin:20px;
-		padding:10px;	
-		//background: #DDDDDD;	
-	} */
-	
-	#main-footer{
+	#main-footer {
 		clear:both;
 		text-align:center;
 		padding:20px;
 		border-top:2px solid #999999;
 	}
-
-
-
-
-
-
-
-
 
 
 
