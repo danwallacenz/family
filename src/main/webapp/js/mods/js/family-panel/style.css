@@ -1,13 +1,21 @@
 
 
-	#family-panel{
-		float:left;
-		width:660px;
-		margin:20px;	
-		font: 12px verdana,sans-serif;
+ 	#family-panel{
+/* 		float:left;
+		width:660px; */
+/* 		-moz-box-flex: 1;
+		-webkit-box-flex: 1; */
+		margin:10px;	
+		/* font: 12px verdana,sans-serif; */
 		border:2px dotted #999999;
-		background: #F00;	
-	}
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px;
+		border-radius:5px;
+		-moz-box-shadow: rgb(150,150,150) 3px 3px 6px;
+		-webkit-box-shadow: rgb(150,150,150) 3px 3px 6px;
+		box-shadow: rgb(150,150,150) 3px 3px 6px;
+		/* background: #F00; */	
+	} 
 	
 	#family-panel .person{
 		text-align:left;

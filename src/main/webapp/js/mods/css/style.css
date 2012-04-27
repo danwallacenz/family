@@ -218,7 +218,12 @@ td { vertical-align: top; }
    Author: Dan Wallace
    ========================================================================== */
 	body {
-		text-align:center;
+		/* text-align:center; */
+		width: 100%;
+		display: -moz-box;
+		display: -webkit-box;
+		-moz-box-pack: center;
+		-webkit-box-pack: center;
 	}
 
 	#wrapper {
@@ -229,10 +234,18 @@ td { vertical-align: top; }
 	}
 	
 	#main-header {
-		background:#FFFBB9;
+		/* background:#FFFBB9; */
+		background: -webkit-linear-gradient(top, #FFFFFF, #006699);
+		background: -moz-linear-gradient(top, #FFFFFF, #006699);
 		border:2px dashed #999999;
 		padding:20px;
 		text-align:left;
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px;
+		border-radius:5px;
+		-moz-box-shadow: rgb(150,150,150) 3px 3px 6px;
+		-webkit-box-shadow: rgb(150,150,150) 3px 3px 6px;
+		box-shadow: rgb(150,150,150) 3px 3px 6px;
 	}
 
 	h1 {
@@ -247,10 +260,49 @@ td { vertical-align: top; }
 
  	#main {
  		/* float:left; */
- 		background:#FFFCCC;
+ 		display: -moz-box;
+		display: -webkit-box;
+		-moz-box-orient: horizontal;
+		-webkit-box-orient: horizontal;
+/* 		-moz-box-flex: 1; 
+		-webkit-box-flex: 1; */
+ 		/* background:#FFFCCC; */
 		border:1px dashed #999999;
 	 	text-align:left;
+	 	font: 12px verdana,sans-serif;
+	 	margin:5px;
 	}
+	
+	#searcher {
+		/* float:left; */
+		/* width:660px; */
+/* 		-moz-box-flex: 1;
+		-webkit-box-flex: 1; */
+		width: 33%;
+		margin:10px 0px 10px 10px;	
+		/* font: 12px verdana,sans-serif; */
+		border:2px dotted #999999;
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px;
+		border-radius:5px;
+		-moz-box-shadow: rgb(150,150,150) 3px 3px 6px;
+		-webkit-box-shadow: rgb(150,150,150) 3px 3px 6px;
+		box-shadow: rgb(150,150,150) 3px 3px 6px;
+		/* background: #F00;	 */
+	}
+	
+	#family-panel {
+		/* float:left; */
+		/* width:660px; */
+		-moz-box-flex: 1;
+		-webkit-box-flex: 1;
+/* 		margin:20px;	
+		font: 12px verdana,sans-serif;
+		border:2px dotted #999999;
+		background: #F00; */	
+	}
+	
+
 	
 /* 	#searches li {
 		font:bold 12px verdana,sans-serif;
@@ -258,7 +310,7 @@ td { vertical-align: top; }
 	} */
 	
 	#main-footer {
-		clear:both;
+		/* clear:both; */
 		text-align:center;
 		padding:20px;
 		border-top:2px solid #999999;
