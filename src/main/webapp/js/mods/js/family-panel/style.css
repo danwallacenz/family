@@ -1,0 +1,48 @@
+
+
+ 	#family-panel{
+/* 		float:left;
+		width:660px; */
+/* 		-moz-box-flex: 1;
+		-webkit-box-flex: 1; */
+		margin:10px; 
+		padding:2px 1px 2px 2px;	
+		/* font: 12px verdana,sans-serif; */
+		/* border:2px dotted #999999; */
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px;
+		border-radius:5px;
+		-moz-box-shadow: rgb(150,150,150) 3px 3px 6px;
+		-webkit-box-shadow: rgb(150,150,150) 3px 3px 6px;
+		box-shadow: rgb(150,150,150) 3px 3px 6px;
+		/* background: #F00; */	
+	} 
+	
+	#family-panel .person{
+		text-align:left;
+		/* border:1px dashed #999999; */
+		margin:2px 2px 2px 2px;
+		padding:2px 1px 2px 2px;	
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px;
+		border-radius:5px;
+/* 		margin:20px;
+		padding:10px; */	
+		background: -webkit-linear-gradient(top, #FFF, #EEE);
+		background: -moz-linear-gradient(top, #FFF, #EEE);	
+	}
+	
+	#family-panel .person p{	
+		margin:2px 2px 2px 2px;
+		padding:2px 1px 2px 2px; 	
+	}
+	
+	#family-panel .children{
+		text-align:left;
+		margin:0px 0px 0px 0px;
+		padding:2px 1px 2px 2px;
+/* 		margin:20px;
+		padding:10px; */
+	}
+
+

@@ -1,0 +1,41 @@
+
+
+	#search-results-panel{
+		/* float:left; */
+		/* width:210px; */
+		margin:10px 0px;
+		padding:5px;
+		/* border:1px solid #999999; */
+		/* background: #00F */
+	}
+	
+	#templ-results-socket {
+		/* float:left; */
+		text-align:left;
+		font:12px verdana,sans-serif;
+		/* border:1px solid #CCCCCC; */
+	}
+	
+ 	#templ-results-socket div:nth-child(odd) {
+		 background: #EEE; 
+/* 		background: -webkit-linear-gradient(top, #CCC, #EEE);
+		background: -moz-linear-gradient(top, #CCC, #EEE); */
+	}
+	
+	#templ-results-socket div:nth-child(even) {
+		 background: #FFF; 
+/* 		background: -webkit-linear-gradient(top, #CCC, #DDD); */
+/* 		background: -moz-linear-gradient(top, #CCC, #DDD); */
+	} 
+	
+	#templ-results-socket div{
+
+		border-bottom:2px solid #999999;
+	}
+	
+	#templ-results-socket p{
+		margin:0px 0px 0px 0px;
+		padding:2px 1px 2px 2px;
+		/* border:0px solid #999999; */
+	}
+	

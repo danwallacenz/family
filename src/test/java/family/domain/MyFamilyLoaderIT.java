@@ -24,7 +24,7 @@ public class MyFamilyLoaderIT extends FuncAbstract {
 		.statusCode(200).when()
     	.put(appUrl() + "/"   + johnnyId + "/father/" + danId);
 
-		String royJSON = "{ \"name\" : \"Roy Stanley Wallace\",\"sex\":\"MALE\",\"dob\":\"02/21/1922\",\"placeOfBirth\":\"Napier, New Zealand\",\"dod\":\"02/10/1990\",\"placeOfDeath\":\"Wanganui, New Zealand\"}";
+		String royJSON = "{ \"name\" : \"Roy Stanley Wallace\",\"sex\":\"MALE\",\"dob\":\"02/21/1925\",\"placeOfBirth\":\"Napier, New Zealand\",\"dod\":\"02/10/1990\",\"placeOfDeath\":\"Wanganui, New Zealand\"}";
     	// Save Dad
     	String royId = idOfPosted(royJSON);
     	// Save Dad as my father.
@@ -32,7 +32,7 @@ public class MyFamilyLoaderIT extends FuncAbstract {
 		.statusCode(200).when()
     	.put(appUrl() + "/"   + danId + "/father/" + royId);
 
-       	String joanJSON = "{ \"name\" : \"Joan Margeret Carter\",\"sex\":\"FEMALE\",\"dob\":\"02/14/1928\",\"placeOfBirth\":\"Nelson, New Zealand\",\"dod\":\"02/10/1996\",\"placeOfDeath\":\"Wanganui, New Zealand\"}";
+       	String joanJSON = "{ \"name\" : \"Joan Margaret Carter\",\"sex\":\"FEMALE\",\"dob\":\"02/14/1929\",\"placeOfBirth\":\"Nelson, New Zealand\",\"dod\":\"02/10/1996\",\"placeOfDeath\":\"Wanganui, New Zealand\"}";
     	// Save Mum
     	String joanId = idOfPosted(joanJSON);
     	// Save Mum as my mother.
@@ -80,13 +80,16 @@ public class MyFamilyLoaderIT extends FuncAbstract {
        	String thomasCarterJSON = "{ \"name\" : \"Thomas Hall Carter\",\"sex\":\"MALE\",\"dob\":\"11/20/1880\",\"placeOfBirth\":\"Nelson, New Zealand\"}";
     	// Save Thomas Carter
     	String thomasCarterId = idOfPosted(thomasCarterJSON);
-       	String elizabethLockJSON = "{ \"name\" : \"Elizabeth Lock\",\"sex\":\"FEMALE\",\"dob\":\"02/03/1887\",\"placeOfBirth\":\"Stoke, New Zealand\"}";
+       	
+    	String elizabethLockJSON = "{ \"name\" : \"Elizabeth Lock\",\"sex\":\"FEMALE\",\"dob\":\"02/03/1887\",\"placeOfBirth\":\"Stoke, New Zealand\"}";
     	// Save Elizabeth Lock
     	String elizabethLockId = idOfPosted(elizabethLockJSON); 	
+    	
     	// Save  Elizabeth Lock as Joan's mother.
     	given().header("Accept", "application/json").then().expect()
 		.statusCode(200).when()
     	.put(appUrl() + "/"   + joanId + "/mother/" + elizabethLockId);
+    	
     	// Save Thomas Carter as Joan's father.
     	given().header("Accept", "application/json").then().expect()
 		.statusCode(200).when()

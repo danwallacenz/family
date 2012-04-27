@@ -1,0 +1,169 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/i/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title></title>
+  <meta name="description" content="Simple pub-sub familypeople with modules">
+
+  <!-- Mobile viewport optimized: h5bp.com/viewport -->
+  <meta name="viewport" content="width=device-width">
+
+	<meta name="keywords" content="family, mother, father, children,
+	 familytree, genealogy, ancestors, descendents">
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="js/search-box/style.css">
+  <link rel="stylesheet" href="js/search-results-panel/style.css">
+  <link rel="stylesheet" href="js/family-panel/style.css">
+
+  
+  <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
+
+  <!-- All JavaScript at the bottom, except this Modernizr build.
+       Modernizr enables HTML5 elements & feature detects for optimal performance.
+       Create your own custom Modernizr build: www.modernizr.com/download/ -->
+  <script src="js/libs/modernizr-2.5.3.min.js"></script>
+</head>
+<body>
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+  
+<!-- ============================================================================================== -->  
+  <div id="wrapper">
+	  <header id="main-header">
+	  	<hgroup>
+		<h1>familypeople</h1>
+		<h2><em>a simple search with modules, sandbox, core, and base</em></h2>
+		<h3><em>search-box, searcher, search-results-panel, results-history-panel, person-loader, family-panel.</em></h3>
+		</hgroup>
+	  </header>
+	  
+	  <div id="main" role="main" >
+	  
+		<section id="searcher">
+			
+			<div id="search-box">
+	        	<input id="search_input" type="search" name='q' />
+	        	<button id="search_button">Search</button>
+	        </div>
+			
+			<div id="search-results-panel">
+				<script id="templ-results" type="text/template">
+							<% CORE.each( foundPeople, function(person){ %>	
+									<div class="person">							
+										<p><strong><a href="<%= person.href %> "><%= person.name %></a></strong></p>
+										<p><a href="<%= person.href %> "><% person.dob?print('born:' + person.dob):'' %>
+											<% person.placeOfBirth?print('at:' + person.placeOfBirth):'' %></a></p>
+										<p><a href="<%= person.href %> "><% person.dod?print('died:' + person.dod):'' %>
+											<% person.placeOfDeath?print('at:' + person.placeOfDeath):'' %></a></p>
+									</div>									
+							<%});%>
+				</script>
+			
+				<div id="templ-results-socket"><!-- results go here --></div>
+			</div>
+			
+		</section>
+		
+		<section id="family-panel">
+			<div id="templ-family-socket">&nbsp;<!-- family HTML goes here --></div>
+			<script id="templ-family" type="text/template">
+						<div class="person">
+							<p><strong><%= person.name %></strong></p>  
+							<p>born on <%= person.dob %> at <%= person.placeOfBirth %></p> 
+							<p>died on <%= person.dod %> at <%=person.placeOfDeath %></p>
+						</div>
+						<% if(person.father){ %>
+							<div class="person">
+								<h5>father</h5>
+								<p><a href="<%= person.father.links[0].href %> "><%= person.father.name %></a></p>
+								<p><a href="<%= person.father.links[0].href %> ">born on <%= person.father.dob %> 
+									at <%= person.father.placeOfBirth %></a></p> 
+								<p><a href="<%= person.father.links[0].href %> ">died on <%= person.father.dod %> 
+									at <%=person.father.placeOfDeath %></a></p>
+							</div>						
+						<%}%>
+						<% if(person.mother){ %>
+							<div class="person">
+								<h5>mother</h5>
+								<p><a href="<%= person.mother.links[0].href %> "><%= person.mother.name %></a></p>
+								<p><a href="<%= person.mother.links[0].href %> ">born on <%= person.mother.dob %> 
+									at <%= person.mother.placeOfBirth %></a></p> 
+								<p><a href="<%= person.mother.links[0].href %> ">died on <%= person.mother.dod %> 
+									at <%=person.mother.placeOfDeath %></a></p>
+							</div>						
+						<%}%>
+						<div class="children">
+							<% if(person.children.length > 0) { %>
+								<h5>children</h5>
+								<% CORE.each(person.children, function(child){ %>
+									<div class="person">
+										<p><a href="<%= child.links[0].href %> "><%= child.name %></a></p>		
+										<p><a href="<%= child.links[0].href %> "><% child.dob?print('born on ' + child.dob):'' %>
+											<% child.placeOfBirth?print('at ' + child.placeOfBirth):'' %></a></p>
+										<p><a href="<%= child.links[0].href %> "><% child.dod?print('died on ' + child.dod):'' %>
+											<% child.placeOfDeath?print('at ' + child.placeOfDeath):'' %></a></p>
+									</div>
+								<%});%>
+							<%}%>
+						</div>
+				</script>
+				
+		</section>
+		
+		<section id="utility"></section>
+	  </div>
+	  
+	  <footer id="main-footer">
+		<small>Copyright &copy;2012</small>
+	  </footer>
+</div>
+<!-- ============================================================================================== -->
+
+  <!-- JavaScript at the bottom for fast page loading -->
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+
+  <!-- scripts concatenated and minified via build script -->
+  <script src="js/plugins.js"></script>
+  <script src="js/libs/pubsub.js"></script>
+  <script src="js/libs/underscore.js"></script>
+  <!--<script src="js/core-dojo.js"></script> -->
+  <script src="js/core-jquery.js"></script>
+  <script src="js/sandbox.js"></script>
+   <script src="js/search-box/search-box.js"></script>
+  <script src="js/searcher/searcher.js"></script>
+  <script src="js/search-results-panel/search-results-panel.js"></script>
+  <script src="js/results-history-panel/results-history-panel.js"></script>
+  <script src="js/person-loader/person-loader.js"></script>
+  <script src="js/family-panel/family-panel.js"></script>
+  <script src="js/bootstrapper.js"></script>
+  <!--<script src="js/modules.js"></script>-->
+  
+  <!-- end scripts -->
+
+  <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
+       mathiasbynens.be/notes/async-analytics-snippet -->
+  <script>
+    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g,s)}(document,'script'));
+  </script>
+</body>
+</html>
